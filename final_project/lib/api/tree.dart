@@ -1,5 +1,9 @@
 // https://docs.flutter.dev/cookbook/networking/fetch-data
 
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class Tree {
   final int id;
   final String buildingName;
@@ -48,32 +52,25 @@ class Tree {
   }
 }
 
-/*
-Random:
-[
-  {
-    "id": 319,
-    "buildingName": "Staples Parking ",
-    "directionName": "N",
-    "scientificName": "Sapindus saponaria L. var drummondii",
-    "latitude": "35.09954",
-    "longitude": "-92.44394",
-    "imageURL": "https://cs21003bffd8ab40343.blob.core.windows.net/hendrix-arboretum/Tree.0319.Soapberry.jpg",
-    "commonName": "Soapberry, Western"
-  }
-]
+Future<Tree> fetchTreeHelper(String req) async {
+  final response = await http
+      .get(Uri.parse('https://arboretum.hendrix.edu/API/Trees/$req'));
 
-id 2:
-[
-  {
-    "id": 2,
-    "buildingName": "Bailey ",
-    "directionName": "W",
-    "scientificName": "Pinus taeda L.",
-    "latitude": "35.101325",
-    "longitude": "-92.4442722",
-    "imageURL": "https://cs21003bffd8ab40343.blob.core.windows.net/hendrix-arboretum/Tree.0002.Pine.jpg",
-    "commonName": "Pine, Loblolly"
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Tree.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
   }
-]
-*/
+}
+
+Future<Tree> fetchTree(int id) async {
+  return fetchTreeHelper('?id=$id');
+}
+
+Future<Tree> fetchRandomTree() async {
+  return fetchTreeHelper('Random');
+}
