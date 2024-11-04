@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922616978098",
+    "project_id": "hendrix-arboretum",
+    "storage_bucket": "hendrix-arboretum.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922616978098:android:83e217e8347dc8a33787ab",
+        "android_client_info": {
+          "package_name": "com.example.final_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaH01rIO8gRoG7Q3AaGpQARASe7-Qup0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
