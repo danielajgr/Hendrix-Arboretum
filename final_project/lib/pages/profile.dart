@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Profile extends StatefulWidget{
-  Profile({required this.user});
+  Profile({required this.user, required this.userTrees});
 
   User user;
+  List userTrees; 
 
   
 
@@ -21,7 +22,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Text('Coming Soon')
-
     );
   }
 }
