@@ -53,17 +53,27 @@ class Tree {
 }
 
 Future<Tree> fetchTreeHelper(String req) async {
-  final response = await http
-      .get(Uri.parse('https://arboretum.hendrix.edu/API/Trees/$req'));
+  final response =
+      await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Trees/$req'));
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Tree.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    var dec = jsonDecode(response.body);
+    if (dec case List<dynamic> jlist) {
+      if (jlist.length == 1) {
+        if (jlist[0] case Map<String, dynamic> jobject) {
+          return Tree.fromJson(jobject);
+        } else {
+          throw Exception('Expected json object, got this instead: ${jlist[0]}');
+        }
+      } else {
+        throw Exception(
+            'Expected JSON list of length 1 (check tree id?), got this instead: $jlist');
+      }
+    } else {
+      throw Exception('Expected JSON list, got this instead: $dec');
+    }
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Failed to load tree, status: ${response.statusCode}');
   }
 }
 
