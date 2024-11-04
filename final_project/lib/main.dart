@@ -15,7 +15,6 @@ import 'package:firebase_core/firebase_core.dart';
 
 
 import 'app_state.dart';
-import 'pages/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +29,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const HomePage(),
+      builder: (context, state) =>  Home(),
       routes: [
         GoRoute(
           path: 'sign-in',
