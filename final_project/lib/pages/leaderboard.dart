@@ -23,8 +23,11 @@ class _LeaderboardState extends State<Leaderboard> {
           title: const Text('Leaderboard'),
         ),
          body: Text('Coming Soon!'),
+
+          //might not want to use elevated buttons idk
+          //needs to be made pretty
          persistentFooterButtons: [
-          ElevatedButton(onPressed: () async {
+          IconButton(onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => Leaderboard(
@@ -33,7 +36,7 @@ class _LeaderboardState extends State<Leaderboard> {
             ),
           );
         },
-        child: const Icon(Icons.leaderboard),),
+        icon: const Icon(Icons.leaderboard),),
         ElevatedButton(onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -53,7 +56,7 @@ class _LeaderboardState extends State<Leaderboard> {
           );
         },
         child: const Icon(Icons.info),),*/
-        //add when page is createe
+        //add when page is created
 
          ]
           
