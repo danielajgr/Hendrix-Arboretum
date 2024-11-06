@@ -20,7 +20,7 @@ class _LeaderboardState extends State<Leaderboard> {
   
   @override
   Widget build(BuildContext context) {
-    return AppOverlay("Leaderboard",0);
+    return AppOverlay("Leaderboard",0,null);
 
 
 

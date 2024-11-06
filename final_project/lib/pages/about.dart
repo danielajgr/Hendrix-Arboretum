@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'home.dart';  
 import 'leaderboard.dart';
+import "/widgets/app_overlay.dart";
 
 class About extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('About'),
-      ),
-      body: ListView(
+
+  Widget body = ListView(
         children: [
           Stack(
             alignment: Alignment.center,
@@ -85,31 +81,13 @@ class About extends StatelessWidget {
             ],
           )
         ],
-      ),
-      persistentFooterButtons: [
-        IconButton(
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => Leaderboard(
-                  topTrees: [], 
-                ),
-              ),
-            );
-          },
-          icon: const Icon(Icons.leaderboard),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ),
-            );
-          },
-          child: const Icon(Icons.home),
-        ),
-      ],
-    );
+      );
+  
+  @override
+  Widget build(BuildContext context) {
+    return AppOverlay("About",2,body);
   }
 }
+
+
+

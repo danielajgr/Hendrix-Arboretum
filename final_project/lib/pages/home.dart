@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return AppOverlay("Hendrix Arboretum",1);
+    return AppOverlay("Hendrix Arboretum",1,null);
   }
 }
 

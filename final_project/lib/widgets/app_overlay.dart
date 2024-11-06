@@ -9,14 +9,17 @@ import "/pages/report.dart";
 
 
 
+
 class AppOverlay extends StatefulWidget {
   AppOverlay(
     this.pageTitle,
-    this.pageIndex
+    this.pageIndex,
+    this.pageBody
   );
 
   final String pageTitle;
   int pageIndex;
+  final Widget? pageBody;
 
   @override 
   _AppOverlayState createState() => _AppOverlayState();
@@ -54,6 +57,7 @@ class _AppOverlayState extends State<AppOverlay> {
         },
       ),
       ),
+      body: widget.pageBody,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.leaderboard),label: "Leaderboard"),
