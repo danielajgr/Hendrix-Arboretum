@@ -1,4 +1,8 @@
+import "package:final_project/app_state.dart";
+import "package:final_project/widgets/authentication.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/material.dart';
+import "package:provider/provider.dart";
 
 import "/pages/about.dart";
 import "/pages/home.dart";
@@ -45,17 +49,13 @@ class _AppOverlayState extends State<AppOverlay> {
           },
         ),
       ],
-      leading: IconButton(
-        icon: Icon(Icons.account_circle_rounded),
-        iconSize: 40,
-        onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => Report(),
-            ),
-          );
-        },
-      ),
+      leading: Consumer<ApplicationState>(
+            builder: (context, appState, _) => AuthFunc(
+                loggedIn: appState.loggedIn,
+                signOut: () {
+                  FirebaseAuth.instance.signOut();
+                }),
+          ),
       ),
       body: widget.pageBody,
       bottomNavigationBar: BottomNavigationBar(
