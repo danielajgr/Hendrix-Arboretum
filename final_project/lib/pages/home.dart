@@ -13,6 +13,8 @@ import "/pages/profile.dart";
 import "/pages/report.dart";
 import "/pages/about.dart";
 
+import "/widgets/app_overlay.dart";
+
 
 class Home extends StatefulWidget {
   
@@ -21,98 +23,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 1;
-
-  void _onItemTapped(int index) async {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-   switch (index) {
-    case 0:
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => Leaderboard(
-            topTrees: [],
-          ),
-        ),
-      );
-      break;
-    case 2:
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => About(
-          ),
-        ),
-      );
-      break;
-    default:
-    // Already on home page
-      break;
-   }
-  }
-
-
-
-  
+  // will need eventually  
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Hendrix Arboretum"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.report),
-            onPressed: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                builder: (context) => Report(
-                ),
-              ),
-              );
-            }
-          )
-        ],
-        leading: IconButton(
-          icon: Icon(Icons.account_circle_rounded),
-          iconSize: 40,
-          onPressed: () async { 
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => Leaderboard(
-                  topTrees: [],
-                ),
-              ),
-            );
-        }
-      )
-      ),
-      body: ListView(
-        children: <Widget>[
-          Consumer<ApplicationState>(
-            builder: (context, appState, _) => AuthFunc(
-                loggedIn: appState.loggedIn,
-                signOut: () {
-                  FirebaseAuth.instance.signOut();
-                }),
-          ),
-          // to here
-          
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.leaderboard),label: "Leaderboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.info),label: "About"),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green,
-        onTap: _onItemTapped,
-      ),
-    );
-        
+    return AppOverlay("Hendrix Arboretum",1);
   }
 }
 
