@@ -6,7 +6,6 @@ import "/pages/leaderboard.dart";
 class Report extends StatefulWidget{
   Report({super.key});
 
-  
 
   @override
   State<Report> createState() => _ReportState();
@@ -14,53 +13,13 @@ class Report extends StatefulWidget{
 
 class _ReportState extends State<Report> {
  
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Report'),
-        ),
-         body: Text('Coming Soon!'),
-
-          //might not want to use elevated buttons idk
-          //needs to be made pretty
-         persistentFooterButtons: [
-          IconButton(onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => Leaderboard(
-                topTrees: [],
-              ),
-            ),
-          );
-        },
-        icon: const Icon(Icons.leaderboard),),
-        ElevatedButton(onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => Home(
-              ),
-            ),
-          );
-        },
-        child: const Icon(Icons.home),),
-        /*ElevatedButton(onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => About(
-                topTrees: [],
-              ),
-            ),
-          );
-        },
-        child: const Icon(Icons.info),),*/
-        //add when page is created
-
-         ]
-          
-          
+        title: const Text('Report'),
+      ),
+      body: Text('Coming Soon!')   
     );
     
     
