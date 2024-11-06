@@ -1,3 +1,4 @@
+import 'package:final_project/pages/about.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' // new
     hide EmailAuthProvider, PhoneAuthProvider;    // new
@@ -97,7 +98,6 @@ class _HomeState extends State<Home> {
                   FirebaseAuth.instance.signOut();
                 }),
           ),
-          // to here
           
         ],
       ),
