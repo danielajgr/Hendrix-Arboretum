@@ -29,7 +29,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) =>  Home(),
+      builder: (context, state) => Home(),
       routes: [
         GoRoute(
           path: 'sign-in',

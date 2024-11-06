@@ -7,6 +7,10 @@ import 'package:provider/provider.dart';          // new
 import '../app_state.dart';                          // new
 import '../widgets/authentication.dart';                 // new
 import '../widgets/widgets.dart';
+
+import "/pages/leaderboard.dart";
+import "/pages/profile.dart";
+
 class Home extends StatefulWidget {
   
   @override
@@ -14,20 +18,35 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
 
-    // Navigate to different screens (optional)
-    if (index == 1) {
-      Navigator.pushNamed(context, "Leaderboard");
-    } else if (index == 2) {
-      Navigator.pushNamed(context, "Profile");
-    }
-    // Add additional logic for other tabs if needed
+   switch (index) {
+    case 0:
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => Leaderboard(
+            topTrees: [],
+          ),
+        ),
+      );
+      break;
+    case 2:
+      // await Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => About(
+      //     ),
+      //   ),
+      // );
+      break;
+    default:
+    // Already on home page
+      break;
+   }
   }
 
 
@@ -41,7 +60,6 @@ class _HomeState extends State<Home> {
       body: ListView(
         children: <Widget>[
           
-          // Add from here
           Consumer<ApplicationState>(
             builder: (context, appState, _) => AuthFunc(
                 loggedIn: appState.loggedIn,
@@ -55,21 +73,15 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.leaderboard),label: "Leaderboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle),label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle),label: "TEMP"),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.green,
         onTap: _onItemTapped,
       ),
     );
-      
-      
-          // Add from here
-          
-          // to here
-          
         
   }
 }
