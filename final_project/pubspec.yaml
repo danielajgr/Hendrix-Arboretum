@@ -89,6 +89,18 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+      - family: Museo
+        fonts:
+          - asset: fonts/Museo_Slab_300.otf
+      - family: MuseoBold
+        fonts:
+          - asset: fonts/Museo_Slab_900.otf
+      - family: Merriweather-Sans
+        fonts:
+          - asset: fonts/MerriweatherSans-VariableFont_wght.ttf
+          - asset: fonts/MerriweatherSans-Italic-VariableFont_wght.ttf
+            style: italic
   # fonts:
   #   - family: Schyler
   #     fonts:

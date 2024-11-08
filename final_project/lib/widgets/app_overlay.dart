@@ -1,5 +1,5 @@
 import "package:final_project/app_state.dart";
-import "package:final_project/widgets/authentication.dart";
+import "package:final_project/pages/authentication.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/material.dart';
 import "package:provider/provider.dart";
@@ -35,8 +35,10 @@ class _AppOverlayState extends State<AppOverlay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold( 
+      backgroundColor: Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
-      title: Text(widget.pageTitle),
+      title: Text(widget.pageTitle,style: Theme.of(context).textTheme.displayMedium),
+      backgroundColor: Color.fromARGB(255, 0,103,79),
       actions: [
         IconButton(
           icon: Icon(Icons.report),
@@ -59,6 +61,7 @@ class _AppOverlayState extends State<AppOverlay> {
       ),
       body: widget.pageBody,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 139,69,19),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.leaderboard),label: "Leaderboard"),
           BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),

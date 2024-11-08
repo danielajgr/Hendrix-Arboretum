@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';           // new
 import 'package:provider/provider.dart';          // new
 
 import '../app_state.dart';                          // new
-import '../widgets/authentication.dart';                 // new
+import 'authentication.dart';                 // new
 import '../widgets/widgets.dart';
 
 import "/pages/leaderboard.dart";
