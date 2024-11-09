@@ -5,17 +5,12 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'objects/theme_data.dart';
-import "pages/home.dart";
-import "pages/leaderboard.dart";
-import "pages/profile.dart";
 
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-
 
 import 'app_state.dart';
+import 'pages/home.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +25,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => Home(),
+      builder: (context, state) => const Home(),
       routes: [
         GoRoute(
           path: 'sign-in',
