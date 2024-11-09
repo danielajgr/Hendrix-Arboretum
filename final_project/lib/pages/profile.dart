@@ -1,8 +1,6 @@
 import 'package:final_project/pages/home.dart';
-import 'package:final_project/pages/leaderboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Profile extends StatefulWidget{
   Profile({required this.user, required this.userTrees});

@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import "package:provider/provider.dart";
 
 import "/pages/about.dart";
-import "/pages/home.dart";
-import "/pages/leaderboard.dart";
 import "/pages/report.dart";
 
 class AppOverlay extends StatefulWidget {

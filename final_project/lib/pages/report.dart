@@ -1,7 +1,4 @@
-import 'package:final_project/pages/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import "/pages/leaderboard.dart";
 
 class Report extends StatefulWidget{
   Report({super.key});
