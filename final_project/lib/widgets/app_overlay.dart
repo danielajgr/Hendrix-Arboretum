@@ -10,10 +10,8 @@ import "/pages/leaderboard.dart";
 import "/pages/profile.dart";
 import "/pages/report.dart";
 
-
-
 class AppOverlay extends StatefulWidget {
-  @override 
+  @override
   _AppOverlayState createState() => _AppOverlayState();
 }
 
@@ -23,38 +21,40 @@ class _AppOverlayState extends State<AppOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
       backgroundColor: Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
-      title: Text(widget.pageTitle,style: Theme.of(context).textTheme.displayMedium),
-      backgroundColor: Color.fromARGB(255, 0,103,79),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.report),
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => Report(),
-              ),
-            );
-          },
-        ),
-      ],
-      leading: Consumer<ApplicationState>(
-            builder: (context, appState, _) => AuthFunc(
-                loggedIn: appState.loggedIn,
-                signOut: () {
-                  FirebaseAuth.instance.signOut();
-                }),
+        title: Text(widget.pageTitle,
+            style: Theme.of(context).textTheme.displayMedium),
+        backgroundColor: Color.fromARGB(255, 0, 103, 79),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.report),
+            onPressed: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Report(),
+                ),
+              );
+            },
           ),
+        ],
+        leading: Consumer<ApplicationState>(
+          builder: (context, appState, _) => AuthFunc(
+              loggedIn: appState.loggedIn,
+              signOut: () {
+                FirebaseAuth.instance.signOut();
+              }),
+        ),
       ),
       body: widget.pageBody,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(255, 139,69,19),
+        backgroundColor: Color.fromARGB(255, 139, 69, 19),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.leaderboard),label: "Leaderboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.info),label: "About"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.leaderboard), label: "Leaderboard"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: "About"),
         ],
         currentIndex: widget.pageIndex,
         selectedItemColor: Colors.green,
@@ -64,40 +64,36 @@ class _AppOverlayState extends State<AppOverlay> {
   }
 
   void _onItemTapped(int index) async {
-    setState(() {
-    });
-  if (index != widget.pageIndex) {
-    switch (index) {
-      case 0:
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => Leaderboard(
-              topTrees: [],
+    setState(() {});
+    if (index != widget.pageIndex) {
+      switch (index) {
+        case 0:
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Leaderboard(
+                topTrees: [],
+              ),
             ),
-          ),
-        );
-        break;
-      case 1: 
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => Home(
+          );
+          break;
+        case 1:
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Home(),
             ),
-          ),
-        );
-        break;
-      case 2:
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => About(
+          );
+          break;
+        case 2:
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => About(),
             ),
-          ),
-        );
-        break;
-      default:
-        // error
-        break;
+          );
+          break;
+        default:
+          // error
+          break;
       }
     }
   }
-   
 }
