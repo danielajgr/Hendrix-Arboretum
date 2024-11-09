@@ -21,6 +21,12 @@ class _HomeState extends State<Home> {
   int pageIndex = 1;
 
   @override
+  void initState() {
+    _onItemTapped(pageIndex);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
@@ -69,9 +75,15 @@ class _HomeState extends State<Home> {
       pageIndex = index;
 
       // TODO: see if creating these page bodies every time matters
-      var (pageBody, pageTitle) = switch(index) {
-        0 => (null, "Leaderboard"), // TODO: replace this null when you create the Leaderboard body widget
-        1 => (null, "Hendrix Arboretum"), // TODO: replace this null when you create the main body widget
+      var (pageBody, pageTitle) = switch (index) {
+        0 => (
+            null,
+            "Leaderboard"
+          ), // TODO: replace this null when you create the Leaderboard body widget
+        1 => (
+            null,
+            "Hendrix Arboretum"
+          ), // TODO: replace this null when you create the main body widget
         2 => (About(), "About"),
         _ => (null, null)
       };
