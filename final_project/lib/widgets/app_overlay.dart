@@ -17,15 +17,17 @@ class AppOverlay extends StatefulWidget {
 }
 
 class _AppOverlayState extends State<AppOverlay> {
-  Widget pageBody;
-  String pageTitle;
+  Widget? pageBody;
+  String? pageTitle;
+
+  int pageIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
-        title: Text(widget.pageTitle,
+        title: Text(pageTitle ?? "missingno",
             style: Theme.of(context).textTheme.displayMedium),
         backgroundColor: const Color.fromARGB(255, 0, 103, 79),
         actions: [
@@ -48,7 +50,7 @@ class _AppOverlayState extends State<AppOverlay> {
               }),
         ),
       ),
-      body: widget.pageBody,
+      body: pageBody,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 139, 69, 19),
         items: const [
@@ -57,7 +59,7 @@ class _AppOverlayState extends State<AppOverlay> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: "About"),
         ],
-        currentIndex: widget.pageIndex,
+        currentIndex: pageIndex,
         selectedItemColor: Colors.green,
         onTap: _onItemTapped,
       ),
@@ -65,36 +67,18 @@ class _AppOverlayState extends State<AppOverlay> {
   }
 
   void _onItemTapped(int index) async {
-    setState(() {});
-    if (index != widget.pageIndex) {
-      switch (index) {
-        case 0:
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => Leaderboard(
-                topTrees: const [],
-              ),
-            ),
-          );
-          break;
-        case 1:
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => Home(),
-            ),
-          );
-          break;
-        case 2:
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => About(),
-            ),
-          );
-          break;
-        default:
-          // error
-          break;
-      }
-    }
+    setState(() {
+      pageIndex = index;
+
+      var (pageBody, pageTitle) = switch(index) {
+        0 => (null, "Leaderboard"),
+        1 => (null, "Hendrix Arboretum"),
+        2 => (null, "About"),
+        _ => (null, null)
+      };
+
+      this.pageBody = pageBody;
+      this.pageTitle = pageTitle;
+    });
   }
 }
