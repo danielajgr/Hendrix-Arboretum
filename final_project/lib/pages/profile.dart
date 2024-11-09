@@ -1,4 +1,4 @@
-import 'package:final_project/pages/home.dart';
+import 'package:final_project/pages/main_scaffold.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +45,7 @@ class _ProfileState extends State<Profile> {
         ElevatedButton(onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => Home(
+              builder: (context) => MainScaffold(
               ),
             ),
           );

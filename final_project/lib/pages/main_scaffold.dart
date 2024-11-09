@@ -7,14 +7,14 @@ import "../widgets/authentication.dart";
 import "/pages/body/about.dart";
 import "/pages/report.dart";
 
-class Home extends StatefulWidget {
-  const Home();
+class MainScaffold extends StatefulWidget {
+  const MainScaffold();
 
   @override
-  _HomeState createState() => _HomeState();
+  _MainScaffoldState createState() => _MainScaffoldState();
 }
 
-class _HomeState extends State<Home> {
+class _MainScaffoldState extends State<MainScaffold> {
   Widget? pageBody;
   String? pageTitle;
 
