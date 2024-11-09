@@ -25,7 +25,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const AppOverlay(),
+      builder: (context, state) => const Home(),
       routes: [
         GoRoute(
           path: 'sign-in',

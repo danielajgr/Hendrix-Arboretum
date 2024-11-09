@@ -7,14 +7,14 @@ import "package:provider/provider.dart";
 import "/pages/about.dart";
 import "/pages/report.dart";
 
-class AppOverlay extends StatefulWidget {
-  const AppOverlay();
+class Home extends StatefulWidget {
+  const Home();
 
   @override
-  _AppOverlayState createState() => _AppOverlayState();
+  _HomeState createState() => _HomeState();
 }
 
-class _AppOverlayState extends State<AppOverlay> {
+class _HomeState extends State<Home> {
   Widget? pageBody;
   String? pageTitle;
 
