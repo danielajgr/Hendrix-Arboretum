@@ -71,7 +71,7 @@ class _AppOverlayState extends State<AppOverlay> {
       var (pageBody, pageTitle) = switch(index) {
         0 => (null, "Leaderboard"),
         1 => (null, "Hendrix Arboretum"),
-        2 => (null, "About"),
+        2 => (About(), "About"),
         _ => (null, null)
       };
 

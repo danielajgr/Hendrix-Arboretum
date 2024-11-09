@@ -5,12 +5,12 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'objects/theme_data.dart';
-import "pages/home.dart";
 
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
+import 'widgets/app_overlay.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +25,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => Home(),
+      builder: (context, state) => const AppOverlay(),
       routes: [
         GoRoute(
           path: 'sign-in',
