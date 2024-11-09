@@ -7,10 +7,11 @@ import "package:provider/provider.dart";
 import "/pages/about.dart";
 import "/pages/home.dart";
 import "/pages/leaderboard.dart";
-import "/pages/profile.dart";
 import "/pages/report.dart";
 
 class AppOverlay extends StatefulWidget {
+  const AppOverlay({super.key});
+
   @override
   _AppOverlayState createState() => _AppOverlayState();
 }
@@ -22,14 +23,14 @@ class _AppOverlayState extends State<AppOverlay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 175, 225, 175),
+      backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
         title: Text(widget.pageTitle,
             style: Theme.of(context).textTheme.displayMedium),
-        backgroundColor: Color.fromARGB(255, 0, 103, 79),
+        backgroundColor: const Color.fromARGB(255, 0, 103, 79),
         actions: [
           IconButton(
-            icon: Icon(Icons.report),
+            icon: const Icon(Icons.report),
             onPressed: () async {
               await Navigator.of(context).push(
                 MaterialPageRoute(
@@ -49,7 +50,7 @@ class _AppOverlayState extends State<AppOverlay> {
       ),
       body: widget.pageBody,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(255, 139, 69, 19),
+        backgroundColor: const Color.fromARGB(255, 139, 69, 19),
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard), label: "Leaderboard"),
@@ -71,7 +72,7 @@ class _AppOverlayState extends State<AppOverlay> {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => Leaderboard(
-                topTrees: [],
+                topTrees: const [],
               ),
             ),
           );
