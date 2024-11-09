@@ -12,25 +12,14 @@ import "/pages/report.dart";
 
 
 
-
-
 class AppOverlay extends StatefulWidget {
-  AppOverlay(
-    this.pageTitle,
-    this.pageIndex,
-    this.pageBody
-  );
-
-  final String pageTitle;
-  int pageIndex;
-  final Widget? pageBody;
-
   @override 
   _AppOverlayState createState() => _AppOverlayState();
 }
 
 class _AppOverlayState extends State<AppOverlay> {
-
+  Widget pageBody;
+  String pageTitle;
 
   @override
   Widget build(BuildContext context) {
