@@ -26,7 +26,13 @@ class _ProfileState extends State<Profile> {
       //might not want to use elevated buttons idk
       //needs to be made pretty
       persistentFooterButtons: [
-          ElevatedButton(onPressed: () async {
+          // TODO: If we want this to bring up the main leaderboard,
+          // (AKA put the app in the same state as if a user tapped the leaderboard icon from home),
+          // We would need to modify home slightly and maybe pushReplacementNamed
+          // Ask Colin about this.
+          // If this button is supposed to do something different than the that, ignore this comment
+          ElevatedButton(onPressed: null,
+          /*() async {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => Leaderboard(
@@ -34,7 +40,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           );
-        },
+        },*/
         child: const Icon(Icons.leaderboard),),
         ElevatedButton(onPressed: () async {
           await Navigator.of(context).push(
