@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:final_project/pages/profile.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'objects/theme_data.dart';
@@ -81,13 +82,7 @@ final _router = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (context, state) {
-            return ProfileScreen(
-              providers: const [],
-              actions: [
-                SignedOutAction((context) {
-                  context.pushReplacement('/');
-                }),
-              ],
+            return Profile(
             );
           },
         ),

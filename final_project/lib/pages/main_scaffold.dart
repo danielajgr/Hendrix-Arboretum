@@ -1,4 +1,5 @@
 import "package:final_project/app_state.dart";
+import "package:final_project/pages/body/leaderboard.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/material.dart';
 import "package:provider/provider.dart";
@@ -77,7 +78,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch (index) {
         0 => (
-            null,
+            Leaderboard(), 
             "Leaderboard"
           ), // TODO: replace this null when you create the Leaderboard body widget
         1 => (
