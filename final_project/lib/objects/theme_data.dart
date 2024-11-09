@@ -30,7 +30,7 @@ final ThemeData hendrixTodayLightMode = ThemeData(
       /// Used for app bar titles and resource button text.
       color: Colors.white,
       fontFamily: 'MuseoBold',
-      fontSize: 30,
+      fontSize: 27,
     ),
     displaySmall: TextStyle(
       /// Used for app bar titles and resource button text.
@@ -124,7 +124,7 @@ final ThemeData hendrixTodayDarkMode = ThemeData(
       /// Used for app bar titles and resource button text.
       color: Colors.white,
       fontFamily: 'MuseoBold',
-      fontSize: 30,
+      fontSize: 25,
     ),
     displaySmall: TextStyle(
       /// Used for app bar titles and resource button text.
