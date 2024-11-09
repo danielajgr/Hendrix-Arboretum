@@ -1,10 +1,10 @@
 import "package:final_project/app_state.dart";
-import "package:final_project/pages/authentication.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/material.dart';
 import "package:provider/provider.dart";
 
-import "/pages/about.dart";
+import "../widgets/authentication.dart";
+import "/pages/body/about.dart";
 import "/pages/report.dart";
 
 class Home extends StatefulWidget {
