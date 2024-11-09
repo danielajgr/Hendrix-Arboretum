@@ -10,7 +10,7 @@ import "/pages/leaderboard.dart";
 import "/pages/report.dart";
 
 class AppOverlay extends StatefulWidget {
-  const AppOverlay({super.key});
+  const AppOverlay();
 
   @override
   _AppOverlayState createState() => _AppOverlayState();

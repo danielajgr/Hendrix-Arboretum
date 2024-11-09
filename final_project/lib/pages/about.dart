@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'home.dart';  
-import 'leaderboard.dart';
-import "/widgets/app_overlay.dart";
-
 class About extends StatelessWidget {
 
-  Widget body = ListView(
+  @override
+  Widget build(BuildContext context) {
+
+  return ListView(
         children: [
           Stack(
             alignment: Alignment.center,
@@ -31,7 +30,7 @@ class About extends StatelessWidget {
                   height: 300.0,
                 ),
               ),
-              Expanded(
+              const Expanded(
                 flex: 2,
                 child: Column( children: [ 
                   Text("The Hendrix College Campus Arboretum",style: TextStyle(
@@ -39,7 +38,7 @@ class About extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         )),
                   Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     "Consistent with its community orientation and the educational goals of Hendrix College, the development of the campus arboretum was intended to provide an educational center for not only Hendrix College, but for the other colleges, public schools, and the general public in the Central Arkansas area, as well as for other visitors to the college.",
                     style: TextStyle(fontSize: 16),
@@ -54,7 +53,7 @@ class About extends StatelessWidget {
           Row( 
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Expanded(
+              const Expanded(
                 flex: 2,
                 child: Column( children: [ 
                   Text("Locate a Tree Tag",style: TextStyle(
@@ -62,7 +61,7 @@ class About extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         )),
                   Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     "Each tree in the arboretum can be identified with a numbered circular metallic tag, found on the south side of the tree. Enter the ID number in the search field below to learn more information about the tree.",
                     style: TextStyle(fontSize: 16),
@@ -82,10 +81,6 @@ class About extends StatelessWidget {
           )
         ],
       );
-  
-  @override
-  Widget build(BuildContext context) {
-    return AppOverlay("About",2,body);
   }
 }
 
