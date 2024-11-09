@@ -68,9 +68,10 @@ class _AppOverlayState extends State<AppOverlay> {
     setState(() {
       pageIndex = index;
 
+      // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch(index) {
-        0 => (null, "Leaderboard"),
-        1 => (null, "Hendrix Arboretum"),
+        0 => (null, "Leaderboard"), // TODO: replace this null when you create the Leaderboard body widget
+        1 => (null, "Hendrix Arboretum"), // TODO: replace this null when you create the main body widget
         2 => (About(), "About"),
         _ => (null, null)
       };
