@@ -46,11 +46,20 @@ class _TreeInfoState extends State<TreeInfo> {
               future: futureTree,
               builder: (context, snapshot) {
               if(snapshot.hasData){
-                return Image.network(snapshot.data!.imageURL);
+                if(snapshot.data!.imageURL == "/assets/img/stockTree.jpg"){
+                  return Image.asset('unavailabletree.jpg');
+                }
+                else{
+                  return Image.network(snapshot.data!.imageURL);  
+                }
+                
               } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
+                return Image.asset('unavailabletree.jpg');
               }
-                return Text('');
+                return Center (
+                  child: Container(margin: EdgeInsets.symmetric( vertical: 100),  height: 50, width: 50, child: 
+                  CircularProgressIndicator(color: Color.fromARGB(255, 0, 103, 79),),
+                ));
               },
            ),
 
@@ -64,7 +73,7 @@ class _TreeInfoState extends State<TreeInfo> {
               }else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
-                return Text('');
+                return const Text("");
               }
               ),
            
