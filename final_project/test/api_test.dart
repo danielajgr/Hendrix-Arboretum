@@ -6,32 +6,12 @@ void main() {
     for (int treeId in [1,33,162]) {
       Tree t = await fetchTree(treeId);
       expect(t.id, treeId);
-      for (String str in [
-        t.buildingName,
-        t.directionName,
-        t.scientificName,
-        t.latitude,
-        t.longitude,
-        t.imageURL,
-        t.commonName
-      ]) {
-        expect(str.isEmpty, false);
-      }
+      expect(t.noEmptyFields(), true);
     }
   });
 
   test('We can fetch a random tree', () async {
     Tree t = await fetchRandomTree();
-    for (String str in [
-      t.buildingName,
-      t.directionName,
-      t.scientificName,
-      t.latitude,
-      t.longitude,
-      t.imageURL,
-      t.commonName
-    ]) {
-      expect(str.isEmpty, false);
-    }
+    expect(t.noEmptyFields(), true);
   });
 }
