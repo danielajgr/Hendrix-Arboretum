@@ -1,4 +1,5 @@
 import "package:final_project/app_state.dart";
+import "package:final_project/objects/tree_object.dart";
 import "package:final_project/pages/body/leaderboard.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/material.dart';
@@ -21,6 +22,10 @@ class _MainScaffoldState extends State<MainScaffold> {
   String? pageTitle;
 
   int pageIndex = 1;
+
+  List<TreeObject> testingTrees = [TreeObject(treeid: 0), TreeObject(treeid: 1), TreeObject(treeid: 2)];
+  //list for leaderboard until data gets pulled from firebase
+
 
   @override
   void initState() {
@@ -79,8 +84,9 @@ class _MainScaffoldState extends State<MainScaffold> {
       // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch (index) {
         0 => (
-            Leaderboard(),
+            Leaderboard(trees: testingTrees),
             "Leaderboard"
+
           ), // TODO: replace this null when you create the Leaderboard body widget
         1 => (Map(), "Hendrix Arboretum"),
         2 => (About(), "About"),

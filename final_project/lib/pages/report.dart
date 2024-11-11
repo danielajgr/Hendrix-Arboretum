@@ -1,3 +1,4 @@
+import 'package:final_project/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class Report extends StatefulWidget{
@@ -14,7 +15,7 @@ class _ReportState extends State<Report> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Report'),
+        title: Header("Report")
       ),
       body: Text('Coming Soon!')   
     );
