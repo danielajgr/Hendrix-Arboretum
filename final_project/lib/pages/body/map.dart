@@ -12,6 +12,7 @@ class Map extends StatefulWidget {
 class _MapState extends State<Map> {
   LatLng? treeLocation;
   Tree? tree;
+  MapController mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class _MapState extends State<Map> {
         ),
         Expanded(
             child: FlutterMap(
+               mapController: mapController,
                 options: MapOptions(
                     initialCenter:
                         treeLocation ?? const LatLng(35.100232, -92.440290),
@@ -81,6 +83,7 @@ class _MapState extends State<Map> {
           treeLocation = LatLng(
               double.parse(tree!.latitude), double.parse(tree!.longitude));
         }
+        mapController.move(treeLocation!,18);
       });
     } catch (e) {
       print("Error fetching tree: $e");
