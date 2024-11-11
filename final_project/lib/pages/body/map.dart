@@ -45,8 +45,11 @@ class _MapState extends State<Map> {
               TileLayer(
                   // https://docs.fleaflet.dev/
                   urlTemplate:
-                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png' // Should change
+                      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' // Should change
                   ),
+              const SimpleAttributionWidget(
+                  source: Text("Tiles - Esri", softWrap: true)),
+              // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
               if (treeLocation != null)
                 MarkerLayer(
                   markers: [
