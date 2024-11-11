@@ -11,6 +11,10 @@ class TreeObject{
     likes ++;
   }
 
+  void remove_Like(){
+    likes --;
+  }
+
   int get_treeId(){
     return treeid;
   }
