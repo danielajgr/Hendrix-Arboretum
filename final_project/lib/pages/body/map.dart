@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
 import "package:latlong2/latlong.dart";
 import "/api/tree.dart";
+import "/pages/tree_info.dart";
 
 class Map extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   LatLng? treeLocation;
+  Tree? tree;
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +51,18 @@ class _MapState extends State<Map> {
                 MarkerLayer(
                   markers: [
                     Marker(
-                      point: treeLocation!,
-                      width: 60,
-                      height: 60,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: const Icon(Icons.location_on,
-                            color: Color.fromARGB(255, 202, 81, 39), size: 50),
-                      ),
-                    ),
+                        point: treeLocation!,
+                        width: 60,
+                        height: 60,
+                        child: GestureDetector(
+                          onTap: () => markerPopup(context),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: const Icon(Icons.location_on,
+                                color: Color.fromARGB(255, 202, 81, 39),
+                                size: 50),
+                          ),
+                        )),
                   ],
                 ),
             ]))
@@ -67,13 +72,42 @@ class _MapState extends State<Map> {
 
   Future<void> searchTree(String id) async {
     try {
-      Tree tree = await fetchTree(int.parse(id));
+      tree = await fetchTree(int.parse(id));
       setState(() {
-        treeLocation =
-            LatLng(double.parse(tree.latitude), double.parse(tree.longitude));
+        if (tree != null) {
+          treeLocation = LatLng(
+              double.parse(tree!.latitude), double.parse(tree!.longitude));
+        }
       });
     } catch (e) {
       print("Error fetching tree: $e");
     }
+  }
+
+  void markerPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tree #${tree!.id}"),
+          content: ElevatedButton(
+              onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TreeInfo(treeid: tree!.id)))
+                  },
+              child: const Text("Tree page")),
+          actions: [
+            TextButton(
+              child: const Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
