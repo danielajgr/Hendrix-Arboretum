@@ -6,6 +6,7 @@ import "package:provider/provider.dart";
 
 import "../widgets/authentication.dart";
 import "/pages/body/about.dart";
+import "body/map.dart";
 import "/pages/report.dart";
 
 class MainScaffold extends StatefulWidget {
@@ -78,13 +79,10 @@ class _MainScaffoldState extends State<MainScaffold> {
       // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch (index) {
         0 => (
-            Leaderboard(), 
+            Leaderboard(),
             "Leaderboard"
           ), // TODO: replace this null when you create the Leaderboard body widget
-        1 => (
-            null,
-            "Hendrix Arboretum"
-          ), // TODO: replace this null when you create the main body widget
+        1 => (Map(), "Hendrix Arboretum"),
         2 => (About(), "About"),
         _ => (null, null)
       };

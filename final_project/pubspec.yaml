@@ -45,6 +45,8 @@ dependencies:
   firebase_ui_auth: ^1.16.0
   table_calendar: ^3.1.2
   flutter_colorpicker: ^1.1.0
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:
