@@ -63,11 +63,41 @@ Future<Tree> fetchTreeHelper(String req) async {
         if (jlist[0] case Map<String, dynamic> jobject) {
           return Tree.fromJson(jobject);
         } else {
-          throw Exception('Expected json object, got this instead: ${jlist[0]}');
+          throw Exception(
+              'Expected json object, got this instead: ${jlist[0]}');
         }
       } else {
         throw Exception(
             'Expected JSON list of length 1 (check tree id?), got this instead: $jlist');
+      }
+    } else {
+      throw Exception('Expected JSON list, got this instead: $dec');
+    }
+  } else {
+    throw Exception('Failed to load tree, status: ${response.statusCode}');
+  }
+}
+
+Future<List<Tree>> fetchTreeMultiHelper(String req, int count) async {
+  final response =
+      await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Trees/$req'));
+
+  if (response.statusCode == 200) {
+    var dec = jsonDecode(response.body);
+    if (dec case List<dynamic> jlist) {
+      if (jlist.length == count) {
+        List<Tree> trees = [];
+        for (var entry in jlist) {
+          if (entry case Map<String, dynamic> jobject) {
+            trees.add(Tree.fromJson(jobject));
+          } else {
+            throw Exception('Expected json object, got this instead: $entry');
+          }
+        }
+        return trees;
+      } else {
+        throw Exception(
+            'Expected JSON list of length $count, got this list instead: $jlist');
       }
     } else {
       throw Exception('Expected JSON list, got this instead: $dec');
@@ -83,4 +113,8 @@ Future<Tree> fetchTree(int id) async {
 
 Future<Tree> fetchRandomTree() async {
   return fetchTreeHelper('Random');
+}
+
+Future<List<Tree>> fetchClosestTrees(double longitude, double latitude, int count) {
+  return fetchTreeMultiHelper("Location/?lat=$latitude&lon=$longitude&count=$count", count);
 }
