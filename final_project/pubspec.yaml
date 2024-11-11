@@ -47,7 +47,6 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
-  flutter_map_marker_cluster: ^1.4.0
 
 dev_dependencies:
   flutter_test:
