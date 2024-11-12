@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/api/tree.dart';
+import 'package:final_project/app_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
 
 
 
@@ -23,21 +29,34 @@ class TreeInfo extends StatefulWidget {
 
 class _TreeInfoState extends State<TreeInfo> {
   late Future<Tree> futureTree;
+  var appState;
   @override
   void initState() {
     super.initState();
     futureTree = fetchTree(widget.treeid);
+    appState = context.read<ApplicationState>();
   }
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold( 
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar
     (title: Text("Tree #${widget.treeid}", style: Theme.of(context).textTheme.displayMedium), backgroundColor: Color.fromARGB(255, 0, 103, 79), actions: [
-      IconButton(icon: Icon(Icons.favorite),
-        onPressed: () async {
-            },
-            )]
+      IconButton(
+      icon: Icon(Icons.favorite),
+      color: appState.isFavorite(widget.treeid) ? Color.fromARGB(255, 255, 0, 0) : Color(0xff9A9A9A),
+      onPressed: () async {
+        if (!appState.loggedIn) {
+            context.push('/sign-in');
+        }else{
+          setState(() {
+            appState.addTree(widget.treeid);
+      
+          });   
+        }         
+      },
+    )]
     ),
       body: ListView(padding: const EdgeInsets.all(50), children: [
 
