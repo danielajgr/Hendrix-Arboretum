@@ -1,6 +1,6 @@
 import 'package:final_project/api/tree.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 
 
 
@@ -46,22 +46,30 @@ class _TreeInfoState extends State<TreeInfo> {
               future: futureTree,
               builder: (context, snapshot) {
               if(snapshot.hasData){
-                if(snapshot.data!.imageURL == "/assets/img/stockTree.jpg"){
-                  return Image.asset('unavailabletree.jpg');
-                }
-                else{
-                  return Image.network(snapshot.data!.imageURL);  
-                }
+                return CachedNetworkImage(
+                  imageUrl: snapshot.data!.imageURL,
+                    
+                    placeholder: (context, url) => Center(
+                      child: Container(margin: EdgeInsets.symmetric( vertical: 100),  height: 75, width: 75,
+                        child: const CircularProgressIndicator(
+                          color: Color.fromARGB(255, 0, 103, 79),
+                        )
+                      )
+                    )  
+                  
+                );
+                   
+                
                 
               } else if (snapshot.hasError) {
-                return Image.asset('unavailabletree.jpg');
+                return Image.asset('img/stockTree.jpg');
               }
                 return Center (
-                  child: Container(margin: EdgeInsets.symmetric( vertical: 100),  height: 50, width: 50, child: 
+                  child: Container(margin: EdgeInsets.symmetric( vertical: 100),  height: 75, width: 75, child: 
                   CircularProgressIndicator(color: Color.fromARGB(255, 0, 103, 79),),
                 ));
               },
-           ),
+            ),
 
            Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
              const Text('Common Name', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18) /*style: TextStyle(),**/),
