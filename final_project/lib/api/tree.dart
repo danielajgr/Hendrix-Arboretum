@@ -50,18 +50,6 @@ class Tree {
       _ => throw const FormatException('Failed to load tree.'),
     };
   }
-
-  bool noEmptyFields() {
-    bool complete = true;
-    for (String s in [buildingName, directionName, scientificName, imageURL, commonName, latitude, longitude]) {
-      complete = complete && s.isNotEmpty;
-    }
-    complete = complete && (id != 0);
-    // complete = complete && (latitude != 0);
-    // complete = complete && (longitude != 0);
-
-    return complete;
-  }
 }
 
 Future<Tree> fetchTreeHelper(String req) async {
@@ -127,6 +115,8 @@ Future<Tree> fetchRandomTree() async {
   return fetchTreeHelper('Random');
 }
 
-Future<List<Tree>> fetchClosestTrees(double latitude, double longitude, int count) {
-  return fetchTreeMultiHelper("Location/?lat=$latitude&lon=$longitude&count=$count", count);
+Future<List<Tree>> fetchClosestTrees(
+    double latitude, double longitude, int count) {
+  return fetchTreeMultiHelper(
+      "Location/?lat=$latitude&lon=$longitude&count=$count", count);
 }
