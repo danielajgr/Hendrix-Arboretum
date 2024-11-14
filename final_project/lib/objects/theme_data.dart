@@ -72,8 +72,9 @@ final ThemeData hendrixTodayLightMode = ThemeData(
     labelLarge: TextStyle(
       // Used for dropdown menu text and search bar labels.
       color: Colors.white,
+      fontWeight: FontWeight.bold,
       fontFamily: 'Museo',
-      fontSize: 15,
+      fontSize: 25,
     ),
     labelMedium: TextStyle(
       // Used for bold text.
