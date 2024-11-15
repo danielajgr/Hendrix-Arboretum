@@ -17,6 +17,7 @@ class ApplicationState extends ChangeNotifier {
     init();
   }
   List<int> likedTrees = [];
+  List<int> allLikedTrees = [];
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
@@ -27,6 +28,7 @@ class ApplicationState extends ChangeNotifier {
     FirebaseUIAuth.configureProviders([
       EmailAuthProvider(),
     ]);
+    loadAllLikedTrees();
 
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
@@ -38,6 +40,24 @@ class ApplicationState extends ChangeNotifier {
       }
       notifyListeners();
     }); 
+    
+  }
+
+  Future<void> loadAllLikedTrees() async {
+    FirebaseFirestore.instance.collection('favoriteTrees').snapshots().listen((snapshot) async {  
+
+        for (var d in snapshot.docs) {
+          final likesDoc = await FirebaseFirestore.instance.collection('favoriteTrees').doc(d.id).get();
+          if(likesDoc.exists) {
+            final toAdd = List<int>.from(likesDoc.data()?['likes'] ?? []);
+            for(var add in toAdd){
+              allLikedTrees.add(add);
+            }
+          }
+        }
+      });
+   
+    
   }
 
   Future<void> loadLikedTrees() async {
@@ -56,6 +76,7 @@ class ApplicationState extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
   
 
   void addTree(int id) async {
@@ -87,5 +108,9 @@ class ApplicationState extends ChangeNotifier {
 
   List getAll(){
     return likedTrees;
+  }
+
+  List getAllTrees(){
+    return allLikedTrees;
   }
 }

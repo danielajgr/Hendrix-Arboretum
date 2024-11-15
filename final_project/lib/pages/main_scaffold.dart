@@ -35,6 +35,11 @@ class _MainScaffoldState extends State<MainScaffold> {
       if(item.get_treeId == tree.get_treeId){
         return true;
       }
+      else{
+        if(list.isEmpty){
+          return false;
+        }
+      }
     }
     return false;
   }
@@ -44,8 +49,9 @@ class _MainScaffoldState extends State<MainScaffold> {
     for(var id in ids){
       TreeObject t = TreeObject(treeid: id);
       if(inList(t, ts) == false){
-        ts.add(t);
         t.add_like();
+        ts.add(t);
+        
       }
       else{
         t.add_like();
@@ -58,7 +64,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   void initState() {
     _onItemTapped(pageIndex);
     appState = context.read<ApplicationState>();
-    treeIds = appState.getAll();
+    treeIds = appState.getAllTrees();
     trees = getTrees(treeIds);
     super.initState();
   }
