@@ -21,6 +21,8 @@ class Leaderboard extends StatefulWidget {
 
   
 
+  
+
   bool inList(TreeObject tree, List list){
     for(var item in list){
       if(item.get_treeId == tree.get_treeId){
@@ -181,32 +183,37 @@ class Leaderboard extends StatefulWidget {
 class _LeaderboardState extends State<Leaderboard> {
   late Future<Tree> futureTree;
   
+  
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.read<ApplicationState>();
+    if(!appState.loggedIn){
+      return Container(
+        child: Text('Log in to See Our Top Trees')
+      );
+    }
+
     if(!widget.userTrees){
       widget.getTopTen();
     }
+    int rank = 0;
    
     return ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: widget.topTenTrees.map((item) {
+          children: 
+          
+          widget.topTenTrees.map((item) {
           //var futureTree = fetchTree(item.get_treeId());
-
+            rank++;
     
             return ListTile(
+              leading: CircleAvatar(
+                child: Text(rank.toString()),
+                backgroundColor: const Color.fromARGB(255, 5, 87, 47),
+                
+              ),
               title: Text("Tree " + item.get_treeId().toString()),
-              /*FutureBuilder<Tree>(
-              future: futureTree,
-              builder: (context, snapshot) {
-              if(snapshot.hasData){
-                return Text(snapshot.data!.commonName);
-              }else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-                return const Text("");
-              }
-              ),*/
               trailing: Text(item.get_likes().toString()),
               onTap: () async {
           await Navigator.of(context).push(
@@ -221,6 +228,7 @@ class _LeaderboardState extends State<Leaderboard> {
               
             );
           }).toList(),
+    
         
       
     );
