@@ -213,7 +213,7 @@ class _LeaderboardState extends State<Leaderboard> {
                 backgroundColor: const Color.fromARGB(255, 5, 87, 47),
                 
               ),
-              title: Text("Tree " + item.get_treeId().toString()),
+              title: Text("Tree #" + item.get_treeId().toString()),
               trailing: Text(item.get_likes().toString()),
               onTap: () async {
           await Navigator.of(context).push(

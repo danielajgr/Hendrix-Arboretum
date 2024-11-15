@@ -32,7 +32,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   bool inList(TreeObject tree, List list){
     for(var item in list){
-      if(item.get_treeId == tree.get_treeId){
+      if(item.get_treeId() == tree.get_treeId()){
         return true;
       }
       else{
@@ -42,6 +42,20 @@ class _MainScaffoldState extends State<MainScaffold> {
       }
     }
     return false;
+  }
+  int findDuplicate(TreeObject tr, List<TreeObject> listTr){
+    int index = 0;
+    for(var t in listTr){
+      if(t.get_treeId() == tr.get_treeId()){
+        return index;
+      }
+      else{
+        index++;
+      }
+    }
+    return index;
+
+
   }
 
   List<TreeObject> getTrees(List ids){
@@ -54,7 +68,8 @@ class _MainScaffoldState extends State<MainScaffold> {
         
       }
       else{
-        t.add_like();
+        int i = findDuplicate(t, ts);
+        ts[i].add_like();
       }
     }
     return ts;
@@ -74,7 +89,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     if(trees.isEmpty){
-      trees = [TreeObject(treeid: 0), TreeObject(treeid: 1), TreeObject(treeid: 2)];
+      trees = [TreeObject(treeid: 0), TreeObject(treeid: 1), TreeObject(treeid: 2), TreeObject(treeid: 3), TreeObject(treeid: 4), TreeObject(treeid: 5), TreeObject(treeid: 6), TreeObject(treeid: 7), TreeObject(treeid: 8), TreeObject(treeid: 9)];
     }
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
