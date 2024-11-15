@@ -1,4 +1,6 @@
 import 'package:final_project/app_state.dart';
+import 'package:final_project/objects/tree_object.dart';
+import 'package:final_project/pages/body/leaderboard.dart';
 import 'package:final_project/pages/main_scaffold.dart';
 import 'package:final_project/widgets/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +15,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +39,7 @@ class _ProfileState extends State<Profile> {
         ],
         children: [
           Text("User's liked trees coming soon"),
+          //Leaderboard(trees: [TreeObject(treeid: 123), TreeObject(treeid: 456)], userTrees: true)
         ],
       ),
     );

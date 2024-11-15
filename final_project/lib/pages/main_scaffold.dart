@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:final_project/app_state.dart";
 import "package:final_project/objects/tree_object.dart";
 import "package:final_project/pages/body/leaderboard.dart";
@@ -23,18 +24,58 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   int pageIndex = 1;
 
-  List<TreeObject> testingTrees = [TreeObject(treeid: 0), TreeObject(treeid: 1), TreeObject(treeid: 2)];
-  //list for leaderboard until data gets pulled from firebase
+  List<TreeObject> trees = [];
+
+  bool inList(TreeObject tree, List list){
+    for(var item in list){
+      if(item.get_treeId == tree.get_treeId){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> getTreesFromFirestore() async {
+    FirebaseFirestore.instance.collection('favoriteTrees').snapshots().listen((snapshot) {
+      setState(() {
+        trees.clear();  
+
+        for (var doc in snapshot.docs) {
+          List likes = (doc['likes'] as List);
+
+          for(var like in likes){
+            TreeObject tree = TreeObject(
+            treeid: (like as int));
+            if(!inList(tree, trees)){
+              trees.add(tree);
+              tree.add_like();
+            }
+            if(inList(tree, trees)){
+              tree.add_like();
+            
+            
+              
+          }
+        }
+  
+      }
+    });
+    });
+  }
 
 
   @override
   void initState() {
     _onItemTapped(pageIndex);
+    getTreesFromFirestore();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if(trees.isEmpty){
+      trees = [TreeObject(treeid: 0), TreeObject(treeid: 1), TreeObject(treeid: 2)];
+    }
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
@@ -84,7 +125,8 @@ class _MainScaffoldState extends State<MainScaffold> {
       // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch (index) {
         0 => (
-            Leaderboard(trees: testingTrees),
+            Leaderboard(trees: 
+            trees, userTrees: false,),
             "Leaderboard"
 
           ), // TODO: replace this null when you create the Leaderboard body widget

@@ -1,30 +1,25 @@
 import 'dart:collection';
 
+import 'package:final_project/api/tree.dart';
+import 'package:final_project/app_state.dart';
 import 'package:final_project/objects/tree_object.dart';
 import 'package:final_project/pages/tree_info.dart';
 import 'package:final_project/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
-class Leaderboard extends StatelessWidget {
-  Leaderboard({required this.trees});
+class Leaderboard extends StatefulWidget {
+  Leaderboard({required this.trees, required this.userTrees});
 
   final List<TreeObject> trees;
+  final bool userTrees;
 
   List<TreeObject> topTenTrees = [];
+
   
 
-  //adding likes to the testing trees list
-  //adds two likes to first tree, one to the second, and none to the third
-  void testAddingLikes(){
-    trees[0].add_like();
-    trees[0].add_like();
-    trees[1].add_like();
-    trees[2].add_like();
-    trees[2].add_like();
-    trees[2].add_like();
-    
-  }
+  
 
   bool inList(TreeObject tree, List list){
     for(var item in list){
@@ -48,18 +43,22 @@ class Leaderboard extends StatelessWidget {
     int tenth = 0;
 
     if(trees.length > 0){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[0].remove_Like();
+      max = topTenTrees[0].get_likes();
       for(var tree in trees){
         if(tree.get_likes() > max){
           topTenTrees[0] = tree;
           max = tree.get_likes();
         }
+        
       }
+      
+      
     }
 
     if(trees.length > 1){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 200000000));
       topTenTrees[1].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= max) 
@@ -72,7 +71,7 @@ class Leaderboard extends StatelessWidget {
     }
 
     if(trees.length > 2){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[2].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= second) 
@@ -84,7 +83,7 @@ class Leaderboard extends StatelessWidget {
       }
     }
     if(trees.length > 3){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[3].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= third) 
@@ -96,7 +95,7 @@ class Leaderboard extends StatelessWidget {
       }
     }
     if(trees.length > 4){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[4].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= fourth) 
@@ -110,7 +109,7 @@ class Leaderboard extends StatelessWidget {
 
 
     if(trees.length > 5){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[5].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= fifth) 
@@ -123,7 +122,7 @@ class Leaderboard extends StatelessWidget {
     }
 
     if(trees.length > 6){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[6].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= sixth) 
@@ -136,7 +135,7 @@ class Leaderboard extends StatelessWidget {
     }
 
     if(trees.length > 7){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[7].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= seventh) 
@@ -149,7 +148,7 @@ class Leaderboard extends StatelessWidget {
     }
 
     if(trees.length > 8){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[8].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= eighth) 
@@ -162,7 +161,7 @@ class Leaderboard extends StatelessWidget {
     }
 
     if(trees.length > 9){
-      topTenTrees.add(TreeObject(treeid: 2000000));
+      topTenTrees.add(TreeObject(treeid: 20000000));
       topTenTrees[9].remove_Like();
       for(var tree in trees){
         if((tree.get_likes() <= ninth) 
@@ -173,47 +172,41 @@ class Leaderboard extends StatelessWidget {
         }
       }
     }
-
-    
-
-
-
-    /*
-    topTenTrees.addFirst(trees[0]);
-
-    for(var tree in trees){
-      if(topTenTrees.isEmpty){
-        topTenTrees.addFirst(trees[0]);
-      }
-      else{
-        if(tree.get_likes() >= topTenTrees.first.get_likes()){
-          topTenTrees.addFirst(tree);
-      }
-        if(tree.get_likes() >= topTenTrees.last.get_likes()){
-          topTenTrees.addFirst(tree);
-        }
-      else{
-          topTenTrees.addLast(tree);
-        }
-      }
-    }*/
-
     }
-    
 
+  @override
+  State<Leaderboard> createState() => _LeaderboardState();
+}
 
-
+class _LeaderboardState extends State<Leaderboard> {
+  late Future<Tree> futureTree;
+  
 
   @override
   Widget build(BuildContext context) {
-    testAddingLikes();
-    getTopTen();
+    if(!widget.userTrees){
+      widget.getTopTen();
+    }
+   
     return ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          children: topTenTrees.map((item) {
+          children: widget.topTenTrees.map((item) {
+          var futureTree = fetchTree(item.get_treeId());
+
+    
             return ListTile(
-              title: Text(item.get_treeId().toString()),
-              subtitle: Text(item.get_likes().toString()),
+              leading: FutureBuilder<Tree>(
+              future: futureTree,
+              builder: (context, snapshot) {
+              if(snapshot.hasData){
+                return Text(snapshot.data!.commonName);
+              }else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+                return const Text("");
+              }
+              ),
+              trailing: Text(item.get_likes().toString()),
               onTap: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -232,4 +225,6 @@ class Leaderboard extends StatelessWidget {
     );
     
   }
+  
+  
 }
