@@ -23,32 +23,16 @@ class _LeaderboardState extends State<Leaderboard> {
 
   List<TreeObject> topTenTrees = [];
 
-  // ----------------------------------------------
-  List<TreeObject> likeList = [
-    TreeObject(treeid: 100000),
-    TreeObject(treeid: 100001),
-    TreeObject(treeid: 100002)
-  ];
-  // ----------------------------------------------
-
   @override
   void initState() {
     super.initState();
     var appState = context.read<ApplicationState>();
-   //  if(!appState.loggedIn){
-   //    return Container(
-   //      child: Text('Log in to See Our Top Trees')
-   //    );
-   //  }
+    //  if(!appState.loggedIn){
+    //    return Container(
+    //      child: Text('Log in to See Our Top Trees')
+    //    );
+    //  }
     if (!widget.userTrees) {
-      // TEMP TO SHOW CORRECT ORDERING (delete when likes fully work):
-      // ----------------------------------------------
-      for (int i = 0; i < 3; i++) {
-        likeList[i].likes = 10 + i;
-      }
-      treeQueue.addAll(likeList);
-      // ----------------------------------------------
-
       treeQueue.addAll(widget.trees);
       for (int i = 0; i < 10 && treeQueue.isNotEmpty; i++) {
         topTenTrees.add(treeQueue.removeFirst());
@@ -58,8 +42,6 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     int rank = 0;
 
     return ListView(
