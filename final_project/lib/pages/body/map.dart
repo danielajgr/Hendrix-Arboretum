@@ -1,3 +1,5 @@
+import "package:audioplayers/audioplayers.dart";
+import "package:final_project/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
 import "package:latlong2/latlong.dart";
@@ -53,6 +55,7 @@ class _MapState extends State<Map> {
                   source: Text("Tiles - Esri", softWrap: true)),
               // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
               if (treeLocation != null)
+              Stack(children: [
                 MarkerLayer(
                   markers: [
                     Marker(
@@ -70,18 +73,25 @@ class _MapState extends State<Map> {
                         )),
                   ],
                 ),
+                 ])
             ]))
       ]);
     });
   }
 
   Future<void> searchTree(String id) async {
+    final AudioPlayer _audioPlayer = AudioPlayer();
     try {
       tree = await fetchTree(int.parse(id));
-      setState(() {
+      setState(()  {
         if (tree != null) {
           treeLocation = LatLng(
               double.parse(tree!.latitude), double.parse(tree!.longitude));
+               _audioPlayer.play(AssetSource('audio/ding.mp3'));
+               ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                content: Text('You found a Tree!',textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelLarge,), backgroundColor:  const Color.fromARGB(255, 0, 103, 79)),
+        );
+
         }
         mapController.move(treeLocation!,18);
       });
