@@ -61,19 +61,33 @@ class _MapState extends State<Map> {
           Row(
             children: [
             Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 child: SizedBox(
-                    width: 200,
-                    height: 60,
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        label: Text("Search by Tree ID:  "), fillColor: const Color.fromARGB(255, 175, 225, 175), filled: true,
-                        border: OutlineInputBorder(),
+                  width: 390,
+                  height: 55,
+                  child: TextField(
+                    decoration:  InputDecoration(
+                      label: Text("Search by Tree ID:", style: Theme.of(context).textTheme.labelLarge,),
+                      fillColor: Color.fromARGB(255, 188, 159, 128),
+                      filled: true,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)), 
                       ),
-                      onSubmitted: (id) {
-                        searchTree(id);
-                      },
-                    ))),
+                      enabledBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)), 
+                        borderSide: BorderSide(color: Colors.grey), 
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)), 
+                        borderSide: BorderSide(color: Colors.black), 
+                      ),
+                    ),
+                    onSubmitted: (id) {
+                      searchTree(id);
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ],)
