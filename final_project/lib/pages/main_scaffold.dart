@@ -23,8 +23,12 @@ class _MainScaffoldState extends State<MainScaffold> {
   String? pageTitle;
 
   int pageIndex = 1;
+  var appState;
+
 
   List<TreeObject> trees = [];
+
+  List treeIds = [];
 
   bool inList(TreeObject tree, List list){
     for(var item in list){
@@ -35,41 +39,31 @@ class _MainScaffoldState extends State<MainScaffold> {
     return false;
   }
 
-  Future<void> getTreesFromFirestore() async {
-    FirebaseFirestore.instance.collection('favoriteTrees').snapshots().listen((snapshot) {
-      setState(() {
-        trees.clear();  
-
-        for (var doc in snapshot.docs) {
-          List likes = (doc['likes'] as List);
-
-          for(var like in likes){
-            TreeObject tree = TreeObject(
-            treeid: (like as int));
-            if(!inList(tree, trees)){
-              trees.add(tree);
-              tree.add_like();
-            }
-            if(inList(tree, trees)){
-              tree.add_like();
-            
-            
-              
-          }
-        }
-  
+  List<TreeObject> getTrees(List ids){
+    List<TreeObject> ts = [];
+    for(var id in ids){
+      TreeObject t = TreeObject(treeid: id);
+      if(inList(t, ts) == false){
+        ts.add(t);
+        t.add_like();
       }
-    });
-    });
-  }
-
+      else{
+        t.add_like();
+      }
+    }
+    return ts;
+  }  
 
   @override
   void initState() {
     _onItemTapped(pageIndex);
-    getTreesFromFirestore();
+    appState = context.read<ApplicationState>();
+    treeIds = appState.getAll();
+    trees = getTrees(treeIds);
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
