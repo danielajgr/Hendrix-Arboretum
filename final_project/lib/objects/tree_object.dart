@@ -1,12 +1,8 @@
-class TreeObject{
+class TreeObject implements Comparable<TreeObject> {
   TreeObject({required this.treeid});
   int treeid;
   int likes = 0;
   
-  int get_likes(){
-    return likes;
-  }
-
   void add_like(){
     likes ++;
   }
@@ -15,9 +11,10 @@ class TreeObject{
     likes --;
   }
 
-  int get_treeId(){
-    return treeid;
+  // Automatically adjusts order of TreeObjects
+  @override
+  int compareTo(TreeObject other) {
+    return other.likes.compareTo(likes);
   }
 
-  
 }
