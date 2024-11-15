@@ -20,25 +20,8 @@ class _MapState extends State<Map> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Column(children: [
-        Row(
-          children: [
-            Text("Search by Tree ID:  "),
-            Padding(
-                padding: const EdgeInsets.all(8),
-                child: SizedBox(
-                    width: 150,
-                    height: 60,
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      onSubmitted: (id) {
-                        searchTree(id);
-                      },
-                    ))),
-          ],
-        ),
-        Expanded(
+        Expanded(child: Stack(children: [
+          Positioned.fill(
             child: FlutterMap(
                mapController: mapController,
                 options: MapOptions(
@@ -74,7 +57,30 @@ class _MapState extends State<Map> {
                   ],
                 ),
                  ])
-            ]))
+            ])),
+          Row(
+            children: [
+            Padding(
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                    width: 200,
+                    height: 60,
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        label: Text("Search by Tree ID:  "), fillColor: const Color.fromARGB(255, 175, 225, 175), filled: true,
+                        border: OutlineInputBorder(),
+                      ),
+                      onSubmitted: (id) {
+                        searchTree(id);
+                      },
+                    ))),
+            ],
+          ),
+        ],)
+        ,)
+        
+        
+        
       ]);
     });
   }
