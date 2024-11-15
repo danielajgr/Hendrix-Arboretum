@@ -195,7 +195,8 @@ class _LeaderboardState extends State<Leaderboard> {
 
     
             return ListTile(
-              leading: FutureBuilder<Tree>(
+              leading: Text("Tree" + item.get_treeId().toString()),
+              /*FutureBuilder<Tree>(
               future: futureTree,
               builder: (context, snapshot) {
               if(snapshot.hasData){
@@ -205,7 +206,7 @@ class _LeaderboardState extends State<Leaderboard> {
               }
                 return const Text("");
               }
-              ),
+              ),*/
               trailing: Text(item.get_likes().toString()),
               onTap: () async {
           await Navigator.of(context).push(
