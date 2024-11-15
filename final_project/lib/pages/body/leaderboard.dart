@@ -191,11 +191,11 @@ class _LeaderboardState extends State<Leaderboard> {
     return ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           children: widget.topTenTrees.map((item) {
-          var futureTree = fetchTree(item.get_treeId());
+          //var futureTree = fetchTree(item.get_treeId());
 
     
             return ListTile(
-              leading: Text("Tree" + item.get_treeId().toString()),
+              title: Text("Tree " + item.get_treeId().toString()),
               /*FutureBuilder<Tree>(
               future: futureTree,
               builder: (context, snapshot) {
