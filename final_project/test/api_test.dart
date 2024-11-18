@@ -12,7 +12,7 @@ void ensureTreeFields(Tree t) {
   expect(t.commonName.isNotEmpty, true);
 }
 
-void ensureSpecialityFields(Speciality s) {
+void ensureSpecialityFields(Specialty s) {
   expect(s.id != 0, true);
   expect(s.title.isNotEmpty, true);
   expect(s.excerpt.isNotEmpty, true);
@@ -42,9 +42,9 @@ void main() {
   });
 
   test('We can get a list of all specialities', () async {
-    List<Speciality> sps = await getAllSpecialties();
+    List<Specialty> sps = await fetchAllSpecialties();
     expect(sps.isNotEmpty, true);
-    for (Speciality s in sps) {
+    for (Specialty s in sps) {
       ensureSpecialityFields(s);
     }
   });
