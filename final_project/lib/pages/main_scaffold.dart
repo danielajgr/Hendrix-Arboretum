@@ -78,9 +78,6 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   void initState() {
     _onItemTapped(pageIndex);
-    appState = context.read<ApplicationState>();
-    treeIds = appState.getAllTrees();
-    trees = getTrees(treeIds);
     super.initState();
   }
 
@@ -133,6 +130,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   void _onItemTapped(int index) async {
     setState(() {
+      appState = context.read<ApplicationState>();
       treeIds = appState.getAllTrees();
       trees = getTrees(treeIds);
       pageIndex = index;
