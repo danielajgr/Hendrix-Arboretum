@@ -144,7 +144,7 @@ class _TreeInfoState extends State<TreeInfo> {
               ),
           ],)
           ),
-          Container(padding: EdgeInsets.only(top:50, left: 80, right: 80), child:
+          Container(padding: EdgeInsets.only(top:50, left: 80, right: 80, bottom: 10), child:
           ElevatedButton(onPressed: () => {_launchurl(Uri.parse('https://plants.ces.ncsu.edu/find_a_plant/common-name/?q=${widget.commonname}'))}
           , child: Text('More Info'))
           )
