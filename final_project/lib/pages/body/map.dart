@@ -128,6 +128,7 @@ class _MapState extends State<Map> {
           title: Text("Tree #${tree!.id}"),
           content: ElevatedButton(
               onPressed: () => {
+                    Navigator.of(context).pop(),
                     Navigator.push(
                         context,
                         MaterialPageRoute(
