@@ -78,6 +78,6 @@ Future<List<Tree>> fetchTreesForSpecialty(Specialty s) async {
       throw Exception('Expected JSON list, got this instead: $dec');
     }
   } else {
-    throw Exception('Failed to load trees in specialty, HTTP status: ${response.statusCode}');
+    throw Exception('Failed to load trees in specialty \'${s.title}\', HTTP status: ${response.statusCode}');
   }
 }

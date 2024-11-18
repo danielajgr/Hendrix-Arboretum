@@ -41,11 +41,23 @@ void main() {
     }
   });
 
-  test('We can get a list of all specialities', () async {
+  test('We can get a list of all specialties', () async {
     List<Specialty> sps = await fetchAllSpecialties();
     expect(sps.isNotEmpty, true);
     for (Specialty s in sps) {
       ensureSpecialityFields(s);
+    }
+  });
+
+  test('We can get a list trees from a specialty', () async {
+    List<Specialty> sps = await fetchAllSpecialties();
+    expect(sps.isNotEmpty, true);
+    Specialty s = sps[0];
+    ensureSpecialityFields(s);
+
+    List<Tree> ts = await fetchTreesForSpecialty(s);
+    for (Tree t in ts) {
+      ensureTreeFields(t);
     }
   });
 }
