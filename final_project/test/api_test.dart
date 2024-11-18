@@ -1,3 +1,4 @@
+import 'package:final_project/api/speciality.dart';
 import 'package:final_project/api/tree.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,6 +10,12 @@ void ensureTreeFields(Tree t) {
   expect(t.latitude.isNotEmpty, true);
   expect(t.longitude.isNotEmpty, true);
   expect(t.commonName.isNotEmpty, true);
+}
+
+void ensureSpecialityFields(Speciality s) {
+  expect(s.id != 0, true);
+  expect(s.title.isNotEmpty, true);
+  expect(s.excerpt.isNotEmpty, true);
 }
 
 void main() {
@@ -33,4 +40,13 @@ void main() {
       ensureTreeFields(t);
     }
   });
+
+  test('We can get a list of all specialities', () async {
+    List<Speciality> sps = await getAllSpecialities();
+    expect(sps.isNotEmpty, true);
+    for (Speciality s in sps) {
+      ensureSpecialityFields(s);
+    }
+  });
 }
+
