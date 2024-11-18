@@ -32,7 +32,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   bool inList(TreeObject tree, List list){
     for(var item in list){
-      if(item.get_treeId() == tree.get_treeId()){
+      if(item.treeid == tree.treeid){
         return true;
       }
       else{
@@ -46,7 +46,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   int findDuplicate(TreeObject tr, List<TreeObject> listTr){
     int index = 0;
     for(var t in listTr){
-      if(t.get_treeId() == tr.get_treeId()){
+      if(t.treeid == tr.treeid){
         return index;
       }
       else{
@@ -123,7 +123,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard), label: "Leaderboard"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: "Map"),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: "About"),
         ],
         currentIndex: pageIndex,
