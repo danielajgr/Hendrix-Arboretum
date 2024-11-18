@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 
 
 class TreeInfo extends StatefulWidget {
-  TreeInfo({super.key, required this.treeid});
+  TreeInfo({super.key, required this.treeid, commonname});
   //will need to know the tree?
   final int treeid;
+  String commonname = 'tree';
   @override
   State<TreeInfo> createState() => _TreeInfoState();
 }
@@ -58,7 +60,7 @@ class _TreeInfoState extends State<TreeInfo> {
       },
     )]
     ),
-      body: ListView(padding: const EdgeInsets.all(50), children: [
+      body: ListView(padding: const EdgeInsets.only(left: 50, right: 50, top: 50), children: [
 
           
            FutureBuilder<Tree>(
@@ -96,6 +98,10 @@ class _TreeInfoState extends State<TreeInfo> {
               future: futureTree,
               builder: (context, snapshot) {
               if(snapshot.hasData){
+                widget.commonname = snapshot.data!.commonName;
+                if(widget.commonname.contains(',')){
+                  widget.commonname = widget.commonname.split(',')[1] + ' ' + widget.commonname.split(',')[0];
+                }
                 return Text(snapshot.data!.commonName, style: TextStyle(color: Colors.white));
               }else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
@@ -137,7 +143,12 @@ class _TreeInfoState extends State<TreeInfo> {
               }
               ),
           ],)
+          ),
+          Container(padding: EdgeInsets.only(top:50, left: 80, right: 80), child:
+          ElevatedButton(onPressed: () => {_launchurl(Uri.parse('https://plants.ces.ncsu.edu/find_a_plant/common-name/?q=${widget.commonname}'))}
+          , child: Text('More Info'))
           )
+          
           
           ],
       ),
@@ -145,5 +156,13 @@ class _TreeInfoState extends State<TreeInfo> {
       
     );
   }
+
+  Future<void> _launchurl(Uri url) async {
+  if(!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
+  }
 }
+
+}
+
 
