@@ -88,9 +88,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    if(trees.isEmpty){
-      trees = [TreeObject(treeid: 0), TreeObject(treeid: 1), TreeObject(treeid: 2), TreeObject(treeid: 3), TreeObject(treeid: 4), TreeObject(treeid: 5), TreeObject(treeid: 6), TreeObject(treeid: 7), TreeObject(treeid: 8), TreeObject(treeid: 9)];
-    }
+    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
@@ -135,16 +133,17 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   void _onItemTapped(int index) async {
     setState(() {
+      treeIds = appState.getAllTrees();
+      trees = getTrees(treeIds);
       pageIndex = index;
 
       // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch (index) {
         0 => (
             Leaderboard(trees: 
-            trees, userTrees: false,),
-            "Leaderboard"
+            trees,),
+            "Leaderboard"),
 
-          ), // TODO: replace this null when you create the Leaderboard body widget
         1 => (Map(), "Hendrix Arboretum"),
         2 => (About(), "About"),
         _ => (null, null)
