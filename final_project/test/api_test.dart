@@ -42,7 +42,7 @@ void main() {
   });
 
   test('We can get a list of all specialities', () async {
-    List<Speciality> sps = await getAllSpecialities();
+    List<Speciality> sps = await getAllSpecialties();
     expect(sps.isNotEmpty, true);
     for (Speciality s in sps) {
       ensureSpecialityFields(s);

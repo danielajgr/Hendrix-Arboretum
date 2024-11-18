@@ -32,7 +32,7 @@ class Speciality {
   }
 }
 
-Future<List<Speciality>> getAllSpecialities() async {
+Future<List<Speciality>> getAllSpecialties() async {
   final response =
       await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Specialties/All'));
 
