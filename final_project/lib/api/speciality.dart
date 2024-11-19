@@ -59,8 +59,9 @@ Future<List<Specialty>> fetchAllSpecialties() async {
 }
 
 Future<List<Tree>> fetchTreesForSpecialty(Specialty s) async {
+  final String req = s.title;
   final response =
-      await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Specialties/${s.title}'));
+      await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Specialties/?specialty=$req'));
 
   if (response.statusCode == 200) {
     var dec = jsonDecode(response.body);

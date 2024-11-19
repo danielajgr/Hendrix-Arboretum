@@ -52,7 +52,7 @@ void main() {
   test('We can get a list trees from a specialty', () async {
     List<Specialty> sps = await fetchAllSpecialties();
     expect(sps.isNotEmpty, true);
-    Specialty s = sps[0];
+    Specialty s = sps.last;
     ensureSpecialityFields(s);
 
     List<Tree> ts = await fetchTreesForSpecialty(s);
