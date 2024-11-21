@@ -1,30 +1,24 @@
 import "package:collection/collection.dart";
-
-import 'package:final_project/api/tree.dart';
-import 'package:final_project/app_state.dart';
 import 'package:final_project/objects/tree_object.dart';
 import 'package:final_project/pages/tree_info.dart';
-import 'package:final_project/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Leaderboard extends StatefulWidget {
-  Leaderboard({required this.trees});
+  const Leaderboard({super.key, required this.trees});
   final List<TreeObject> trees;
 
   @override
-  State<Leaderboard> createState() => _LeaderboardState();
-}
+  State<Leaderboard> createState() => _LeaderboardState();}
+
 
 class _LeaderboardState extends State<Leaderboard> {
   PriorityQueue<TreeObject> treeQueue = PriorityQueue();
-
   List<TreeObject> topTenTrees = [];
 
   @override
   void initState() {
     super.initState();
-    if(treeQueue.isEmpty){
+    if(topTenTrees.isEmpty){
       treeQueue.addAll(widget.trees);
       for (int i = 0; i < 10 && treeQueue.isNotEmpty; i++) {
         topTenTrees.add(treeQueue.removeFirst());
@@ -32,14 +26,16 @@ class _LeaderboardState extends State<Leaderboard> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     int rank = 0;
-    if(treeQueue.isEmpty){
+    if(topTenTrees.isEmpty){
     treeQueue.addAll(widget.trees);
       for (int i = 0; i < 10 && treeQueue.isNotEmpty; i++) {
         topTenTrees.add(treeQueue.removeFirst());
-      }}
+      }
+    }
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       children: topTenTrees.map((item) {
@@ -55,8 +51,7 @@ class _LeaderboardState extends State<Leaderboard> {
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => TreeInfo(
-                  treeid: item.treeid,
-                ),
+                  treeid: item.treeid,),
               ),
             );
           },

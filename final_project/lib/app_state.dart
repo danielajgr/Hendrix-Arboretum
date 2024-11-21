@@ -89,6 +89,22 @@ class ApplicationState extends ChangeNotifier {
 
 
 
+  void removeTree(int id) async {
+    int i = 0;
+    int remove = 0;
+    for (var t in likedTrees){
+      if(t == id){
+        remove = i;
+      }
+      i++;
+    }
+
+    likedTrees.removeAt(remove);
+    await updateLikedTreesInFirestore();
+    notifyListeners();  }
+
+
+
   Future<void> updateLikedTreesInFirestore() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
