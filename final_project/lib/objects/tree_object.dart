@@ -1,15 +1,25 @@
 import '../api/tree.dart';
 
-class TreeObject {
+class TreeObject implements Comparable<TreeObject> {
   TreeObject({required this.treeid});
   int treeid;
   int likes = 0;
 
-  void addLike() {
+  Future<Tree> getTree() {
+    return fetchTree(treeid);
+  }
+
+  void add_like() {
     likes++;
   }
 
-  Future<Tree> getTree() {
-    return fetchTree(treeid);
+  void remove_Like() {
+    likes--;
+  }
+
+  // Automatically adjusts order of TreeObjects
+  @override
+  int compareTo(TreeObject other) {
+    return other.likes.compareTo(likes);
   }
 }

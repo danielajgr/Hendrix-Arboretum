@@ -1,7 +1,6 @@
 import 'package:final_project/app_state.dart';
-import 'package:final_project/pages/main_scaffold.dart';
-import 'package:final_project/widgets/authentication.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:final_project/objects/tree_object.dart';
+import 'package:final_project/pages/tree_info.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +12,25 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  var appState;
+  List<TreeObject> trees = [];
+  List treeIds = [];
+
+
+  List<TreeObject> getTrees(List ids){
+    List<TreeObject> ts = [];
+    for(var id in ids){
+      TreeObject t = TreeObject(treeid: id);}
+    return ts;} 
+
+  @override
+  void initState() {
+    appState = context.read<ApplicationState>();
+    treeIds = appState.getAll();
+    trees = getTrees(treeIds);
+    super.initState();}
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +53,40 @@ class _ProfileState extends State<Profile> {
           }),
         ],
         children: [
-          Text("User's liked trees coming soon"),
-        ],
-      ),
-    );
-  }
-}
+          Container(
+            child: Text("Your Liked Trees"),
+          ),
+          ListView(
+            shrinkWrap: true,
+          children: trees.map((item) {
+            return ListTile(
+              title: Text("Tree #" + item.treeid.toString()),
+              trailing: IconButton(
+              icon: Icon(Icons.favorite),
+              color: appState.isFavorite(item.treeid) ? Color.fromARGB(255, 255, 0, 0) : Color(0xff9A9A9A),
+              onPressed: () async {
+                if (!appState.loggedIn) {
+                  context.push('/sign-in');
+                }else{
+                if(appState.isFavorite(item.treeid)){
+                  setState(() {
+                  appState.removeTree(item.treeid);
+                });}
+                else{
+                  setState(() {
+                  appState.addTree(item.treeid);
+                  });
+                }}},
+              ),
+          onTap: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => TreeInfo(treeid: item.treeid),
+              ),
+            );
+          },
+        );
+      }).toList()),
+    ]), 
+  );
+}}

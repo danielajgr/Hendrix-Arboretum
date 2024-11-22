@@ -1,3 +1,5 @@
+import "package:audioplayers/audioplayers.dart";
+import "package:final_project/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
 import "package:latlong2/latlong.dart";
@@ -12,31 +14,16 @@ class Map extends StatefulWidget {
 class _MapState extends State<Map> {
   LatLng? treeLocation;
   Tree? tree;
+  MapController mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Column(children: [
-        Row(
-          children: [
-            Text("Search by Tree ID:  "),
-            Padding(
-                padding: const EdgeInsets.all(8),
-                child: SizedBox(
-                    width: 150,
-                    height: 60,
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      onSubmitted: (id) {
-                        searchTree(id);
-                      },
-                    ))),
-          ],
-        ),
-        Expanded(
+        Expanded(child: Stack(children: [
+          Positioned.fill(
             child: FlutterMap(
+               mapController: mapController,
                 options: MapOptions(
                     initialCenter:
                         treeLocation ?? const LatLng(35.100232, -92.440290),
@@ -45,9 +32,13 @@ class _MapState extends State<Map> {
               TileLayer(
                   // https://docs.fleaflet.dev/
                   urlTemplate:
-                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png' // Should change
+                      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' // Should change
                   ),
+              const SimpleAttributionWidget(
+                  source: Text("Tiles - Esri", softWrap: true)),
+              // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
               if (treeLocation != null)
+              Stack(children: [
                 MarkerLayer(
                   markers: [
                     Marker(
@@ -65,18 +56,63 @@ class _MapState extends State<Map> {
                         )),
                   ],
                 ),
-            ]))
+                 ])
+            ])),
+          Row(
+            children: [
+            Padding(
+                padding: const EdgeInsets.all(10),
+                child: SizedBox(
+                  width: 390,
+                  height: 55,
+                  child: TextField(
+                    decoration:  InputDecoration(
+                      label: Text("Search by Tree ID:", style: Theme.of(context).textTheme.labelLarge,),
+                      fillColor: Color.fromARGB(255, 188, 159, 128),
+                      filled: true,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)), 
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)), 
+                        borderSide: BorderSide(color: Colors.grey), 
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)), 
+                        borderSide: BorderSide(color: Colors.black), 
+                      ),
+                    ),
+                    onSubmitted: (id) {
+                      searchTree(id);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],)
+        ,)
+        
+        
+        
       ]);
     });
   }
 
   Future<void> searchTree(String id) async {
+    final AudioPlayer _audioPlayer = AudioPlayer();
     try {
       tree = await fetchTree(int.parse(id));
-      setState(() {
+      setState(()  {
         if (tree != null) {
           treeLocation = LatLng(tree!.latitude, tree!.longitude);
+
+               _audioPlayer.play(AssetSource('audio/ding.mp3'));
+               ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                content: Text('You found a Tree!',textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelLarge,), backgroundColor:  const Color.fromARGB(255, 0, 103, 79)),
+        );
         }
+        mapController.move(treeLocation!,18);
       });
     } catch (e) {
       print("Error fetching tree: $e");
@@ -91,6 +127,7 @@ class _MapState extends State<Map> {
           title: Text("Tree #${tree!.id}"),
           content: ElevatedButton(
               onPressed: () => {
+                    Navigator.of(context).pop(),
                     Navigator.push(
                         context,
                         MaterialPageRoute(

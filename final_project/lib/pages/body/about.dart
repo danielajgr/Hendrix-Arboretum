@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_arc_text/flutter_arc_text.dart';
 
 class About extends StatelessWidget {
   @override
@@ -8,27 +11,20 @@ class About extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            Image.asset('assets/about_tree.jpg'),
+            Image.asset('assets/vines.png'),
             Container(
-              color: Colors.black54,
-              child: const Text(
+              child: Text(
                 "Hendrix Arboretum",
-                style: TextStyle(color: Colors.white, fontSize: 25),
+                style: Theme.of(context).textTheme.displayLarge),
               ),
-            ),
+              
+            
           ],
         ),
+        
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(
-              flex: 1,
-              child: Image.asset(
-                'assets/oak_tree.jpeg',
-                fit: BoxFit.cover,
-                height: 300.0,
-              ),
-            ),
             const Expanded(
                 flex: 2,
                 child: Column(children: [
@@ -48,36 +44,44 @@ class About extends StatelessWidget {
                 ])),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Expanded(
-                flex: 2,
-                child: Column(children: [
-                  Text("Locate a Tree Tag",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Each tree in the arboretum can be identified with a numbered circular metallic tag, found on the south side of the tree. Enter the ID number in the search field below to learn more information about the tree.",
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ])),
-            Expanded(
-              flex: 1,
-              child: Image.asset(
-                'assets/tree_tag.jpg',
-                fit: BoxFit.cover,
-                height: 300.0,
+        Image.asset('assets/vines2.png'),
+        Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Image.asset(
+              'assets/tag.png',
+              fit: BoxFit.contain, 
+              height: 400.0,       
+            ),
+            Positioned(
+              top: 150, 
+              child: ArcText(
+                radius: 150,
+                text: 'Locate Tag!',
+                textStyle: Theme.of(context).textTheme.displayLarge,
+                startAngle: -pi / 2.3,
+                startAngleAlignment: StartAngleAlignment.start,
+                placement: Placement.outside,
+                direction: Direction.clockwise,
               ),
             ),
           ],
-        )
+          ),
+          
+        Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text(
+          "Each tree in the arboretum can be identified with a numbered circular metallic tag, found on the south side of the tree. Enter the ID number in the search field to learn more information about the tree.",
+          style: TextStyle(fontSize: 16),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Image.asset('assets/hendrix_logo.png',
+              fit: BoxFit.contain, 
+              height: 150.0,       
+            )
+      
+
       ],
     );
   }
