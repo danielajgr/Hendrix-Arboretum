@@ -105,13 +105,12 @@ class _MapState extends State<Map> {
       tree = await fetchTree(int.parse(id));
       setState(()  {
         if (tree != null) {
-          treeLocation = LatLng(
-              double.parse(tree!.latitude), double.parse(tree!.longitude));
+          treeLocation = LatLng(tree!.latitude, tree!.longitude);
+
                _audioPlayer.play(AssetSource('audio/ding.mp3'));
                ScaffoldMessenger.of(context).showSnackBar( SnackBar(
                 content: Text('You found a Tree!',textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelLarge,), backgroundColor:  const Color.fromARGB(255, 0, 103, 79)),
         );
-
         }
         mapController.move(treeLocation!,18);
       });
