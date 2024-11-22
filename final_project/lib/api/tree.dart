@@ -13,17 +13,20 @@ class Tree {
   final String longitude;
   final String imageURL;
   final String commonName;
+  final int height;
+  final double dbh;
 
-  const Tree({
-    required this.id,
-    required this.buildingName,
-    required this.directionName,
-    required this.scientificName,
-    required this.latitude,
-    required this.longitude,
-    required this.imageURL,
-    required this.commonName,
-  });
+  const Tree(
+      {required this.id,
+      required this.buildingName,
+      required this.directionName,
+      required this.scientificName,
+      required this.latitude,
+      required this.longitude,
+      required this.imageURL,
+      required this.commonName,
+      required this.height,
+      required this.dbh});
 
   factory Tree.fromJson(Map<String, dynamic> json) {
     return switch (json) {
@@ -36,6 +39,8 @@ class Tree {
         'longitude': String longitude,
         'imageURL': String imageURL,
         'commonName': String commonName,
+        'height': int height,
+        'dbh': double dbh
       } =>
         Tree(
           id: id,
@@ -46,6 +51,8 @@ class Tree {
           longitude: longitude,
           imageURL: imageURL,
           commonName: commonName,
+          height: height,
+          dbh: dbh,
         ),
       _ => throw const FormatException('Failed to load tree.'),
     };
