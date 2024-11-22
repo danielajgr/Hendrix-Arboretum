@@ -9,8 +9,8 @@ class Tree {
   final String buildingName;
   final String directionName;
   final String scientificName;
-  final String latitude;
-  final String longitude;
+  final double latitude;
+  final double longitude;
   final String imageURL;
   final String commonName;
   final int height;
@@ -47,14 +47,14 @@ class Tree {
           buildingName: buildingName,
           directionName: directionName,
           scientificName: scientificName,
-          latitude: latitude,
-          longitude: longitude,
+          latitude: double.parse(latitude),
+          longitude: double.parse(longitude),
           imageURL: imageURL,
           commonName: commonName,
           height: height,
           dbh: dbh,
         ),
-      _ => throw const FormatException('Failed to load tree.'),
+      _ => throw FormatException('Failed to load tree. $json'),
     };
   }
 }

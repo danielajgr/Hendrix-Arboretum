@@ -7,8 +7,8 @@ void ensureTreeFields(Tree t) {
   expect(t.buildingName.isNotEmpty, true);
   expect(t.directionName.isNotEmpty, true);
   expect(t.scientificName.isNotEmpty, true);
-  expect(t.latitude.isNotEmpty, true);
-  expect(t.longitude.isNotEmpty, true);
+  expect(t.latitude != 0, true);
+  expect(t.longitude != 0, true);
   expect(t.commonName.isNotEmpty, true);
 }
 

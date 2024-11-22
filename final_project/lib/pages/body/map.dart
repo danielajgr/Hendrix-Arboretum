@@ -75,8 +75,7 @@ class _MapState extends State<Map> {
       tree = await fetchTree(int.parse(id));
       setState(() {
         if (tree != null) {
-          treeLocation = LatLng(
-              double.parse(tree!.latitude), double.parse(tree!.longitude));
+          treeLocation = LatLng(tree!.latitude, tree!.longitude);
         }
       });
     } catch (e) {
