@@ -63,7 +63,7 @@ class _MapState extends State<Map> {
             Padding(
                 padding: const EdgeInsets.all(10),
                 child: SizedBox(
-                  width: 390,
+                  width: 300,
                   height: 55,
                   child: TextField(
                     decoration:  InputDecoration(
@@ -83,11 +83,14 @@ class _MapState extends State<Map> {
                       ),
                     ),
                     onSubmitted: (id) {
-                      searchTree(id);
+                      searchTree(id, false);
                     },
                   ),
                 ),
               ),
+              ElevatedButton(onPressed: (){
+                searchTree("", true);
+              }, child: const Icon(Icons.auto_awesome_rounded))
             ],
           ),
         ],)
@@ -99,10 +102,15 @@ class _MapState extends State<Map> {
     });
   }
 
-  Future<void> searchTree(String id) async {
+  Future<void> searchTree(String id, bool rand) async {
     final AudioPlayer _audioPlayer = AudioPlayer();
     try {
-      tree = await fetchTree(int.parse(id));
+      if (!rand){
+        tree = await fetchTree(int.parse(id));
+      }else{
+        tree = await fetchRandomTree();
+      }
+      
       setState(()  {
         if (tree != null) {
           treeLocation = LatLng(tree!.latitude, tree!.longitude);
@@ -119,6 +127,7 @@ class _MapState extends State<Map> {
     }
   }
 
+  
   void markerPopup(BuildContext context) {
     showDialog(
       context: context,
