@@ -88,9 +88,14 @@ class _MapState extends State<Map> {
                   ),
                 ),
               ),
-              ElevatedButton(onPressed: (){
-                searchTree("", true);
-              }, child: const Icon(Icons.auto_awesome_rounded))
+              IconButton(icon: Image.asset(
+                          "assets/dice.png",
+                          width: 24,
+                          height: 24),
+                          onPressed: (){
+                            searchTree("", true);
+                          },
+                          style: IconButton.styleFrom(backgroundColor: const Color.fromARGB(255, 188, 159, 128)))
             ],
           ),
         ],)
