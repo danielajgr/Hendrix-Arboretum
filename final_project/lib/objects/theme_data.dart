@@ -6,7 +6,7 @@ final ThemeData hendrixTodayLightMode = ThemeData(
   brightness: Brightness.light,
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
-    primary: Color.fromARGB(255, 202, 81, 39),
+    primary: Color.fromARGB(255, 12, 156, 98),
     onPrimary: Colors.white,
     secondary: Colors.black,
     onSecondary: Colors.white,

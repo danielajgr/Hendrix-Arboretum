@@ -63,7 +63,7 @@ class _MapState extends State<Map> {
             Padding(
                 padding: const EdgeInsets.all(10),
                 child: SizedBox(
-                  width: 390,
+                  width: 300,
                   height: 55,
                   child: TextField(
                     decoration:  InputDecoration(
@@ -83,11 +83,19 @@ class _MapState extends State<Map> {
                       ),
                     ),
                     onSubmitted: (id) {
-                      searchTree(id);
+                      searchTree(id, false);
                     },
                   ),
                 ),
               ),
+              IconButton(icon: Image.asset(
+                          "assets/dice.png",
+                          width: 24,
+                          height: 24),
+                          onPressed: (){
+                            searchTree("", true);
+                          },
+                          style: IconButton.styleFrom(backgroundColor: const Color.fromARGB(255, 188, 159, 128)))
             ],
           ),
         ],)
@@ -99,19 +107,23 @@ class _MapState extends State<Map> {
     });
   }
 
-  Future<void> searchTree(String id) async {
+  Future<void> searchTree(String id, bool rand) async {
     final AudioPlayer _audioPlayer = AudioPlayer();
     try {
-      tree = await fetchTree(int.parse(id));
+      if (!rand){
+        tree = await fetchTree(int.parse(id));
+      }else{
+        tree = await fetchRandomTree();
+      }
+      
       setState(()  {
         if (tree != null) {
-          treeLocation = LatLng(
-              double.parse(tree!.latitude), double.parse(tree!.longitude));
+          treeLocation = LatLng(tree!.latitude, tree!.longitude);
+
                _audioPlayer.play(AssetSource('audio/ding.mp3'));
                ScaffoldMessenger.of(context).showSnackBar( SnackBar(
                 content: Text('You found a Tree!',textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelLarge,), backgroundColor:  const Color.fromARGB(255, 0, 103, 79)),
         );
-
         }
         mapController.move(treeLocation!,18);
       });
@@ -120,6 +132,7 @@ class _MapState extends State<Map> {
     }
   }
 
+  
   void markerPopup(BuildContext context) {
     showDialog(
       context: context,
