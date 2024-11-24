@@ -20,7 +20,8 @@ class _ProfileState extends State<Profile> {
   List<TreeObject> getTrees(List ids){
     List<TreeObject> ts = [];
     for(var id in ids){
-      TreeObject t = TreeObject(treeid: id);}
+      TreeObject t = TreeObject(treeid: id);
+      ts.add(t);}
     return ts;} 
 
   @override
@@ -58,7 +59,7 @@ class _ProfileState extends State<Profile> {
           ),
           ListView(
             shrinkWrap: true,
-          children: trees.map((item) {
+            children: trees.map((item) {
             return ListTile(
               title: Text("Tree #" + item.treeid.toString()),
               trailing: IconButton(
