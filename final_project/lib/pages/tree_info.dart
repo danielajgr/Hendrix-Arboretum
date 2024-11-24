@@ -144,6 +144,44 @@ class _TreeInfoState extends State<TreeInfo> {
               ),
           ],)
           ),
+        FutureBuilder<Tree>(
+            future: futureTree,
+            builder: (context, snapshot) {
+            if(snapshot.hasData){
+              if(snapshot.data!.height != 0.0){
+                return Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
+                const Text('Height', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18)),
+                Text("${snapshot.data!.height}", style: TextStyle(color: Colors.white)),
+                ],
+              ));
+              }
+                
+            }else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+              return Text('');
+            }
+        ),
+
+          FutureBuilder<Tree>(
+            future: futureTree,
+            builder: (context, snapshot) {
+            if(snapshot.hasData){
+              if(snapshot.data!.dbh != 0.0){
+                return Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
+                const Text('DBH', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18)),
+                Text("${snapshot.data!.dbh}", style: TextStyle(color: Colors.white)),
+                ],
+              ));
+              }
+                
+            }else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+              return Text('');
+            }
+            ),
+          
           Container(padding: EdgeInsets.only(top:50, left: 80, right: 80, bottom: 10), child:
           ElevatedButton(onPressed: () => {_launchurl(Uri.parse('https://plants.ces.ncsu.edu/find_a_plant/common-name/?q=${widget.commonname}'))}
           , child: Text('More Info'))
