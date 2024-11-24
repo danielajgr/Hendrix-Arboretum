@@ -1,6 +1,7 @@
 import 'package:final_project/app_state.dart';
 import 'package:final_project/objects/tree_object.dart';
 import 'package:final_project/pages/tree_info.dart';
+import 'package:final_project/widgets/widgets.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -54,13 +55,21 @@ class _ProfileState extends State<Profile> {
           }),
         ],
         children: [
+          const Padding(padding: EdgeInsets.all(5)),
           Container(
-            child: Text("Your Liked Trees"),
-          ),
+            padding: const EdgeInsets.all(1),
+            child: const TextAndIcon(Icons.forest, "Your Liked Trees", 30
+            ),),
+          
+          const Padding(padding: EdgeInsets.only(top: 10)),
           ListView(
+            padding: EdgeInsets.all(0.8),
             shrinkWrap: true,
             children: trees.map((item) {
             return ListTile(
+              shape: const Border(
+              top: BorderSide(color: Color.fromARGB(255, 134, 72, 20), width: 1),
+              ),
               title: Text("Tree #" + item.treeid.toString()),
               trailing: IconButton(
               icon: Icon(Icons.favorite),

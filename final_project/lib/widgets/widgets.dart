@@ -147,4 +147,30 @@ class _PopupAndSoundState extends State<PopupAndSound> {
   }  
 }
 
+class TextAndIcon extends StatelessWidget {
+  const TextAndIcon(this.icon, this.detail, this.size, {super.key});
+  final IconData icon;
+  final String detail;
+  final double size;
 
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: Row(
+          children: [
+            
+            Text(
+              detail,
+              style: TextStyle(fontSize: size),
+            ),
+            Padding(padding:  const EdgeInsets.only(right: 8.0, left: 8.0),),
+            Icon(icon,
+            color: const Color.fromARGB(255, 11, 103, 14),
+            size: 25,
+            ),
+
+            const SizedBox(width: 8)
+          ],
+        ),
+      );
+}
