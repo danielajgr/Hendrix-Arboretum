@@ -32,7 +32,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   bool inList(TreeObject tree, List list){
     for(var item in list){
-      if(item == tree.treeid){
+      if(item.treeid == tree.treeid){
         return true;
       }
       else{

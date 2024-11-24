@@ -45,16 +45,19 @@ class ApplicationState extends ChangeNotifier {
 
   Future<void> loadAllLikedTrees() async {
     FirebaseFirestore.instance.collection('favoriteTrees').snapshots().listen((snapshot) async {  
+        List<int> alt = [];
 
         for (var d in snapshot.docs) {
           final likesDoc = await FirebaseFirestore.instance.collection('favoriteTrees').doc(d.id).get();
           if(likesDoc.exists) {
             final toAdd = List<int>.from(likesDoc.data()?['likes'] ?? []);
             for(var add in toAdd){
-              allLikedTrees.add(add);
+              alt.add(add);
             }
           }
         }
+        allLikedTrees = alt;
+
       });
    
     
@@ -100,8 +103,10 @@ class ApplicationState extends ChangeNotifier {
     }
 
     likedTrees.removeAt(remove);
+
     await updateLikedTreesInFirestore();
-    notifyListeners();  }
+    notifyListeners();  
+    }
 
 
 

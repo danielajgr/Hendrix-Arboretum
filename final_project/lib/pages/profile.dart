@@ -77,7 +77,8 @@ class _ProfileState extends State<Profile> {
                   setState(() {
                   appState.addTree(item.treeid);
                   });
-                }}},
+                }
+                }},
               ),
           onTap: () async {
             await Navigator.of(context).push(
