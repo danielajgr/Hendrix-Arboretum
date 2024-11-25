@@ -10,14 +10,14 @@ final ThemeData hendrixTodayLightMode = ThemeData(
     onPrimary: Colors.white,
     secondary: Colors.black,
     onSecondary: Colors.white,
-    tertiary: Color.fromARGB(255, 128, 128, 128),
+    tertiary: Color.fromARGB(255, 0, 0, 0),
     onTertiary: Colors.white,
     background: Colors.white,
     onBackground: Colors.black,
     error: Color.fromARGB(255, 255, 170, 170),
     onError: Color.fromARGB(255, 255, 100, 100),
     surface: Color.fromARGB(255, 228, 223, 221),
-    onSurface: Color.fromARGB(255, 128, 128, 128),
+    onSurface: Color.fromARGB(255, 0, 0, 0),
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -52,7 +52,7 @@ final ThemeData hendrixTodayLightMode = ThemeData(
     ),
     headlineSmall: TextStyle(
       // Used for dates and event details.
-      color: Color.fromARGB(255, 128, 128, 128),
+      color: Color.fromARGB(255, 0, 0, 0),
       fontStyle: FontStyle.italic,
       fontWeight: FontWeight.w200,
       fontSize: 14,
@@ -105,14 +105,14 @@ final ThemeData hendrixTodayDarkMode = ThemeData(
     onPrimary: Colors.white,
     secondary: Colors.white,
     onSecondary: Colors.black,
-    tertiary: Color.fromARGB(255, 160, 160, 160),
+    tertiary: Color.fromARGB(255, 0, 0, 0),
     onTertiary: Colors.white,
     background: Color.fromARGB(255, 36, 36, 36),
     onBackground: Colors.white,
     error: Color.fromARGB(255, 255, 170, 170),
     onError: Color.fromARGB(255, 137, 0, 0),
     surface: Color.fromARGB(255, 36, 36, 36),
-    onSurface: Color.fromARGB(255, 160, 160, 160),
+    onSurface: Color.fromARGB(255, 0, 0, 0),
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -147,7 +147,7 @@ final ThemeData hendrixTodayDarkMode = ThemeData(
     ),
     headlineSmall: TextStyle(
       // Used for dates and event details.
-      color: Color.fromARGB(255, 160, 160, 160),
+      color: Color.fromARGB(255, 0, 0, 0),
       fontStyle: FontStyle.italic,
       fontWeight: FontWeight.w200,
       fontSize: 14,

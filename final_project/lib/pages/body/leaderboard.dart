@@ -55,7 +55,7 @@ class _LeaderboardState extends State<Leaderboard> {
               style: TextStyle(fontSize: 15)
             ),
             title: TextAndIcon( Icons.forest,
-              "    Top 10 Trees", 35
+              "Top 10 Trees", 25
             ),
             trailing: 
               Text(

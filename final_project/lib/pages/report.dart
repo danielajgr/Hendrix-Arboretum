@@ -29,19 +29,21 @@ class _ReportState extends State<Report> {
         backgroundColor: const Color.fromARGB(255, 0, 103, 79),
         
       ),
-      body: Column( crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView( 
                     children: [SizedBox(height: 16),
-                              Text("Is there a missing tag?", style: Theme.of(context).textTheme.headlineLarge),
+                              Text("Is there a missing tag?", textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineLarge),
+                              Image.asset('assets/missing.PNG'),
+                              
+                              Text("Is there a damaged tag?",textAlign: TextAlign.center,style: Theme.of(context).textTheme.headlineLarge),
+                              Image.asset('assets/dam.PNG'),
+                              
+                              Text("Click the button below to report any concerns",textAlign: TextAlign.center,style: Theme.of(context).textTheme.headlineLarge),
                               SizedBox(height: 16),
-                              Text("Is there a damaged tag?",style: Theme.of(context).textTheme.headlineLarge),
-                              SizedBox(height: 16),
-                              Text("Click the button below to report any concerns",style: Theme.of(context).textTheme.headlineLarge, textAlign: TextAlign.center),
-                              SizedBox(height: 16,),
                               ElevatedButton(child: Text("Report"),
                               onPressed: () {
                                 _launchURL('https://forms.gle/QnkWZRu1437LN3RYA'); 
-                              }, )
-                              ])  
+                              }, ),
+                              SizedBox(height: 16)])  
     );
     
     

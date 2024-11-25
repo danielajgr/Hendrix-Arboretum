@@ -51,12 +51,16 @@ class _TreeInfoState extends State<TreeInfo> {
       onPressed: () async {
         if (!appState.loggedIn) {
             context.push('/sign-in');
-        }else{
-          setState(() {
-            appState.addTree(widget.treeid);
-      
-          });   
-        }         
+        }if(appState.isFavorite(widget.treeid)){
+                  setState(() {
+                  appState.removeTree(widget.treeid);
+                });}
+                else{
+                  setState(() {
+                  appState.addTree(widget.treeid);
+                  });
+                }
+                
       },
     )]
     ),

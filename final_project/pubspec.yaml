@@ -85,6 +85,8 @@ flutter:
     - assets/tag.png
     - assets/hendrix_logo.png
     - assets/dice.png
+    - assets/dam.PNG
+    - assets/missing.PNG
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

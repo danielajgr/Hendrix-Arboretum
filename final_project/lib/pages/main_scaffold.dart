@@ -122,7 +122,7 @@ class _MainScaffoldState extends State<MainScaffold> {
           BottomNavigationBarItem(icon: Icon(Icons.info), label: "About"),
         ],
         currentIndex: pageIndex,
-        selectedItemColor: Colors.green,
+        selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
         onTap: _onItemTapped,
       ),
     );

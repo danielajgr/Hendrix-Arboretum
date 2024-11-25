@@ -46,7 +46,12 @@ class _MapState extends State<Map> {
                         width: 60,
                         height: 60,
                         child: GestureDetector(
-                          onTap: () => markerPopup(context),
+                          onTap: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TreeInfo(treeid: tree!.id)))
+                            },
                           child: Container(
                             alignment: Alignment.center,
                             child: const Icon(Icons.location_on,
