@@ -87,6 +87,8 @@ flutter:
     - assets/dice.png
     - assets/dam.PNG
     - assets/missing.PNG
+    - assets/tree_icon.PNG
+    - assets/breaker.PNG
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

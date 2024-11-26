@@ -46,38 +46,54 @@ class _LeaderboardState extends State<Leaderboard> {
         if(rank < 0){
           rank++;
 
-          return const ListTile(
-            shape: Border(
-            bottom: BorderSide(color: Color.fromARGB(255, 186, 81, 21), width: 5),
-          ),
-            leading: Text(
-              "Rank",
-              style: TextStyle(fontSize: 15)
-            ),
-            title: TextAndIcon( Icons.forest,
-              "Top 10 Trees", 25
-            ),
-            trailing: 
-              Text(
-              "Likes",
-              style: TextStyle(fontSize: 15),
-            ),
+          return  Column(
+  children: [
+    // First ListTile (with headings)
+    ListTile(
+      
+      leading: Text(
+        "Rank",
         
-          );
+      ),
+      title: TextAndIcon(
+        Icons.forest,
+        "Top 10 Trees",
+        25,
+      ),
+      trailing: Text(
+        "Likes",
+        style: TextStyle(fontSize: 15),
+      ),
+    ),
+    
+    // Image placed between ListTiles
+    Image.asset(
+      'assets/breaker.PNG',
+      width: double.infinity, // Stretch to match parent width
+      height: 60, // Adjust height as needed
+      fit: BoxFit.fill,
+    ),]);
         }
 
         else{
         rank++;
         return ListTile(
           shape: const Border(
-          top: BorderSide(color: Color.fromARGB(255, 8, 37, 2), width: 1),
+          top: BorderSide(color: Color.fromARGB(255, 0, 48, 37), width: 1),
           ), 
 
           contentPadding: const EdgeInsets.all(8.0),
-          leading: CircleAvatar(
-            backgroundColor: const Color.fromARGB(255, 5, 87, 47),
-            child: Text(rank.toString()),
-          ),
+          leading: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Image.asset(
+              'assets/tree_icon.PNG',
+              width: 80,
+              height: 150,
+              fit: BoxFit.fill,
+            ),
+            Text(rank.toString(),style: Theme.of(context).textTheme.headlineLarge, )]),
+            
 
           title: Text(
             "Tree #${item.treeid}",
