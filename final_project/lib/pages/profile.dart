@@ -13,24 +13,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  var appState;
-  List<TreeObject> trees = [];
-  List treeIds = [];
-
-
-  List<TreeObject> getTrees(List ids){
-    List<TreeObject> ts = [];
-    for(var id in ids){
-      TreeObject t = TreeObject(treeid: id);
-      ts.add(t);}
-    return ts;} 
-
-  @override
-  void initState() {
-    appState = context.read<ApplicationState>();
-    treeIds = appState.getAll();
-    trees = getTrees(treeIds);
-    super.initState();}
 
   
   @override
@@ -62,10 +44,13 @@ class _ProfileState extends State<Profile> {
             ),),
           
           const Padding(padding: EdgeInsets.only(top: 10)),
+
+          Consumer<ApplicationState>(
+          builder: (context, appState, _) => 
           ListView(
             padding: EdgeInsets.all(0.8),
             shrinkWrap: true,
-            children: trees.map((item) {
+            children: appState.getAll().map((item) {
             return ListTile(
               shape: const Border(
               top: BorderSide(color: Color.fromARGB(255, 134, 72, 20), width: 1),
@@ -98,6 +83,7 @@ class _ProfileState extends State<Profile> {
           },
         );
       }).toList()),
+          ),
     ]), 
   );
 }}

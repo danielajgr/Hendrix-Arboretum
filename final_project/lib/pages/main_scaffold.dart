@@ -23,57 +23,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   String? pageTitle;
 
   int pageIndex = 1;
-  var appState;
-
-
-  List<TreeObject> trees = [];
-
-  List treeIds = [];
-
-  bool inList(TreeObject tree, List list){
-    for(var item in list){
-      if(item.treeid == tree.treeid){
-        return true;
-      }
-      else{
-        if(list.isEmpty){
-          return false;
-        }
-      }
-    }
-    return false;
-  }
-  int findDuplicate(TreeObject tr, List<TreeObject> listTr){
-    int index = 0;
-    for(var t in listTr){
-      if(t.treeid == tr.treeid){
-        return index;
-      }
-      else{
-        index++;
-      }
-    }
-    return index;
-
-
-  }
-
-  List<TreeObject> getTrees(List ids){
-    List<TreeObject> ts = [];
-    for(var id in ids){
-      TreeObject t = TreeObject(treeid: id);
-      if(inList(t, ts) == false){
-        t.add_like();
-        ts.add(t);
-        
-      }
-      else{
-        int i = findDuplicate(t, ts);
-        ts[i].add_like();
-      }
-    }
-    return ts;
-  }  
+  
 
   @override
   void initState() {
@@ -130,16 +80,13 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   void _onItemTapped(int index) async {
     setState(() {
-      appState = context.read<ApplicationState>();
-      treeIds = appState.getAllTrees();
-      trees = getTrees(treeIds);
+
       pageIndex = index;
 
       // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch (index) {
         0 => (
-            Leaderboard(trees: 
-            trees,),
+            Leaderboard(),
             "Leaderboard"),
 
         1 => (Map(), "Hendrix Arboretum"),

@@ -1,81 +1,72 @@
 import "package:collection/collection.dart";
+import 'package:final_project/app_state.dart';
 import 'package:final_project/objects/tree_object.dart';
 import 'package:final_project/pages/tree_info.dart';
+import 'package:final_project/widgets/authentication.dart';
 import 'package:final_project/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Leaderboard extends StatefulWidget {
-  const Leaderboard({super.key, required this.trees});
-  final List<TreeObject> trees;
+  Leaderboard({super.key});
 
+  
   @override
   State<Leaderboard> createState() => _LeaderboardState();}
 
 
-class _LeaderboardState extends State<Leaderboard> {
-  PriorityQueue<TreeObject> treeQueue = PriorityQueue();
-  List<TreeObject> topTenTrees = [TreeObject(treeid: 0000)];
-
-  @override
-  void initState() {
-    super.initState();
-    if(topTenTrees.length == 1){
-      treeQueue.addAll(widget.trees);
-      for (int i = 0; i < 10 && treeQueue.isNotEmpty; i++) {
-        topTenTrees.add(treeQueue.removeFirst());
-      }
-    }
-  }
-
+class _LeaderboardState extends State<Leaderboard> { 
 
   @override
   Widget build(BuildContext context) {
-    int rank = -1;
-    if(topTenTrees.length == 1){
-    treeQueue.addAll(widget.trees);
-      for (int i = 0; i < 10 && treeQueue.isNotEmpty; i++) {
-        topTenTrees.add(treeQueue.removeFirst());
-      }
-    }
-    return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      children: 
-      
+    int rank = 0;
 
-      topTenTrees.map((item) {
-        if(rank < 0){
-          rank++;
-
-          return  Column(
-  children: [
-    // First ListTile (with headings)
-    ListTile(
-      
-      leading: Text(
-        "Rank",
+    return Consumer<ApplicationState>(
+          builder: (context, appState, _) => 
+      ListView(
         
-      ),
-      title: TextAndIcon(
-        Icons.forest,
-        "Top 10 Trees",
-        25,
-      ),
-      trailing: Text(
-        "Likes",
-        style: TextStyle(fontSize: 15),
-      ),
-    ),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        children: 
+        
+        
+        (appState.getTopTrees()).map((item) {//appstate gives top ten trees
+        
+        
+        if(item.treeid == 0000){
+          rank = 0;
+          return  Column(
+          children: [
+    // First ListTile (with headings)
+          const ListTile(
+            shape: Border(
+            bottom: BorderSide(color: Color.fromARGB(255, 0, 48, 37), width: 1),
+            ),      
+            leading: Text(
+            "Rank",
+            ),
+            title: TextAndIcon(
+            Icons.forest,
+            "Top 10 Trees",
+            25,
+            ),
+            trailing: Text(
+            "Likes",
+            style: TextStyle(fontSize: 15),
+            ),
+          ),
     
     // Image placed between ListTiles
-    Image.asset(
-      'assets/breaker.PNG',
-      width: double.infinity, // Stretch to match parent width
-      height: 60, // Adjust height as needed
-      fit: BoxFit.fill,
-    ),]);
-        }
+          Image.asset(
+            'assets/breaker.PNG',
+            width: double.infinity, // Stretch to match parent width
+            height: 60, // Adjust height as needed
+            fit: BoxFit.fill,
+          ),
+        ]);
+      }
 
-        else{
+      else{
         rank++;
         return ListTile(
           shape: const Border(
@@ -89,7 +80,7 @@ class _LeaderboardState extends State<Leaderboard> {
             Image.asset(
               'assets/tree_icon.PNG',
               width: 80,
-              height: 150,
+              height: 200,
               fit: BoxFit.fill,
             ),
             Text(rank.toString(),style: Theme.of(context).textTheme.headlineLarge, )]),
@@ -116,6 +107,7 @@ class _LeaderboardState extends State<Leaderboard> {
           },
         );
       }}).toList(),
+      ),
 
     );
   }

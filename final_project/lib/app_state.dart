@@ -3,7 +3,10 @@
 // found in the LICENSE file.
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import "package:collection/collection.dart";
+
 import 'package:final_project/api/tree.dart';
+import 'package:final_project/objects/tree_object.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
@@ -57,6 +60,8 @@ class ApplicationState extends ChangeNotifier {
           }
         }
         allLikedTrees = alt;
+        notifyListeners();
+
 
       });
    
@@ -127,11 +132,66 @@ class ApplicationState extends ChangeNotifier {
     return likedTrees.contains(id);
   }
 
-  List getAll(){
-    return likedTrees;
+  List<TreeObject> getAll(){
+    return getTrees(likedTrees);
+  }
+  
+
+  bool inList(TreeObject tree, List list){
+    for(var item in list){
+      if(item.treeid == tree.treeid){
+        return true;
+      }
+      else{
+        if(list.isEmpty){
+          return false;
+        }
+      }
+    }
+    return false;
+  }
+  int findDuplicate(TreeObject tr, List<TreeObject> listTr){
+    int index = 0;
+    for(var t in listTr){
+      if(t.treeid == tr.treeid){
+        return index;
+      }
+      else{
+        index++;
+      }
+    }
+    return index;
+
+
   }
 
-  List getAllTrees(){
-    return allLikedTrees;
+  List<TreeObject> getTrees(List ids){
+    List<TreeObject> ts = [];
+    for(var id in ids){
+      TreeObject t = TreeObject(treeid: id);
+      if(inList(t, ts) == false){
+        t.add_like();
+        ts.add(t);
+        
+      }
+      else{
+        int i = findDuplicate(t, ts);
+        ts[i].add_like();
+      }
+    }
+    return ts;
+  } 
+
+  List<TreeObject> getTopTrees(){
+    PriorityQueue<TreeObject> treeQueue = PriorityQueue();
+    List<TreeObject> topTenTrees = [TreeObject(treeid: 0000)];
+    List<TreeObject> trees = getTrees(allLikedTrees);
+    if(topTenTrees.length == 1){
+      treeQueue.addAll(trees);
+      for (int i = 0; i < 10 && treeQueue.isNotEmpty; i++) {
+        topTenTrees.add(treeQueue.removeFirst());
+      }
+    }
+    return topTenTrees;
   }
 }
