@@ -78,18 +78,18 @@ class _MapState extends State<Map> {
                   width: 300,
                   height: 55,
                   child: TextField(
-                    decoration:  InputDecoration(
-                      label: Text("Search by Tree ID:", style: Theme.of(context).textTheme.labelLarge,),
-                      fillColor: const Color.fromARGB(255, 240, 255, 240),
+                    decoration:  const InputDecoration(
+                      label: Text("Search by Tree ID:", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                      fillColor: Color.fromARGB(255, 240, 255, 240),
                       filled: true,
-                      border: const OutlineInputBorder(
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)), 
                       ),
-                      enabledBorder: const OutlineInputBorder(
+                      enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)), 
                         borderSide: BorderSide(color: Colors.grey), 
                       ),
-                      focusedBorder: const OutlineInputBorder(
+                      focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)), 
                         borderSide: BorderSide(color: Colors.black), 
                       ),
