@@ -69,7 +69,7 @@ class _MapState extends State<Map> {
               Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
+                      padding: const EdgeInsets.only(bottom: 55),
                       child: Row(
                         children: [
                           Padding(
