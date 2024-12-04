@@ -63,7 +63,14 @@ class _MapState extends State<Map> {
                 ),
                  ])
             ])),
-          Row(
+          Align(
+            alignment: Alignment.bottomCenter,
+            child:
+            Padding(
+            padding: const EdgeInsets.only(bottom: 30),
+            child:
+
+            Row(
             children: [
             Padding(
                 padding: const EdgeInsets.all(10),
@@ -73,7 +80,7 @@ class _MapState extends State<Map> {
                   child: TextField(
                     decoration:  InputDecoration(
                       label: Text("Search by Tree ID:", style: Theme.of(context).textTheme.labelLarge,),
-                      fillColor: Color.fromARGB(255, 188, 159, 128),
+                      fillColor: const Color.fromARGB(255, 240, 255, 240),
                       filled: true,
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)), 
@@ -95,14 +102,14 @@ class _MapState extends State<Map> {
               ),
               IconButton(icon: Image.asset(
                           "assets/dice.png",
-                          width: 24,
-                          height: 24),
+                          width: 40,
+                          height: 40),
                           onPressed: (){
                             searchTree("", true);
                           },
-                          style: IconButton.styleFrom(backgroundColor: const Color.fromARGB(255, 188, 159, 128)))
+                          style: IconButton.styleFrom(backgroundColor: const Color.fromARGB(255, 240, 255, 240)                          ))
             ],
-          ),
+          ))),
         ],)
         ,)
         
