@@ -92,12 +92,12 @@ class _MapState extends State<Map> {
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20)),
-                                    borderSide: BorderSide(color: Colors.grey),
+                                    borderSide: BorderSide(color: Colors.grey, width: 3),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20)),
-                                    borderSide: BorderSide(color: Colors.black),
+                                    borderSide: BorderSide(color: Colors.black, width: 3),
                                   ),
                                 ),
                                 onSubmitted: (id) {
@@ -113,6 +113,7 @@ class _MapState extends State<Map> {
                                 searchTree("", true);
                               },
                               style: IconButton.styleFrom(
+                                  side: const BorderSide(color: Colors.black, width: 3),
                                   backgroundColor:
                                       const Color.fromARGB(255, 240, 255, 240)))
                         ],
