@@ -38,13 +38,13 @@ class _LeaderboardState extends State<Leaderboard> {
           return  Column(
           children: [
     // First ListTile (with headings)
-          const ListTile(
+          ListTile(
             shape: Border(
             bottom: BorderSide(color: Color.fromARGB(255, 0, 48, 37), width: 1),
             ),      
             leading: Text(
             "Rank",
-            ),
+            style: Theme.of(context).textTheme.bodyMedium,),
             title: TextAndIcon(
             Icons.forest,
             "Top 10 Trees",
@@ -52,7 +52,7 @@ class _LeaderboardState extends State<Leaderboard> {
             ),
             trailing: Text(
             "Likes",
-            style: TextStyle(fontSize: 15),
+            style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
     
@@ -91,11 +91,15 @@ class _LeaderboardState extends State<Leaderboard> {
             style: const TextStyle(fontSize: 25)
             ),
 
-          trailing: 
+          trailing: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+          Icon(Icons.favorite, color: Colors.green, size: 40,),
+          
           Text(
-          "${item.likes}       ",
-          style: const TextStyle(fontSize: 20),
-        ),
+          "${item.likes}",
+          style: Theme.of(context).textTheme.headlineMedium,
+        )]),
         
           onTap: () async {
             await Navigator.of(context).push(
