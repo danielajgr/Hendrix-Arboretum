@@ -37,11 +37,11 @@ class _MainScaffoldState extends State<MainScaffold> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 175, 225, 175),
+      backgroundColor: const Color.fromARGB(255, 167,201,87),
       appBar: AppBar(
         title: Text(pageTitle ?? "missingno",
             style: Theme.of(context).textTheme.displayMedium),
-        backgroundColor: const Color.fromARGB(255, 0, 103, 79),
+        backgroundColor: const Color.fromARGB(255, 0,127,95),
         actions: [
           IconButton(
             icon: const Icon(Icons.report),
@@ -64,7 +64,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       ),
       body: pageBody,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 139, 69, 19),
+        backgroundColor: const Color.fromARGB(255, 255,255,63),
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard), label: "Leaderboard"),
@@ -72,7 +72,7 @@ class _MainScaffoldState extends State<MainScaffold> {
           BottomNavigationBarItem(icon: Icon(Icons.info), label: "About"),
         ],
         currentIndex: pageIndex,
-        selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
+        selectedItemColor: const Color.fromARGB(255, 43, 147, 72),
         onTap: _onItemTapped,
       ),
     );
