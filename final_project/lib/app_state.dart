@@ -4,6 +4,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/api/tree.dart';
+import 'package:final_project/objects/comment.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +19,9 @@ class ApplicationState extends ChangeNotifier {
   }
   List<int> likedTrees = [];
   List<int> allLikedTrees = [];
+  List<int> allComments = [];
+  List<Comment> _treeComments = [];
+  List<Comment> get treeComments => _treeComments;
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
@@ -80,7 +84,38 @@ class ApplicationState extends ChangeNotifier {
     }
   }
   
+  Future<List<Comment>> loadComments(int id) async {
+    final user = FirebaseAuth.instance.currentUser;
+    List<Comment> comments = [];
+    if (user != null){
+      final _firestore = FirebaseFirestore.instance;
+      QuerySnapshot snapshot = await _firestore
+        .collection('treeComments')
+        .doc(id.toString())
+        .collection('comments')
+        .get();
+      
+      //List<Object?> objects = snapshot.docs.map((doc) => doc.data()).toList();
+      for (var d in snapshot.docs){
+        
+          Map<String, dynamic> data = d.data() as dynamic;
+          comments.add(Comment(name: data['name'], message: data['message']));  
+        
+        
+      }
+      notifyListeners();
+      _treeComments = comments;
+    } 
+    print(treeComments[0].message);
+    return comments;
+    
+  }
   
+
+  List<Comment> getComments(int id){
+    loadComments(id);
+    return treeComments;
+  }
 
   void addTree(int id) async {
     if (!likedTrees.contains(id)) {
@@ -133,5 +168,24 @@ class ApplicationState extends ChangeNotifier {
 
   List getAllTrees(){
     return allLikedTrees;
+  }
+
+  Future<void> addComment(int id, String comment) async{
+    final user = FirebaseAuth.instance.currentUser;
+    print(user);
+    if(user != null){
+      await FirebaseFirestore.instance
+        .collection('treeComments')
+        .doc(id.toString())
+        .collection('comments')
+        .add(<String, dynamic>{
+      'message': comment,
+      'name': FirebaseAuth.instance.currentUser!.displayName,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+
+    });
+    }
+    
+    
   }
 }

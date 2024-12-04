@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/api/tree.dart';
 import 'package:final_project/app_state.dart';
+import 'package:final_project/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:final_project/objects/comment.dart';
 
 
 
@@ -16,6 +18,7 @@ class TreeInfo extends StatefulWidget {
   //will need to know the tree?
   final int treeid;
   String commonname = 'tree';
+  List<Comment> cmts = [];
   @override
   State<TreeInfo> createState() => _TreeInfoState();
 }
@@ -37,6 +40,8 @@ class _TreeInfoState extends State<TreeInfo> {
     super.initState();
     futureTree = fetchTree(widget.treeid);
     appState = context.read<ApplicationState>();
+    widget.cmts = appState.getComments(widget.treeid);
+    appState.loadComments(widget.treeid);
   }
   @override
   Widget build(BuildContext context) {
@@ -189,9 +194,11 @@ class _TreeInfoState extends State<TreeInfo> {
           Container(padding: EdgeInsets.only(top:50, left: 80, right: 80, bottom: 10), child:
           ElevatedButton(onPressed: () => {_launchurl(Uri.parse('https://plants.ces.ncsu.edu/find_a_plant/common-name/?q=${widget.commonname}'))}
           , child: Text('More Info'))
-          )
+          ),
           
-          
+          //widget.cmts = appState.getComments(widget.treeid);
+          Text(appState.getComments(widget.treeid).length.toString()),
+          CommentSection(addComment: (id, comment) => appState.addComment(id, comment), comments: appState.loadComments(widget.treeid), getComment: appState.loadComments(widget.treeid), treeID: widget.treeid)
           ],
       ),
 
@@ -205,6 +212,75 @@ class _TreeInfoState extends State<TreeInfo> {
   }
 }
 
+}
+
+class CommentSection extends StatefulWidget {
+  const CommentSection({super.key, required this.addComment, required this.comments, required this.treeID, required this.getComment});
+
+  final Future<void> Function(int id, String comment) addComment;
+  final Future<List<Comment>> Function(int id) getComment;
+  final List<Comment> comments;
+  final int treeID;
+
+  @override
+  State<CommentSection> createState() => _CommentSectionState();
+}
+
+class _CommentSectionState extends State<CommentSection> {
+  final _controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>(debugLabel: '_CommentSectionState');
+  late List result;
+  void getCmts(id) async{
+    result = await widget.getComment(id);
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Consumer<ApplicationState>(
+            builder: (context, appState, _)=> 
+            Form(key: _formKey, child: Row(
+              children: [
+                if(appState.loggedIn)...[
+                  Expanded(child: TextFormField(
+          controller: _controller,
+          decoration: const InputDecoration(
+            hintText: 'Leave a comment',
+          ),
+          validator: (value) {
+            if(value == null || value.isEmpty){
+              return 'Enter your message to continue';
+            }
+            print("no");
+            return null;
+          },
+        )),
+        StyledButton(child: Text('post'), 
+        onPressed: () async{
+          if(_formKey.currentState != null){
+            if(_formKey.currentState!.validate()){
+            await widget.addComment(widget.treeID, _controller.text);
+            _controller.clear();
+            }
+          }
+          
+        })
+                ]
+              ],
+            ), 
+          ),
+
+          ),
+        const SizedBox(height: 20),
+        
+        for (Comment comment in widget.comments)
+          Text('${comment.name}: ${comment.message}', style: TextStyle(color: Colors.black), ),
+        const SizedBox(height: 8),
+        
+      ],
+    );
+  }
 }
 
 
