@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
 import "package:latlong2/latlong.dart";
 import "/api/tree.dart";
+import "/api/speciality.dart";
 import "/pages/tree_info.dart";
 import "package:geolocator/geolocator.dart";
 
@@ -13,16 +14,19 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  LatLng? treeLocation;
-  List<Tree>? trees;
+  LatLng? mapLocation;
   Tree? tree;
 
-  LatLng? userLocation;
+  List<Tree>? trees;
+
+   List<Specialty> specialtyList = [];
+  Specialty? specialty;
 
   MapController mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
+    getSpecialties();
     return LayoutBuilder(builder: (context, constraints) {
       return Column(children: [
         Expanded(
@@ -32,8 +36,7 @@ class _MapState extends State<Map> {
                   child: FlutterMap(
                       mapController: mapController,
                       options: MapOptions(
-                          initialCenter: treeLocation ??
-                              userLocation ??
+                          initialCenter: mapLocation ??
                               const LatLng(35.100232, -92.440290),
                           initialZoom: 16),
                       children: [
@@ -45,12 +48,12 @@ class _MapState extends State<Map> {
                     const SimpleAttributionWidget(
                         source: Text("Tiles - Esri", softWrap: true)),
                     // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
-                    if (treeLocation != null)
+                    if (tree != null)
                       Stack(children: [
                         MarkerLayer(
                           markers: [
                             Marker(
-                                point: treeLocation!,
+                                point: mapLocation!,
                                 width: 60,
                                 height: 60,
                                 child: GestureDetector(
@@ -71,7 +74,7 @@ class _MapState extends State<Map> {
                           ],
                         ),
                       ]),
-                    if (userLocation != null)
+                    if (trees != null)
                       Stack(children: [
                         MarkerLayer(
                           markers: createMarkers(context),
@@ -79,23 +82,47 @@ class _MapState extends State<Map> {
                       ]),
                   ])),
               Column(children: [
+
+               Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SizedBox(  
+                     width: 300,
+                     height: 55,
+                     child: Container(
+                        decoration: const BoxDecoration(
+                           color: Color.fromARGB(255, 188, 159, 128),
+                        ),
+                        child: DropdownButton<Specialty>(
+                           value: specialty, 
+                           hint: Text("Select a specialty"),
+                           isExpanded: true, 
+                           items: specialtyList.map((Specialty item) {
+                              return DropdownMenuItem<Specialty>(
+                                 value: item,
+                                 child: Text(item.title),
+                              );
+                           }).toList(),
+                           onChanged: (Specialty? newSpecialty) {
+                              if (newSpecialty != null) {
+                                 specialty = newSpecialty; 
+                                 specialtyTrees();
+                              }
+                           },
+                        ),
+                     ),
+                  // if (specialty != null)
+                  //    Text('Selected: $specialty'),
+                  )
+               ),
+
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
                     width: 300,
                     height: 55,
                     child: ElevatedButton.icon(
-                      onPressed: () async {
-                        try {
-                          await fetchNearbyTrees();
-                          print(trees!.map((Tree x) => x.id));
-                          print(userLocation);
-                        } catch (e) {
-                          print("Error getting location: $e");
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Error: $e")),
-                          );
-                        }
+                      onPressed: () {
+                        fetchNearbyTrees();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -164,6 +191,14 @@ class _MapState extends State<Map> {
     });
   }
 
+   Future<void> getSpecialties() async {
+      try {
+         specialtyList = await fetchAllSpecialties();
+      } catch (e) {
+         print("Error fetching specialties");
+      }
+   }
+
   Future<void> searchTree(String id, bool rand) async {
     final AudioPlayer _audioPlayer = AudioPlayer();
     try {
@@ -176,10 +211,9 @@ class _MapState extends State<Map> {
       setState(() {
         if (tree != null) {
           // Reset nearby tree markers
-          userLocation = null;
           trees = null;
 
-          treeLocation = LatLng(tree!.latitude, tree!.longitude);
+          mapLocation = LatLng(tree!.latitude, tree!.longitude);
 
           _audioPlayer.play(AssetSource('audio/ding.mp3'));
           ScaffoldMessenger.of(context).showSnackBar(
@@ -192,10 +226,41 @@ class _MapState extends State<Map> {
                 backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
           );
         }
-        mapController.move(treeLocation!, 18);
+        mapController.move(mapLocation!, 18);
       });
     } catch (e) {
       print("Error fetching tree: $e");
+    }
+  }
+
+  Future<void> specialtyTrees() async {
+    final AudioPlayer _audioPlayer = AudioPlayer();
+
+    try {
+      trees = await fetchTreesForSpecialty(specialty!);
+
+      setState(() {
+        if (specialty != null && trees != null) {
+          tree = null;
+          int len = trees!.length;
+
+          mapLocation = const LatLng(35.100232, -92.440290);
+
+          _audioPlayer.play(AssetSource('audio/ding.mp3'));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                  'You found $len Trees!',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
+          );
+        }
+        mapController.move(mapLocation!, 18);
+      });
+    } catch (e) {
+      print("Error fetching specialty trees: $e");
     }
   }
 
@@ -285,11 +350,11 @@ class _MapState extends State<Map> {
       if (trees != null) {
         // Reset searched tree
         tree = null;
-        treeLocation = null;
 
         int len = trees!.length;
-        // userLocation = const LatLng(35.100232, -92.440290);
-        userLocation = LatLng(trees![0].latitude, trees![0].longitude);
+
+        mapLocation = LatLng(trees![0].latitude, trees![0].longitude);
+
         _audioPlayer.play(AssetSource('audio/ding.mp3'));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -301,7 +366,7 @@ class _MapState extends State<Map> {
               backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
         );
       }
-      mapController.move(userLocation!, 18);
+      mapController.move(mapLocation!, 18);
     });
   }
 }
