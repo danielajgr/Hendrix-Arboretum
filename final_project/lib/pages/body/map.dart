@@ -19,14 +19,19 @@ class _MapState extends State<Map> {
 
   List<Tree>? trees;
 
-   List<Specialty> specialtyList = [];
+  List<Specialty> specialtyList = [];
   Specialty? specialty;
 
   MapController mapController = MapController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     getSpecialties();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Column(children: [
         Expanded(
@@ -82,39 +87,37 @@ class _MapState extends State<Map> {
                       ]),
                   ])),
               Column(children: [
-
-               Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SizedBox(  
-                     width: 300,
-                     height: 55,
-                     child: Container(
+                Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SizedBox(
+                      width: 300,
+                      height: 55,
+                      child: Container(
                         decoration: const BoxDecoration(
-                           color: Color.fromARGB(255, 188, 159, 128),
+                          color: Color.fromARGB(255, 188, 159, 128),
                         ),
                         child: DropdownButton<Specialty>(
-                           value: specialty, 
-                           hint: Text("Select a specialty"),
-                           isExpanded: true, 
-                           items: specialtyList.map((Specialty item) {
-                              return DropdownMenuItem<Specialty>(
-                                 value: item,
-                                 child: Text(item.title),
-                              );
-                           }).toList(),
-                           onChanged: (Specialty? newSpecialty) {
-                              if (newSpecialty != null) {
-                                 specialty = newSpecialty; 
-                                 specialtyTrees();
-                              }
-                           },
+                          value: specialty,
+                          hint: Text(
+                            "Select a specialty",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          isExpanded: true,
+                          items: specialtyList.map((Specialty item) {
+                            return DropdownMenuItem<Specialty>(
+                              value: item,
+                              child: Text(item.title),
+                            );
+                          }).toList(),
+                          onChanged: (Specialty? newSpecialty) {
+                            if (newSpecialty != null) {
+                              specialty = newSpecialty;
+                              specialtyTrees();
+                            }
+                          },
                         ),
-                     ),
-                  // if (specialty != null)
-                  //    Text('Selected: $specialty'),
-                  )
-               ),
-
+                      ),
+                    )),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
@@ -191,13 +194,14 @@ class _MapState extends State<Map> {
     });
   }
 
-   Future<void> getSpecialties() async {
-      try {
-         specialtyList = await fetchAllSpecialties();
-      } catch (e) {
-         print("Error fetching specialties");
-      }
-   }
+  Future<void> getSpecialties() async {
+    try {
+      specialtyList = await fetchAllSpecialties();
+      setState(() {});
+    } catch (e) {
+      print("Error fetching specialties");
+    }
+  }
 
   Future<void> searchTree(String id, bool rand) async {
     final AudioPlayer _audioPlayer = AudioPlayer();
@@ -209,6 +213,7 @@ class _MapState extends State<Map> {
       }
 
       setState(() {
+        specialty = null;
         if (tree != null) {
           // Reset nearby tree markers
           trees = null;
@@ -257,7 +262,10 @@ class _MapState extends State<Map> {
                 backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
           );
         }
-        mapController.move(mapLocation!, 18);
+        mapController.move(
+          mapLocation!,
+          16,
+        );
       });
     } catch (e) {
       print("Error fetching specialty trees: $e");
@@ -346,6 +354,7 @@ class _MapState extends State<Map> {
         await fetchClosestTrees(loc.latitude, loc.longitude, 5);
 
     setState(() {
+      specialty = null;
       trees = treeList;
       if (trees != null) {
         // Reset searched tree
@@ -354,6 +363,7 @@ class _MapState extends State<Map> {
         int len = trees!.length;
 
         mapLocation = LatLng(trees![0].latitude, trees![0].longitude);
+        //   mapLocation = LatLng(loc.latitude,loc.longitude);
 
         _audioPlayer.play(AssetSource('audio/ding.mp3'));
         ScaffoldMessenger.of(context).showSnackBar(
