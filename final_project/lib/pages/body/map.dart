@@ -30,6 +30,23 @@ class _MapState extends State<Map> {
     getSpecialties();
   }
 
+  Widget buildStyledContainer(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: SizedBox(
+        width: 300,
+        height: 55,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 188, 159, 128),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -87,92 +104,71 @@ class _MapState extends State<Map> {
                       ]),
                   ])),
               Column(children: [
-                Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SizedBox(
-                      width: 300,
-                      height: 55,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 188, 159, 128),
-                        ),
-                        child: DropdownButton<Specialty>(
-                          value: specialty,
-                          hint: Text(
-                            "Select a specialty",
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          isExpanded: true,
-                          items: specialtyList.map((Specialty item) {
-                            return DropdownMenuItem<Specialty>(
-                              value: item,
-                              child: Text(item.title),
-                            );
-                          }).toList(),
-                          onChanged: (Specialty? newSpecialty) {
-                            if (newSpecialty != null) {
-                              specialty = newSpecialty;
-                              specialtyTrees();
-                            }
-                          },
-                        ),
-                      ),
+                buildStyledContainer(
+                  DropdownButton<Specialty>(
+                    value: specialty,
+                    hint: Center(child:Text(
+                      "Select a specialty",
+                      style: Theme.of(context).textTheme.labelLarge,
                     )),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SizedBox(
-                    width: 300,
-                    height: 55,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        fetchNearbyTrees();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 188, 159, 128),
-                      ),
-                      icon: const Icon(Icons.near_me, color: Colors.white),
-                      label: Text(
-                        "Find Nearby Trees",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
+                    isExpanded: true,
+                    items: specialtyList.map((Specialty item) {
+                      return DropdownMenuItem<Specialty>(
+                        value: item,
+                        child: Center(child: Text(item.title,
+                            style: Theme.of(context).textTheme.labelLarge),
+                      ));
+                    }).toList(),
+                    onChanged: (Specialty? newSpecialty) {
+                      if (newSpecialty != null) {
+                        specialty = newSpecialty;
+                        specialtyTrees();
+                      }
+                    },
+                    dropdownColor: const Color.fromARGB(255, 188, 159, 128),
+                  ),
+                ),
+                buildStyledContainer(
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      fetchNearbyTrees();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 188, 159, 128),
+                    ),
+                    icon: const Icon(Icons.near_me, color: Colors.white),
+                    label: Text(
+                      "Find Nearby Trees",
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
                 ),
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SizedBox(
-                        width: 300,
-                        height: 55,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            label: Text(
-                              "Search by Tree ID:",
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                            fillColor: Color.fromARGB(255, 188, 159, 128),
-                            filled: true,
-                            border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
+                    buildStyledContainer(
+                      TextField(
+                        decoration: InputDecoration(
+                          label: Text(
+                            "Search by Tree ID:",
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
-                          onSubmitted: (id) {
-                            searchTree(id, false);
-                          },
+                          fillColor: Color.fromARGB(255, 188, 159, 128),
+                          filled: true,
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
                         ),
+                        onSubmitted: (id) {
+                          searchTree(id, false);
+                        },
                       ),
                     ),
                     IconButton(
