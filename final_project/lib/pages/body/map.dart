@@ -3,10 +3,10 @@ import "package:final_project/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
 import "package:latlong2/latlong.dart";
+import "package:geolocator/geolocator.dart";
 import "/api/tree.dart";
 import "/api/speciality.dart";
 import "/pages/tree_info.dart";
-import "package:geolocator/geolocator.dart";
 
 class Map extends StatefulWidget {
   @override
@@ -105,27 +105,32 @@ class _MapState extends State<Map> {
                   ])),
               Column(children: [
                 buildStyledContainer(
-                  DropdownButton<Specialty>(
-                    value: specialty,
-                    hint: Center(child:Text(
-                      "Select a specialty",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    )),
-                    isExpanded: true,
-                    items: specialtyList.map((Specialty item) {
-                      return DropdownMenuItem<Specialty>(
-                        value: item,
-                        child: Center(child: Text(item.title,
-                            style: Theme.of(context).textTheme.labelLarge),
-                      ));
-                    }).toList(),
-                    onChanged: (Specialty? newSpecialty) {
-                      if (newSpecialty != null) {
-                        specialty = newSpecialty;
-                        specialtyTrees();
-                      }
-                    },
-                    dropdownColor: const Color.fromARGB(255, 188, 159, 128),
+                  Center(
+                    child: DropdownButton<Specialty>(
+                      value: specialty,
+                      hint: Center(
+                          child: Text(
+                        "Select a specialty",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      )),
+                      isExpanded: true,
+                      items: specialtyList.map((Specialty item) {
+                        return DropdownMenuItem<Specialty>(
+                            value: item,
+                            child: Center(
+                              child: Text(item.title,
+                                  style:
+                                      Theme.of(context).textTheme.labelLarge),
+                            ));
+                      }).toList(),
+                      onChanged: (Specialty? newSpecialty) {
+                        if (newSpecialty != null) {
+                          specialty = newSpecialty;
+                          specialtyTrees();
+                        }
+                      },
+                      dropdownColor: const Color.fromARGB(255, 188, 159, 128),
+                    ),
                   ),
                 ),
                 buildStyledContainer(
@@ -230,6 +235,15 @@ class _MapState extends State<Map> {
         mapController.move(mapLocation!, 18);
       });
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+              'No tree found!',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
+      );
       print("Error fetching tree: $e");
     }
   }
