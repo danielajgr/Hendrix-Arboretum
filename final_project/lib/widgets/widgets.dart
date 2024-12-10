@@ -91,6 +91,7 @@ class _PopupAndSoundState extends State<PopupAndSound> {
   void _playSound() async {
     await _audioPlayer.play(AssetSource('audio/ding.mp3'));
   }
+
   // https://stackoverflow.com/questions/53615666/how-can-i-make-alertdialog-disappear-automatically-after-few-seconds-in-flutter
   void _triggerPopup() {
     setState(() {
@@ -117,7 +118,7 @@ class _PopupAndSoundState extends State<PopupAndSound> {
       children: [
         if (_showPopup)
           Positioned(
-            top: 50, 
+            top: 50,
             left: 10,
             right: 10,
             child: Material(
@@ -128,23 +129,20 @@ class _PopupAndSoundState extends State<PopupAndSound> {
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 118, 206, 124),
                   borderRadius: BorderRadius.circular(5),
-                  
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      "Tree Found!",
-                      style: Theme.of(context).textTheme.displayMedium
-                    ),
-                    ],
+                    Text("Tree Found!",
+                        style: Theme.of(context).textTheme.displayMedium),
+                  ],
                 ),
               ),
             ),
           ),
       ],
     );
-  }  
+  }
 }
 
 class TextAndIcon extends StatelessWidget {
@@ -158,17 +156,18 @@ class TextAndIcon extends StatelessWidget {
         padding: const EdgeInsets.all(1.0),
         child: Row(
           children: [
-            
             Text(
               detail,
               style: TextStyle(fontSize: size),
             ),
-            Padding(padding:  const EdgeInsets.only(right: 8.0, left: 8.0),),
-            Icon(icon,
-            color: const Color.fromARGB(255, 11, 103, 14),
-            size: 25,
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0, left: 8.0),
             ),
-
+            Icon(
+              icon,
+              color: const Color.fromARGB(255, 11, 103, 14),
+              size: 25,
+            ),
             const SizedBox(width: 8)
           ],
         ),

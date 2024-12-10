@@ -8,9 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-
-
 class TreeInfo extends StatefulWidget {
   TreeInfo({super.key, required this.treeid, commonname});
   //will need to know the tree?
@@ -38,173 +35,206 @@ class _TreeInfoState extends State<TreeInfo> {
     futureTree = fetchTree(widget.treeid);
     appState = context.read<ApplicationState>();
   }
+
   @override
   Widget build(BuildContext context) {
-    
-    return Scaffold( 
+    return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
-      appBar: AppBar
-    (title: Text("Tree #${widget.treeid}", style: Theme.of(context).textTheme.displayMedium), backgroundColor: Color.fromARGB(255, 0, 103, 79), actions: [
-      IconButton(
-      icon: Icon(Icons.favorite),
-      color: appState.isFavorite(widget.treeid) ? Color.fromARGB(255, 255, 0, 0) : Color(0xff9A9A9A),
-      onPressed: () async {
-        if (!appState.loggedIn) {
-            context.push('/sign-in');
-        }if(appState.isFavorite(widget.treeid)){
+      appBar: AppBar(
+          title: Text("Tree #${widget.treeid}",
+              style: Theme.of(context).textTheme.displayMedium),
+          backgroundColor: Color.fromARGB(255, 0, 103, 79),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.favorite),
+              color: appState.isFavorite(widget.treeid)
+                  ? Color.fromARGB(255, 255, 0, 0)
+                  : Color(0xff9A9A9A),
+              onPressed: () async {
+                if (!appState.loggedIn) {
+                  context.push('/sign-in');
+                }
+                if (appState.isFavorite(widget.treeid)) {
                   setState(() {
-                  appState.removeTree(widget.treeid);
-                });}
-                else{
+                    appState.removeTree(widget.treeid);
+                  });
+                } else {
                   setState(() {
-                  appState.addTree(widget.treeid);
+                    appState.addTree(widget.treeid);
                   });
                 }
-                
-      },
-    )]
-    ),
-      body: ListView(padding: const EdgeInsets.only(left: 50, right: 50, top: 50), children: [
-
-          
-           FutureBuilder<Tree>(
-              future: futureTree,
-              builder: (context, snapshot) {
-              if(snapshot.hasData){
-                return CachedNetworkImage(
-                  imageUrl: snapshot.data!.imageURL,
-                    
-                    placeholder: (context, url) => Center(
-                      child: Container(margin: EdgeInsets.symmetric( vertical: 100),  height: 75, width: 75,
-                        child: const CircularProgressIndicator(
-                          color: Color.fromARGB(255, 0, 103, 79),
-                        )
-                      )
-                    )  
-                  
-                );
-                   
-                
-                
-              } else if (snapshot.hasError) {
-                return Image.asset('img/stockTree.jpg');
-              }
-                return Center (
-                  child: Container(margin: EdgeInsets.symmetric( vertical: 100),  height: 75, width: 75, child: 
-                  CircularProgressIndicator(color: Color.fromARGB(255, 0, 103, 79),),
-                ));
               },
-            ),
-
-           Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
-             const Text('Common Name', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18) /*style: TextStyle(),**/),
-            FutureBuilder<Tree>(
-              future: futureTree,
-              builder: (context, snapshot) {
-              if(snapshot.hasData){
-                widget.commonname = snapshot.data!.commonName;
-                if(widget.commonname.contains(',')){
-                  widget.commonname = widget.commonname.split(',')[1] + ' ' + widget.commonname.split(',')[0];
-                }
-                return Text(snapshot.data!.commonName, style: TextStyle(color: Colors.white));
-              }else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-                return const Text("");
-              }
-              ),
-           
-            //const Text('Pine, Loblolly', textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
-          ],)
-          ),
-           Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
-            const Text('Scientific Name', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18) /*style: TextStyle(),**/),
-            FutureBuilder<Tree>(
-              future: futureTree,
-              builder: (context, snapshot) {
-              if(snapshot.hasData){
-                return Text(snapshot.data!.scientificName, style: TextStyle(color: Colors.white));
-              }else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-                return Text('');
-              }
-              ),
-          ],)
-          ),
-
-        Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
-            const Text('Building', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18) /*style: TextStyle(),**/),
-            FutureBuilder<Tree>(
-              future: futureTree,
-              builder: (context, snapshot) {
-              if(snapshot.hasData){
-                return Text(snapshot.data!.buildingName, style: TextStyle(color: Colors.white));
-              }else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-                return Text('');
-              }
-              ),
-          ],)
-          ),
-        FutureBuilder<Tree>(
-            future: futureTree,
-            builder: (context, snapshot) {
-            if(snapshot.hasData){
-              if(snapshot.data!.height != 0.0){
-                return Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
-                const Text('Height', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18)),
-                Text("${snapshot.data!.height}", style: TextStyle(color: Colors.white)),
-                ],
-              ));
-              }
-                
-            }else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-              return Text('');
-            }
-        ),
-
+            )
+          ]),
+      body: ListView(
+        padding: const EdgeInsets.only(left: 50, right: 50, top: 50),
+        children: [
           FutureBuilder<Tree>(
             future: futureTree,
             builder: (context, snapshot) {
-            if(snapshot.hasData){
-              if(snapshot.data!.dbh != 0.0){
-                return Card(color: Color.fromARGB(255, 0, 103, 79), child: Column(children: [
-                const Text('DBH', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18)),
-                Text("${snapshot.data!.dbh}", style: TextStyle(color: Colors.white)),
-                ],
-              ));
+              if (snapshot.hasData) {
+                return CachedNetworkImage(
+                    imageUrl: snapshot.data!.imageURL,
+                    placeholder: (context, url) => Center(
+                        child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 100),
+                            height: 75,
+                            width: 75,
+                            child: const CircularProgressIndicator(
+                              color: Color.fromARGB(255, 0, 103, 79),
+                            ))));
+              } else if (snapshot.hasError) {
+                return Image.asset('img/stockTree.jpg');
               }
-                
-            }else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-              return Text('');
-            }
-            ),
-          
-          Container(padding: EdgeInsets.only(top:50, left: 80, right: 80, bottom: 10), child:
-          ElevatedButton(onPressed: () => {_launchurl(Uri.parse('https://plants.ces.ncsu.edu/find_a_plant/common-name/?q=${widget.commonname}'))}
-          , child: Text('More Info'))
-          )
-          
-          
-          ],
-      ),
+              return Center(
+                  child: Container(
+                margin: EdgeInsets.symmetric(vertical: 100),
+                height: 75,
+                width: 75,
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 0, 103, 79),
+                ),
+              ));
+            },
+          ),
+          Card(
+              color: Color.fromARGB(255, 0, 103, 79),
+              child: Column(
+                children: [
+                  const Text('Common Name',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18) /*style: TextStyle(),**/),
+                  FutureBuilder<Tree>(
+                      future: futureTree,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          widget.commonname = snapshot.data!.commonName;
+                          if (widget.commonname.contains(',')) {
+                            widget.commonname =
+                                widget.commonname.split(',')[1] +
+                                    ' ' +
+                                    widget.commonname.split(',')[0];
+                          }
+                          return Text(snapshot.data!.commonName,
+                              style: TextStyle(color: Colors.white));
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return const Text("");
+                      }),
 
-      
+                  //const Text('Pine, Loblolly', textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
+                ],
+              )),
+          Card(
+              color: Color.fromARGB(255, 0, 103, 79),
+              child: Column(
+                children: [
+                  const Text('Scientific Name',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18) /*style: TextStyle(),**/),
+                  FutureBuilder<Tree>(
+                      future: futureTree,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(snapshot.data!.scientificName,
+                              style: TextStyle(color: Colors.white));
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return Text('');
+                      }),
+                ],
+              )),
+          Card(
+              color: Color.fromARGB(255, 0, 103, 79),
+              child: Column(
+                children: [
+                  const Text('Building',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18) /*style: TextStyle(),**/),
+                  FutureBuilder<Tree>(
+                      future: futureTree,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(snapshot.data!.buildingName,
+                              style: TextStyle(color: Colors.white));
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return Text('');
+                      }),
+                ],
+              )),
+          FutureBuilder<Tree>(
+              future: futureTree,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.height != 0.0) {
+                    return Card(
+                        color: Color.fromARGB(255, 0, 103, 79),
+                        child: Column(
+                          children: [
+                            const Text('Height',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            Text("${snapshot.data!.height}",
+                                style: TextStyle(color: Colors.white)),
+                          ],
+                        ));
+                  }
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                return Text('');
+              }),
+          FutureBuilder<Tree>(
+              future: futureTree,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.dbh != 0.0) {
+                    return Card(
+                        color: Color.fromARGB(255, 0, 103, 79),
+                        child: Column(
+                          children: [
+                            const Text('DBH',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18)),
+                            Text("${snapshot.data!.dbh}",
+                                style: TextStyle(color: Colors.white)),
+                          ],
+                        ));
+                  }
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                return Text('');
+              }),
+          Container(
+              padding:
+                  EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 10),
+              child: ElevatedButton(
+                  onPressed: () => {
+                        _launchurl(Uri.parse(
+                            'https://plants.ces.ncsu.edu/find_a_plant/common-name/?q=${widget.commonname}'))
+                      },
+                  child: Text('More Info')))
+        ],
+      ),
     );
   }
 
   Future<void> _launchurl(Uri url) async {
-  if(!await launchUrl(url)) {
-    throw Exception('Could not launch $url');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
-
-}
-
-

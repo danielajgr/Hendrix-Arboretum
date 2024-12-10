@@ -23,7 +23,6 @@ class _MainScaffoldState extends State<MainScaffold> {
   String? pageTitle;
 
   int pageIndex = 1;
-  
 
   @override
   void initState() {
@@ -31,11 +30,8 @@ class _MainScaffoldState extends State<MainScaffold> {
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
@@ -80,15 +76,11 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   void _onItemTapped(int index) async {
     setState(() {
-
       pageIndex = index;
 
       // TODO: see if creating these page bodies every time matters
       var (pageBody, pageTitle) = switch (index) {
-        0 => (
-            Leaderboard(),
-            "Leaderboard"),
-
+        0 => (Leaderboard(), "Leaderboard"),
         1 => (Map(), "Hendrix Arboretum"),
         2 => (About(), "About"),
         _ => (null, null)

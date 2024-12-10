@@ -35,50 +35,52 @@ class Specialty {
 }
 
 Future<List<Specialty>> fetchAllSpecialties() async {
-  final response =
-      await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Specialties/All'));
+  final response = await http
+      .get(Uri.parse('https://arboretum.hendrix.edu/API/Specialties/All'));
 
   if (response.statusCode == 200) {
     var dec = jsonDecode(response.body);
     if (dec case List<dynamic> jlist) {
-        List<Specialty> specialties = [];
-        for (var entry in jlist) {
-          if (entry case Map<String, dynamic> jobject) {
-            specialties.add(Specialty.fromJson(jobject));
-          } else {
-            throw Exception('Expected json object, got this instead: $entry');
-          }
+      List<Specialty> specialties = [];
+      for (var entry in jlist) {
+        if (entry case Map<String, dynamic> jobject) {
+          specialties.add(Specialty.fromJson(jobject));
+        } else {
+          throw Exception('Expected json object, got this instead: $entry');
         }
-        return specialties;
+      }
+      return specialties;
     } else {
       throw Exception('Expected JSON list, got this instead: $dec');
     }
   } else {
-    throw Exception('Failed to fetch all specialties, HTTP status: ${response.statusCode}');
+    throw Exception(
+        'Failed to fetch all specialties, HTTP status: ${response.statusCode}');
   }
 }
 
 Future<List<Tree>> fetchTreesForSpecialty(Specialty s) async {
   final String req = s.title;
-  final response =
-      await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Specialties/?specialty=$req'));
+  final response = await http.get(Uri.parse(
+      'https://arboretum.hendrix.edu/API/Specialties/?specialty=$req'));
 
   if (response.statusCode == 200) {
     var dec = jsonDecode(response.body);
     if (dec case List<dynamic> jlist) {
-        List<Tree> trees = [];
-        for (var entry in jlist) {
-          if (entry case Map<String, dynamic> jobject) {
-            trees.add(Tree.fromJson(jobject));
-          } else {
-            throw Exception('Expected json object, got this instead: $entry');
-          }
+      List<Tree> trees = [];
+      for (var entry in jlist) {
+        if (entry case Map<String, dynamic> jobject) {
+          trees.add(Tree.fromJson(jobject));
+        } else {
+          throw Exception('Expected json object, got this instead: $entry');
         }
-        return trees;
+      }
+      return trees;
     } else {
       throw Exception('Expected JSON list, got this instead: $dec');
     }
   } else {
-    throw Exception('Failed to load trees in specialty \'${s.title}\', HTTP status: ${response.statusCode}');
+    throw Exception(
+        'Failed to load trees in specialty \'${s.title}\', HTTP status: ${response.statusCode}');
   }
 }

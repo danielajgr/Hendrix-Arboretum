@@ -82,8 +82,7 @@ final _router = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (context, state) {
-            return Profile(
-            );
+            return Profile();
           },
         ),
       ],
