@@ -74,9 +74,12 @@ final _router = GoRouter(
               path: 'forgot-password',
               builder: (context, state) {
                 final arguments = state.uri.queryParameters;
-                return ForgotPasswordScreen(
-                  email: arguments['email'],
-                  headerMaxExtent: 200,
+                return AppBarWrapper(
+                  title: "Forgot Password",
+                  body: ForgotPasswordScreen(
+                    email: arguments['email'],
+                    headerMaxExtent: 200,
+                  ),
                 );
               },
             ),
