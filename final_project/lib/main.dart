@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import 'app_state.dart';
 import 'pages/main_scaffold.dart';
+import 'widgets/authentication.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,13 +32,8 @@ final _router = GoRouter(
         GoRoute(
           path: 'sign-in',
           builder: (context, state) {
-            return Scaffold(
-                backgroundColor: const Color.fromARGB(255, 175, 225, 175),
-                appBar: AppBar(
-                  title: Text("Sign In",
-                      style: Theme.of(context).textTheme.displayMedium),
-                  backgroundColor: const Color.fromARGB(255, 0, 103, 79),
-                ),
+            return AppBarWrapper(
+                title: "Sign In",
                 body: SignInScreen(
                   actions: [
                     ForgotPasswordAction(((context, email) {

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/authentication.dart';
+
 class Profile extends StatefulWidget {
   @override
   State<Profile> createState() => _ProfileState();
@@ -15,13 +17,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 175, 225, 175),
-      appBar: AppBar(
-        title:
-            Text("Profile", style: Theme.of(context).textTheme.displayMedium),
-        backgroundColor: const Color.fromARGB(255, 0, 103, 79),
-      ),
+    return AppBarWrapper(
+      title: "Profile",
       body: ProfileScreen(providers: const [], actions: [
         SignedOutAction((context) {
           context.pushReplacement('/');
