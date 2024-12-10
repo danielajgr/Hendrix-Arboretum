@@ -42,6 +42,7 @@ class _ProfileState extends State<Profile> {
               ),
         ),
         child: ProfileScreen(
+          avatarSize: 0,
           providers: const [],
           actions: [
             SignedOutAction((context) {
