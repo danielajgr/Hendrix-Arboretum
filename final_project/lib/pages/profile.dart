@@ -21,13 +21,6 @@ class _ProfileState extends State<Profile> {
         title:
             Text("Profile", style: Theme.of(context).textTheme.displayMedium),
         backgroundColor: const Color.fromARGB(255, 0, 103, 79),
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     context.go('/');
-        //   },
-        // ),
-        leading: null,
       ),
       body: ProfileScreen(providers: const [], actions: [
         SignedOutAction((context) {
