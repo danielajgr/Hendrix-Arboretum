@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+// NOTE(LeitMoth):
+// We have to make one modification to this theme in profile.dart
+// to ensure the firebase widgets play nicely, if you modify
+// labelLarge below, make sure to check and update the
+// small theme change in profile.dart accordingly.
+
 /// A custom light theme for the app.
 final ThemeData hendrixTodayLightMode = ThemeData(
   fontFamily: 'Merriweather-Sans',

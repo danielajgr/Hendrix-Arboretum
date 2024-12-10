@@ -42,30 +42,31 @@ class ApplicationState extends ChangeNotifier {
         likedTrees.clear();
       }
       notifyListeners();
-    }); 
-    
+    });
   }
 
   Future<void> loadAllLikedTrees() async {
-    FirebaseFirestore.instance.collection('favoriteTrees').snapshots().listen((snapshot) async {  
-        List<int> alt = [];
+    FirebaseFirestore.instance
+        .collection('favoriteTrees')
+        .snapshots()
+        .listen((snapshot) async {
+      List<int> alt = [];
 
-        for (var d in snapshot.docs) {
-          final likesDoc = await FirebaseFirestore.instance.collection('favoriteTrees').doc(d.id).get();
-          if(likesDoc.exists) {
-            final toAdd = List<int>.from(likesDoc.data()?['likes'] ?? []);
-            for(var add in toAdd){
-              alt.add(add);
-            }
+      for (var d in snapshot.docs) {
+        final likesDoc = await FirebaseFirestore.instance
+            .collection('favoriteTrees')
+            .doc(d.id)
+            .get();
+        if (likesDoc.exists) {
+          final toAdd = List<int>.from(likesDoc.data()?['likes'] ?? []);
+          for (var add in toAdd) {
+            alt.add(add);
           }
         }
-        allLikedTrees = alt;
-        notifyListeners();
-
-
-      });
-   
-    
+      }
+      allLikedTrees = alt;
+      notifyListeners();
+    });
   }
 
   Future<void> loadLikedTrees() async {
@@ -84,8 +85,6 @@ class ApplicationState extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
-  
 
   void addTree(int id) async {
     if (!likedTrees.contains(id)) {
@@ -95,13 +94,11 @@ class ApplicationState extends ChangeNotifier {
     }
   }
 
-
-
   void removeTree(int id) async {
     int i = 0;
     int remove = 0;
-    for (var t in likedTrees){
-      if(t == id){
+    for (var t in likedTrees) {
+      if (t == id) {
         remove = i;
       }
       i++;
@@ -110,10 +107,8 @@ class ApplicationState extends ChangeNotifier {
     likedTrees.removeAt(remove);
 
     await updateLikedTreesInFirestore();
-    notifyListeners();  
-    }
-
-
+    notifyListeners();
+  }
 
   Future<void> updateLikedTreesInFirestore() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -128,65 +123,59 @@ class ApplicationState extends ChangeNotifier {
     }
   }
 
-  bool isFavorite(int id){
+  bool isFavorite(int id) {
     return likedTrees.contains(id);
   }
 
-  List<TreeObject> getAll(){
+  List<TreeObject> getAll() {
     return getTrees(likedTrees);
   }
-  
 
-  bool inList(TreeObject tree, List list){
-    for(var item in list){
-      if(item.treeid == tree.treeid){
+  bool inList(TreeObject tree, List list) {
+    for (var item in list) {
+      if (item.treeid == tree.treeid) {
         return true;
-      }
-      else{
-        if(list.isEmpty){
+      } else {
+        if (list.isEmpty) {
           return false;
         }
       }
     }
     return false;
   }
-  int findDuplicate(TreeObject tr, List<TreeObject> listTr){
+
+  int findDuplicate(TreeObject tr, List<TreeObject> listTr) {
     int index = 0;
-    for(var t in listTr){
-      if(t.treeid == tr.treeid){
+    for (var t in listTr) {
+      if (t.treeid == tr.treeid) {
         return index;
-      }
-      else{
+      } else {
         index++;
       }
     }
     return index;
-
-
   }
 
-  List<TreeObject> getTrees(List ids){
+  List<TreeObject> getTrees(List ids) {
     List<TreeObject> ts = [];
-    for(var id in ids){
+    for (var id in ids) {
       TreeObject t = TreeObject(treeid: id);
-      if(inList(t, ts) == false){
+      if (inList(t, ts) == false) {
         t.add_like();
         ts.add(t);
-        
-      }
-      else{
+      } else {
         int i = findDuplicate(t, ts);
         ts[i].add_like();
       }
     }
     return ts;
-  } 
+  }
 
-  List<TreeObject> getTopTrees(){
+  List<TreeObject> getTopTrees() {
     PriorityQueue<TreeObject> treeQueue = PriorityQueue();
     List<TreeObject> topTenTrees = [TreeObject(treeid: 0000)];
     List<TreeObject> trees = getTrees(allLikedTrees);
-    if(topTenTrees.length == 1){
+    if (topTenTrees.length == 1) {
       treeQueue.addAll(trees);
       for (int i = 0; i < 10 && treeQueue.isNotEmpty; i++) {
         topTenTrees.add(treeQueue.removeFirst());
