@@ -178,7 +178,7 @@ class _MapState extends State<Map> {
                     ),
                     IconButton(
                         icon: Image.asset("assets/dice.png",
-                            width: 24, height: 24),
+                            width: 40, height: 40),
                         onPressed: () {
                           searchTree("", true);
                         },
