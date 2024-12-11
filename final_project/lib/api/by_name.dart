@@ -43,8 +43,8 @@ Future<List<SpeciesName>> fetchSpeciesNames(bool scientificName) async {
   }
 }
 
-Future<List<Tree>> fetchTreesBySpecies(bool scientificMode, String name) async {
-  final category = scientificMode ? "Scientific" : "Common";
+Future<List<Tree>> fetchTreesBySpecies(bool scientificName, String name) async {
+  final category = scientificName ? "Scientific" : "Common";
   final response = await http.get(
       Uri.parse('https://arboretum.hendrix.edu/API/$category/?name=$name'));
 
