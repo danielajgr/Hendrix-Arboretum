@@ -110,7 +110,7 @@ Future<List<Tree>> fetchTreeMultiHelper(String req, int count) async {
       throw Exception('Expected JSON list, got this instead: $dec');
     }
   } else {
-    throw Exception('Failed to load tree, status: ${response.statusCode}');
+    throw Exception('Failed to load trees, status: ${response.statusCode}');
   }
 }
 
