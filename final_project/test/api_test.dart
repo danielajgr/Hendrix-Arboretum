@@ -74,4 +74,17 @@ void main() {
       ensureTreeFields(t);
     }
   });
+
+  test('We can fetch trees by common name', () async {
+    // There are only 2 of these, so this will be a fast query
+    // Hopefully this doesn't break in the future
+    const common = 'Redbud, Texas';
+
+    List<Tree> ts = await fetchTreesBySpecies(false, common);
+
+    expect(ts.isNotEmpty, true);
+    for (Tree t in ts) {
+      ensureTreeFields(t);
+    }
+  });
 }
