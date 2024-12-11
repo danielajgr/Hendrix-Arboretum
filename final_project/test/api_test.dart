@@ -27,14 +27,14 @@ void ensureSpecialityFields(Specialty s) {
 void main() {
   test('We can fetch different trees', () async {
     for (int treeId in [1, 33, 162]) {
-      Tree t = await fetchTree(treeId);
+      Tree t = (await fetchTree(treeId))!;
       expect(t.id, treeId);
       ensureTreeFields(t);
     }
   });
 
   test('We can fetch a random tree', () async {
-    Tree t = await fetchRandomTree();
+    Tree t = (await fetchRandomTree())!;
     ensureTreeFields(t);
   });
 

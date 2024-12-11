@@ -59,7 +59,7 @@ class Tree {
   }
 }
 
-Future<Tree> fetchTreeHelper(String req) async {
+Future<Tree?> fetchTreeHelper(String req) async {
   final response =
       await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Trees/$req'));
 
@@ -114,11 +114,11 @@ Future<List<Tree>> fetchTreeMultiHelper(String req, int count) async {
   }
 }
 
-Future<Tree> fetchTree(int id) async {
+Future<Tree?> fetchTree(int id) async {
   return fetchTreeHelper('?id=$id');
 }
 
-Future<Tree> fetchRandomTree() async {
+Future<Tree?> fetchRandomTree() async {
   return fetchTreeHelper('Random');
 }
 
