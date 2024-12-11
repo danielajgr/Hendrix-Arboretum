@@ -1,3 +1,4 @@
+import 'package:final_project/api/by_name.dart';
 import 'package:final_project/api/speciality.dart';
 import 'package:final_project/api/tree.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +11,11 @@ void ensureTreeFields(Tree t) {
   expect(t.latitude != 0, true);
   expect(t.longitude != 0, true);
   expect(t.commonName.isNotEmpty, true);
+}
+
+void ensureNameFields(SpeciesName n) {
+  expect(n.id != 0, true);
+  expect(n.name.isNotEmpty, true);
 }
 
 void ensureSpecialityFields(Specialty s) {
@@ -60,5 +66,48 @@ void main() {
       ensureTreeFields(t);
     }
   });
-}
 
+  test('We can fetch trees by scientific name', () async {
+    // There are only 2 of these, so this will be a fast query
+    // Hopefully this doesn't break in the future
+    const science = 'Cercis canadensis L. var. texensis (S. Watson) M. Hopkins';
+
+    List<Tree> ts = await fetchTreesBySpecies(true, science);
+
+    expect(ts.isNotEmpty, true);
+    for (Tree t in ts) {
+      ensureTreeFields(t);
+    }
+  });
+
+  test('We can fetch trees by common name', () async {
+    // There are only 2 of these, so this will be a fast query
+    // Hopefully this doesn't break in the future
+    const common = 'Redbud, Texas';
+
+    List<Tree> ts = await fetchTreesBySpecies(false, common);
+
+    expect(ts.isNotEmpty, true);
+    for (Tree t in ts) {
+      ensureTreeFields(t);
+    }
+  });
+
+  test('We can fetch a list of scientific names', () async {
+    List<SpeciesName> ns = await fetchSpeciesNames(true);
+
+    expect(ns.isNotEmpty, true);
+    for (SpeciesName n in ns) {
+      ensureNameFields(n);
+    }
+  });
+
+  test('We can fetch a list of common names', () async {
+    List<SpeciesName> ns = await fetchSpeciesNames(false);
+
+    expect(ns.isNotEmpty, true);
+    for (SpeciesName n in ns) {
+      ensureNameFields(n);
+    }
+  });
+}
