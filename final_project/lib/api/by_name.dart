@@ -17,6 +17,32 @@ class SpeciesName {
   }
 }
 
+Future<List<SpeciesName>> fetchSpeciesNames(bool scientificName) async {
+  final category = scientificName ? "Scientific" : "Common";
+  final response = await http.get(
+      Uri.parse('https://arboretum.hendrix.edu/API/$category/All'));
+
+  if (response.statusCode == 200) {
+    var dec = jsonDecode(response.body);
+    if (dec case List<dynamic> jlist) {
+      List<SpeciesName> names = [];
+      for (var entry in jlist) {
+        if (entry case Map<String, dynamic> jobject) {
+          names.add(SpeciesName.fromJson(jobject));
+        } else {
+          throw Exception('Expected json object, got this instead: $entry');
+        }
+      }
+      return names;
+    } else {
+      throw Exception('Expected JSON list, got this instead: $dec');
+    }
+  } else {
+    throw Exception(
+        'Failed to load list of species, in category \'$category\' HTTP status: ${response.statusCode}');
+  }
+}
+
 Future<List<Tree>> fetchTreesBySpecies(bool scientificMode, String name) async {
   final category = scientificMode ? "Scientific" : "Common";
   final response = await http.get(

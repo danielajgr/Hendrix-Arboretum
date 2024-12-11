@@ -13,6 +13,11 @@ void ensureTreeFields(Tree t) {
   expect(t.commonName.isNotEmpty, true);
 }
 
+void ensureNameFields(SpeciesName n) {
+  expect(n.id != 0, true);
+  expect(n.name.isNotEmpty, true);
+}
+
 void ensureSpecialityFields(Specialty s) {
   expect(s.id != 0, true);
   expect(s.title.isNotEmpty, true);
@@ -85,6 +90,24 @@ void main() {
     expect(ts.isNotEmpty, true);
     for (Tree t in ts) {
       ensureTreeFields(t);
+    }
+  });
+
+  test('We can fetch a list of scientific names', () async {
+    List<SpeciesName> ns = await fetchSpeciesNames(true);
+
+    expect(ns.isNotEmpty, true);
+    for (SpeciesName n in ns) {
+      ensureNameFields(n);
+    }
+  });
+
+  test('We can fetch a list of common names', () async {
+    List<SpeciesName> ns = await fetchSpeciesNames(false);
+
+    expect(ns.isNotEmpty, true);
+    for (SpeciesName n in ns) {
+      ensureNameFields(n);
     }
   });
 }
