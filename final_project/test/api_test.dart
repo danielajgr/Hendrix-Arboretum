@@ -1,3 +1,4 @@
+import 'package:final_project/api/by_name.dart';
 import 'package:final_project/api/speciality.dart';
 import 'package:final_project/api/tree.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -60,5 +61,17 @@ void main() {
       ensureTreeFields(t);
     }
   });
-}
 
+  test('We can fetch trees by scientific name', () async {
+    // There are only 2 of these, so this will be a fast query
+    // Hopefully this doesn't break in the future
+    const science = 'Cercis canadensis L. var. texensis (S. Watson) M. Hopkins';
+
+    List<Tree> ts = await fetchTreesBySpecies(true, science);
+
+    expect(ts.isNotEmpty, true);
+    for (Tree t in ts) {
+      ensureTreeFields(t);
+    }
+  });
+}
