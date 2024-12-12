@@ -213,9 +213,9 @@ class _MapState extends State<Map> {
         tree = await fetchRandomTree();
       }
 
-        if (tree != null) {
-      setState(() {
-        specialty = null;
+      if (tree != null) {
+        setState(() {
+          specialty = null;
           // Reset nearby tree markers
           trees = null;
 
@@ -231,11 +231,11 @@ class _MapState extends State<Map> {
                 ),
                 backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
           );
-        mapController.move(mapLocation!, 18);
-      });
-        } else {
-          throw Exception("Missing tree");
-        }
+          mapController.move(mapLocation!, 18);
+        });
+      } else {
+        throw Exception("Missing tree");
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
