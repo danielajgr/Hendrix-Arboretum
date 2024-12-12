@@ -5,7 +5,7 @@ import "package:flutter_map/flutter_map.dart";
 import "package:latlong2/latlong.dart";
 import "package:geolocator/geolocator.dart";
 import "/api/tree.dart";
-import "/api/speciality.dart";
+import "/api/specialty.dart";
 import "/pages/tree_info.dart";
 
 class Map extends StatefulWidget {
