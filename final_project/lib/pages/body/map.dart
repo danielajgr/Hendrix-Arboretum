@@ -234,6 +234,21 @@ class _MapState extends State<Map> {
     }
   }
 
+  void populateMap(List<Tree> theTrees) {
+    int len = theTrees.length;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text(
+            len == 1 ? 'You found a Tree!' : 'You found $len Trees!',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          backgroundColor: const Color.fromARGB(255, 0, 103, 79),
+        ),
+    );
+  }
+
   Future<void> searchTree(String id, bool rand) async {
     final AudioPlayer _audioPlayer = AudioPlayer();
     try {
