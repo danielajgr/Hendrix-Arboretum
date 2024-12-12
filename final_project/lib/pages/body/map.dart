@@ -1,4 +1,5 @@
 import "package:audioplayers/audioplayers.dart";
+import "package:final_project/api/by_name.dart";
 import "package:final_project/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
@@ -201,6 +202,35 @@ class _MapState extends State<Map> {
       setState(() {});
     } catch (e) {
       print("Error fetching specialties");
+    }
+  }
+
+  Future<void> search(String text) async {
+    try {
+      if (int.tryParse(text) case int id) {
+        tree = await fetchTree(id);
+
+        if (tree == null) {
+          throw Exception("Could not find tree at id $id");
+        }
+
+        populateMap([tree!]);
+      } else {
+        List<Tree> science = await fetchTreesBySpecies(false, text);
+        List<Tree> common = await fetchTreesBySpecies(true, text);
+
+        List<Tree> resultTrees = [];
+        resultTrees.addAll(science);
+        resultTrees.addAll(common);
+
+        if (resultTrees.isEmpty) {
+          throw Exception("Could not find trees with common or scientific name of $text");
+        }
+
+        populateMap(trees);
+      }
+    } catch (e) {
+      noTreesFound();
     }
   }
 
