@@ -21,12 +21,15 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  SearchResult? searchResult;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   List<Specialty> specialtyList = [];
   Specialty? specialty;
 
   MapController mapController = MapController();
+
+  SearchResult? searchResult;
+
 
   @override
   void initState() {
@@ -251,7 +254,6 @@ class _MapState extends State<Map> {
   }
 
   Future<void> specialtyTrees() async {
-    final AudioPlayer _audioPlayer = AudioPlayer();
 
     try {
       trees = await fetchTreesForSpecialty(specialty!);
@@ -307,8 +309,6 @@ class _MapState extends State<Map> {
   }
 
   Future<void> fetchNearbyTrees() async {
-    final AudioPlayer _audioPlayer = AudioPlayer();
-
     bool serviceEnabled;
     LocationPermission permission;
 
