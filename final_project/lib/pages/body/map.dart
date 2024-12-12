@@ -268,10 +268,7 @@ class _MapState extends State<Map> {
   Future<void> specialtyTrees(Specialty specialty) async {
     try {
       List<Tree> trees = await fetchTreesForSpecialty(specialty);
-
-      setState(() {
-        populateMap(trees);
-      });
+      populateMap(trees);
     } catch (e) {
       noTreesFound();
       print("Error fetching specialty trees: $e");
@@ -329,26 +326,6 @@ class _MapState extends State<Map> {
     List<Tree> treeList =
         await fetchClosestTrees(loc.latitude, loc.longitude, 5);
 
-    setState(() {
-      specialty = null;
-      trees = treeList;
-
-      if (trees != null) {
-        int len = trees!.length;
-
-        _audioPlayer.play(AssetSource('audio/ding.mp3'));
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                "You found $len Trees!",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
-        );
-        mapController.move(LatLng(trees![0].latitude, trees![0].longitude), 18);
-      }
-    });
+    populateMap(treeList);
   }
-
 }
