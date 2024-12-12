@@ -9,6 +9,11 @@ import "/api/tree.dart";
 import "/api/specialty.dart";
 import "/pages/tree_info.dart";
 
+// class SearchResult {
+//   List<Tree> trees;
+//   LatLng mapCenter;
+// }
+
 class Map extends StatefulWidget {
   @override
   _MapState createState() => _MapState();
@@ -16,7 +21,6 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   LatLng? mapLocation;
-  Tree? tree;
 
   List<Tree>? trees;
 
@@ -71,32 +75,32 @@ class _MapState extends State<Map> {
                     const SimpleAttributionWidget(
                         source: Text("Tiles - Esri", softWrap: true)),
                     // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
-                    if (tree != null)
-                      Stack(children: [
-                        MarkerLayer(
-                          markers: [
-                            Marker(
-                                point: mapLocation!,
-                                width: 60,
-                                height: 60,
-                                child: GestureDetector(
-                                  onTap: () => {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                TreeInfo(treeid: tree!.id)))
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    child: const Icon(Icons.location_on,
-                                        color: Color.fromARGB(255, 202, 81, 39),
-                                        size: 50),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ]),
+                  //   if (tree != null)
+                  //     Stack(children: [
+                  //       MarkerLayer(
+                  //         markers: [
+                  //           Marker(
+                  //               point: mapLocation!,
+                  //               width: 60,
+                  //               height: 60,
+                  //               child: GestureDetector(
+                  //                 onTap: () => {
+                  //                   Navigator.push(
+                  //                       context,
+                  //                       MaterialPageRoute(
+                  //                           builder: (context) =>
+                  //                               TreeInfo(treeid: tree!.id)))
+                  //                 },
+                  //                 child: Container(
+                  //                   alignment: Alignment.center,
+                  //                   child: const Icon(Icons.location_on,
+                  //                       color: Color.fromARGB(255, 202, 81, 39),
+                  //                       size: 50),
+                  //                 ),
+                  //               )),
+                  //         ],
+                  //       ),
+                  //     ]),
                     if (trees != null)
                       Stack(children: [
                         MarkerLayer(
@@ -173,7 +177,8 @@ class _MapState extends State<Map> {
                           ),
                         ),
                         onSubmitted: (id) {
-                          searchTree(id, false);
+                          search(id);
+                          // searchTree(id, false);
                         },
                       ),
                     ),
@@ -181,7 +186,8 @@ class _MapState extends State<Map> {
                         icon: Image.asset("assets/dice.png",
                             width: 40, height: 40),
                         onPressed: () {
-                          searchTree("", true);
+                          // searchTree("", true);
+                          randomTree();
                         },
                         style: IconButton.styleFrom(
                             backgroundColor:
@@ -208,13 +214,13 @@ class _MapState extends State<Map> {
   Future<void> search(String text) async {
     try {
       if (int.tryParse(text) case int id) {
-        tree = await fetchTree(id);
+        Tree? tree = await fetchTree(id);
 
         if (tree == null) {
           throw Exception("Could not find tree at id $id");
         }
 
-        populateMap([tree!]);
+        populateMap([tree]);
       } else {
         List<Tree> science = await fetchTreesBySpecies(false, text);
         List<Tree> common = await fetchTreesBySpecies(true, text);
@@ -235,8 +241,26 @@ class _MapState extends State<Map> {
     }
   }
 
+  Future<void> randomTree() async {
+    try {
+      Tree? tree = await fetchRandomTree();
+
+      if (tree == null) {
+        throw Exception("Failed to fetch random tree.");
+      }
+
+      populateMap([tree]);
+    } catch (e) {
+      noTreesFound();
+    }
+  }
+
   void populateMap(List<Tree> theTrees) {
     int len = theTrees.length;
+
+    setState(() {
+      trees = theTrees;
+    });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -263,51 +287,51 @@ class _MapState extends State<Map> {
     );
   }
 
-  Future<void> searchTree(String id, bool rand) async {
-    final AudioPlayer _audioPlayer = AudioPlayer();
-    try {
-      if (!rand) {
-        tree = await fetchTree(int.parse(id));
-      } else {
-        tree = await fetchRandomTree();
-      }
-
-      if (tree != null) {
-        setState(() {
-          specialty = null;
-          // Reset nearby tree markers
-          trees = null;
-
-          mapLocation = LatLng(tree!.latitude, tree!.longitude);
-
-          _audioPlayer.play(AssetSource('audio/ding.mp3'));
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                  'You found a Tree!',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
-          );
-          mapController.move(mapLocation!, 18);
-        });
-      } else {
-        throw Exception("Missing tree");
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-              'No tree found!',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
-      );
-      print("Error fetching tree: $e");
-    }
-  }
+  // Future<void> searchTree(String id, bool rand) async {
+  //   final AudioPlayer _audioPlayer = AudioPlayer();
+  //   try {
+  //     if (!rand) {
+  //       tree = await fetchTree(int.parse(id));
+  //     } else {
+  //       tree = await fetchRandomTree();
+  //     }
+  //
+  //     if (tree != null) {
+  //       setState(() {
+  //         specialty = null;
+  //         // Reset nearby tree markers
+  //         trees = null;
+  //
+  //         mapLocation = LatLng(tree!.latitude, tree!.longitude);
+  //
+  //         _audioPlayer.play(AssetSource('audio/ding.mp3'));
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(
+  //               content: Text(
+  //                 'You found a Tree!',
+  //                 textAlign: TextAlign.center,
+  //                 style: Theme.of(context).textTheme.labelLarge,
+  //               ),
+  //               backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
+  //         );
+  //         mapController.move(mapLocation!, 18);
+  //       });
+  //     } else {
+  //       throw Exception("Missing tree");
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //           content: Text(
+  //             'No tree found!',
+  //             textAlign: TextAlign.center,
+  //             style: Theme.of(context).textTheme.labelLarge,
+  //           ),
+  //           backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
+  //     );
+  //     print("Error fetching tree: $e");
+  //   }
+  // }
 
   Future<void> specialtyTrees() async {
     final AudioPlayer _audioPlayer = AudioPlayer();
@@ -317,7 +341,7 @@ class _MapState extends State<Map> {
 
       setState(() {
         if (specialty != null && trees != null) {
-          tree = null;
+          // tree = null;
           int len = trees!.length;
 
           mapLocation = const LatLng(35.100232, -92.440290);
@@ -343,33 +367,33 @@ class _MapState extends State<Map> {
     }
   }
 
-  void markerPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Tree #${tree!.id}"),
-          content: ElevatedButton(
-              onPressed: () => {
-                    Navigator.of(context).pop(),
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TreeInfo(treeid: tree!.id)))
-                  },
-              child: const Text("Tree page")),
-          actions: [
-            TextButton(
-              child: const Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void markerPopup(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text("Tree #${tree!.id}"),
+  //         content: ElevatedButton(
+  //             onPressed: () => {
+  //                   Navigator.of(context).pop(),
+  //                   Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                           builder: (context) => TreeInfo(treeid: tree!.id)))
+  //                 },
+  //             child: const Text("Tree page")),
+  //         actions: [
+  //           TextButton(
+  //             child: const Text("Close"),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   List<Marker> createMarkers(BuildContext context) {
     if (trees == null) {
@@ -429,7 +453,7 @@ class _MapState extends State<Map> {
       trees = treeList;
       if (trees != null) {
         // Reset searched tree
-        tree = null;
+        // tree = null;
 
         int len = trees!.length;
 
