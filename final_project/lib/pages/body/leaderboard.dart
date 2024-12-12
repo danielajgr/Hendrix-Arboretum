@@ -23,33 +23,19 @@ class _LeaderboardState extends State<Leaderboard> {
     return Consumer<ApplicationState>(
       builder: (context, appState, _) => ListView(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        children: (appState.getTopTrees()).map((item) {
+        //https://stackoverflow.com/a/54899730
+        children: appState.getTopTrees().indexed.map((tuple) {
           //appstate gives top ten trees
+          var (idx, item) = tuple;
 
           if (item.treeid == 0000) {
             rank = 0;
             return Column(children: [
               // First ListTile (with headings)
+              // https://stackoverflow.com/questions/47107027/how-to-center-the-title-of-a-listtile-in-flutter
               ListTile(
-                shape: Border(
-                  bottom: BorderSide(
-                      color: Color.fromARGB(255, 0, 48, 37), width: 1),
-                ),
-                leading: Text(
-                  "Rank",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                title: TextAndIcon(
-                  Icons.forest,
-                  "Top 10 Trees",
-                  25,
-                ),
-                trailing: Text(
-                  "Likes",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+                title: Text("Top 10 Trees", textAlign: TextAlign.center),
               ),
-
               // Image placed between ListTiles
               Image.asset(
                 'assets/breaker.PNG',
@@ -68,7 +54,12 @@ class _LeaderboardState extends State<Leaderboard> {
               contentPadding: const EdgeInsets.all(8.0),
               leading: Stack(alignment: Alignment.center, children: <Widget>[
                 Image.asset(
-                  'assets/tree_icon.PNG',
+                  switch (idx) {
+                    1 => 'assets/tree_icon_gold.png',
+                    2 => 'assets/tree_icon_silver.png',
+                    3 => 'assets/tree_icon_bronze.png',
+                    _ => 'assets/tree_icon.PNG',
+                  },
                   width: 80,
                   height: 200,
                   fit: BoxFit.fill,
