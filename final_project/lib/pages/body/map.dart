@@ -224,7 +224,8 @@ class _MapState extends State<Map> {
         resultTrees.addAll(common);
 
         if (resultTrees.isEmpty) {
-          throw Exception("Could not find trees with common or scientific name of $text");
+          throw Exception(
+              "Could not find trees with common or scientific name of $text");
         }
 
         populateMap(resultTrees);
@@ -239,13 +240,13 @@ class _MapState extends State<Map> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          content: Text(
-            len == 1 ? 'You found a Tree!' : 'You found $len Trees!',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          backgroundColor: const Color.fromARGB(255, 0, 103, 79),
+        content: Text(
+          len == 1 ? 'You found a Tree!' : 'You found $len Trees!',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
+        backgroundColor: const Color.fromARGB(255, 0, 103, 79),
+      ),
     );
   }
 
