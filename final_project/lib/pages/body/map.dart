@@ -21,7 +21,7 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  List<Tree>? trees;
+  SearchResult? searchResult;
 
   List<Specialty> specialtyList = [];
   Specialty? specialty;
@@ -72,7 +72,7 @@ class _MapState extends State<Map> {
                     const SimpleAttributionWidget(
                         source: Text("Tiles - Esri", softWrap: true)),
                     // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
-                    if (trees != null)
+                    if (searchResult != null)
                       Stack(children: [
                         MarkerLayer(
                           markers: createMarkers(context),
@@ -225,12 +225,14 @@ class _MapState extends State<Map> {
     }
   }
 
-  void populateMap(List<Tree> theTrees) {
-    int len = theTrees.length;
+  void populateMap(List<Tree> trees) {
+    int len = trees.length;
 
     setState(() {
-      trees = theTrees;
+      searchResult = SearchResult(trees: trees);
     });
+
+    mapController.move(LatLng(trees[0].latitude, trees[0].longitude), 16);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
