@@ -30,7 +30,6 @@ class _MapState extends State<Map> {
 
   SearchResult? searchResult;
 
-
   @override
   void initState() {
     super.initState();
@@ -64,7 +63,8 @@ class _MapState extends State<Map> {
               Positioned.fill(
                   child: FlutterMap(
                       mapController: mapController,
-                      options: const MapOptions(initialCenter: LatLng(35.100232, -92.440290),
+                      options: const MapOptions(
+                          initialCenter: LatLng(35.100232, -92.440290),
                           initialZoom: 16),
                       children: [
                     TileLayer(
@@ -254,7 +254,6 @@ class _MapState extends State<Map> {
   }
 
   Future<void> specialtyTrees() async {
-
     try {
       trees = await fetchTreesForSpecialty(specialty!);
 
@@ -284,25 +283,28 @@ class _MapState extends State<Map> {
   }
 
   List<Marker> createMarkers(List<Tree> trees) {
-    return trees.map((tree) =>
-      Marker(
-          point: LatLng(tree.latitude, tree.longitude),
-          width: 60,
-          height: 60,
-          child: GestureDetector(
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TreeInfo(treeid: tree.id)))
-            },
-            child: Container(
-              alignment: Alignment.center,
-              child: const Icon(Icons.location_on,
-                  color: Color.fromARGB(255, 202, 81, 39), size: 50),
+    return trees
+        .map(
+          (tree) => Marker(
+            point: LatLng(tree.latitude, tree.longitude),
+            width: 60,
+            height: 60,
+            child: GestureDetector(
+              onTap: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TreeInfo(treeid: tree.id)))
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: const Icon(Icons.location_on,
+                    color: Color.fromARGB(255, 202, 81, 39), size: 50),
+              ),
             ),
-          ),),
-    ).toList();
+          ),
+        )
+        .toList();
   }
 
   Future<void> fetchNearbyTrees() async {
@@ -352,7 +354,6 @@ class _MapState extends State<Map> {
       }
     });
   }
-
 
   Future<void> getSpecialties() async {
     try {
