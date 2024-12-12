@@ -227,7 +227,7 @@ class _MapState extends State<Map> {
           throw Exception("Could not find trees with common or scientific name of $text");
         }
 
-        populateMap(trees);
+        populateMap(resultTrees);
       }
     } catch (e) {
       noTreesFound();
