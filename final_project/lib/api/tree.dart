@@ -66,16 +66,19 @@ Future<Tree?> fetchTreeHelper(String req) async {
   if (response.statusCode == 200) {
     var dec = jsonDecode(response.body);
     if (dec case List<dynamic> jlist) {
-      if (jlist.length == 1) {
-        if (jlist[0] case Map<String, dynamic> jobject) {
-          return Tree.fromJson(jobject);
-        } else {
+      switch (jlist.length) {
+        case 0:
+          return null;
+        case 1:
+          if (jlist[0] case Map<String, dynamic> jobject) {
+            return Tree.fromJson(jobject);
+          } else {
+            throw Exception(
+                'Expected json object, got this instead: ${jlist[0]}');
+          }
+        default:
           throw Exception(
-              'Expected json object, got this instead: ${jlist[0]}');
-        }
-      } else {
-        throw Exception(
-            'Expected JSON list of length 1 (check tree id?), got this instead: $jlist');
+              'Expected JSON list of length of 1 or 0 (check tree id?), got this instead: $jlist');
       }
     } else {
       throw Exception('Expected JSON list, got this instead: $dec');
