@@ -1,5 +1,5 @@
 import 'package:final_project/api/by_name.dart';
-import 'package:final_project/api/speciality.dart';
+import 'package:final_project/api/specialty.dart';
 import 'package:final_project/api/tree.dart';
 import 'package:flutter_test/flutter_test.dart';
 
