@@ -22,16 +22,17 @@ class _MainScaffoldState extends State<MainScaffold> {
   Widget? pageBody;
   String? pageTitle;
 
-  List<(Widget,String)> pageCache = [
-        (Leaderboard(), "Leaderboard"),
-        (Map(), "Hendrix Arboretum"),
-        (About(), "About"),
-  ];
-
+  List<(Widget, String)> pageCache = [];
   int pageIndex = 1;
 
   @override
   void initState() {
+    pageCache = [
+      (Leaderboard(), "Leaderboard"),
+      (Map(), "Hendrix Arboretum"),
+      (About(), "About"),
+    ];
+
     _onItemTapped(pageIndex);
     super.initState();
   }
