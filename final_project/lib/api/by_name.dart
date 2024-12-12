@@ -19,8 +19,8 @@ class SpeciesName {
 
 Future<List<SpeciesName>> fetchSpeciesNames(bool scientificName) async {
   final category = scientificName ? "Scientific" : "Common";
-  final response = await http.get(
-      Uri.parse('https://arboretum.hendrix.edu/API/$category/All'));
+  final response = await http
+      .get(Uri.parse('https://arboretum.hendrix.edu/API/$category/All'));
 
   if (response.statusCode == 200) {
     var dec = jsonDecode(response.body);
