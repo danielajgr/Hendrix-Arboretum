@@ -227,7 +227,7 @@ class _MapState extends State<Map> {
           throw Exception("Could not find tree at id $id");
         }
 
-        populateMap([tree]);
+        populateMap([tree], zoom: 18);
       } else {
         List<Tree> science = await fetchTreesBySpecies(false, text);
         List<Tree> common = await fetchTreesBySpecies(true, text);
@@ -256,7 +256,7 @@ class _MapState extends State<Map> {
         throw Exception("Failed to fetch random tree.");
       }
 
-      populateMap([tree]);
+      populateMap([tree], zoom: 18);
     } catch (e) {
       noTreesFound();
     }
@@ -288,7 +288,7 @@ class _MapState extends State<Map> {
     List<Tree> treeList =
         await fetchClosestTrees(loc.latitude, loc.longitude, 5);
 
-    populateMap(treeList);
+    populateMap(treeList, zoom: 18);
   }
 
   Future<void> specialtyTrees(Specialty specialty) async {
@@ -312,7 +312,7 @@ class _MapState extends State<Map> {
     }
   }
 
-  void populateMap(List<Tree> trees) {
+  void populateMap(List<Tree> trees, {double zoom = 16}) {
     int len = trees.length;
 
     setState(() {
@@ -331,7 +331,7 @@ class _MapState extends State<Map> {
       ),
     );
 
-    mapController.move(LatLng(trees[0].latitude, trees[0].longitude), 16);
+    mapController.move(LatLng(trees[0].latitude, trees[0].longitude), zoom);
   }
 
   void noTreesFound() {
