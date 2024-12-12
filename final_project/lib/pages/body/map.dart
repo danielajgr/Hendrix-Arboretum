@@ -172,15 +172,6 @@ class _MapState extends State<Map> {
     });
   }
 
-  Future<void> getSpecialties() async {
-    try {
-      specialtyList = await fetchAllSpecialties();
-      setState(() {});
-    } catch (e) {
-      print("Error fetching specialties");
-    }
-  }
-
   Future<void> search(String text) async {
     try {
       if (int.tryParse(text) case int id) {
@@ -363,5 +354,15 @@ class _MapState extends State<Map> {
         mapController.move(LatLng(trees![0].latitude, trees![0].longitude), 18);
       }
     });
+  }
+
+
+  Future<void> getSpecialties() async {
+    try {
+      specialtyList = await fetchAllSpecialties();
+      setState(() {});
+    } catch (e) {
+      print("Error fetching specialties");
+    }
   }
 }
