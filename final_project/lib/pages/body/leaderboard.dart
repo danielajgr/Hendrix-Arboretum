@@ -33,8 +33,12 @@ class _LeaderboardState extends State<Leaderboard> {
             return Column(children: [
               // First ListTile (with headings)
               // https://stackoverflow.com/questions/47107027/how-to-center-the-title-of-a-listtile-in-flutter
-              ListTile(
-                title: Text("Top 10 Trees", textAlign: TextAlign.center),
+              const ListTile(
+                title: Text("Top 10 Trees", textAlign: TextAlign.center, style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontFamily: 'MuseoBold',
+                      fontSize: 30,
+                    )),
               ),
               // Image placed between ListTiles
               Image.asset(
