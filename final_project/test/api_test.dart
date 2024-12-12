@@ -110,4 +110,10 @@ void main() {
       ensureNameFields(n);
     }
   });
+
+  test('Fetching an id that doesn\'t exist returns null', () async {
+      const tooBig = 1234321;
+      Tree? t = await fetchTree(tooBig);
+      expect(t == null, true);
+  });
 }
