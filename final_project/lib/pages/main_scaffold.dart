@@ -22,6 +22,12 @@ class _MainScaffoldState extends State<MainScaffold> {
   Widget? pageBody;
   String? pageTitle;
 
+  List<(Widget,String)> pageCache = [
+        (Leaderboard(), "Leaderboard"),
+        (Map(), "Hendrix Arboretum"),
+        (About(), "About"),
+  ];
+
   int pageIndex = 1;
 
   @override
@@ -78,16 +84,12 @@ class _MainScaffoldState extends State<MainScaffold> {
     setState(() {
       pageIndex = index;
 
-      // TODO: see if creating these page bodies every time matters
-      var (pageBody, pageTitle) = switch (index) {
-        0 => (Leaderboard(), "Leaderboard"),
-        1 => (Map(), "Hendrix Arboretum"),
-        2 => (About(), "About"),
-        _ => (null, null)
-      };
+      if (index >= 0 && index <= 3) {
+        var (pageBody, pageTitle) = pageCache[index];
 
-      this.pageBody = pageBody;
-      this.pageTitle = pageTitle;
+        this.pageBody = pageBody;
+        this.pageTitle = pageTitle;
+      }
     });
   }
 }
