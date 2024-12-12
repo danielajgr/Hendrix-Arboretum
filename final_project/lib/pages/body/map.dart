@@ -283,12 +283,9 @@ class _MapState extends State<Map> {
     }
   }
 
-  List<Marker> createMarkers(BuildContext context) {
-    if (trees == null) {
-      return [];
-    }
-    return trees!.map((tree) {
-      return Marker(
+  List<Marker> createMarkers(List<Tree> trees) {
+    return trees.map((tree) =>
+      Marker(
           point: LatLng(tree.latitude, tree.longitude),
           width: 60,
           height: 60,
@@ -304,8 +301,8 @@ class _MapState extends State<Map> {
               child: const Icon(Icons.location_on,
                   color: Color.fromARGB(255, 202, 81, 39), size: 50),
             ),
-          ));
-    }).toList();
+          ),),
+    ).toList();
   }
 
   Future<void> fetchNearbyTrees() async {
