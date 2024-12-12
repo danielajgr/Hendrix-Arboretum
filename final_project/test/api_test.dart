@@ -27,14 +27,14 @@ void ensureSpecialityFields(Specialty s) {
 void main() {
   test('We can fetch different trees', () async {
     for (int treeId in [1, 33, 162]) {
-      Tree t = await fetchTree(treeId);
+      Tree t = (await fetchTree(treeId))!;
       expect(t.id, treeId);
       ensureTreeFields(t);
     }
   });
 
   test('We can fetch a random tree', () async {
-    Tree t = await fetchRandomTree();
+    Tree t = (await fetchRandomTree())!;
     ensureTreeFields(t);
   });
 
@@ -109,5 +109,11 @@ void main() {
     for (SpeciesName n in ns) {
       ensureNameFields(n);
     }
+  });
+
+  test('Fetching an id that doesn\'t exist returns null', () async {
+      const tooBig = 1234321;
+      Tree? t = await fetchTree(tooBig);
+      expect(t == null, true);
   });
 }

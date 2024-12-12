@@ -59,23 +59,26 @@ class Tree {
   }
 }
 
-Future<Tree> fetchTreeHelper(String req) async {
+Future<Tree?> fetchTreeHelper(String req) async {
   final response =
       await http.get(Uri.parse('https://arboretum.hendrix.edu/API/Trees/$req'));
 
   if (response.statusCode == 200) {
     var dec = jsonDecode(response.body);
     if (dec case List<dynamic> jlist) {
-      if (jlist.length == 1) {
-        if (jlist[0] case Map<String, dynamic> jobject) {
-          return Tree.fromJson(jobject);
-        } else {
+      switch (jlist.length) {
+        case 0:
+          return null;
+        case 1:
+          if (jlist[0] case Map<String, dynamic> jobject) {
+            return Tree.fromJson(jobject);
+          } else {
+            throw Exception(
+                'Expected json object, got this instead: ${jlist[0]}');
+          }
+        default:
           throw Exception(
-              'Expected json object, got this instead: ${jlist[0]}');
-        }
-      } else {
-        throw Exception(
-            'Expected JSON list of length 1 (check tree id?), got this instead: $jlist');
+              'Expected JSON list of length of 1 or 0 (check tree id?), got this instead: $jlist');
       }
     } else {
       throw Exception('Expected JSON list, got this instead: $dec');
@@ -114,11 +117,11 @@ Future<List<Tree>> fetchTreeMultiHelper(String req, int count) async {
   }
 }
 
-Future<Tree> fetchTree(int id) async {
+Future<Tree?> fetchTree(int id) async {
   return fetchTreeHelper('?id=$id');
 }
 
-Future<Tree> fetchRandomTree() async {
+Future<Tree?> fetchRandomTree() async {
   return fetchTreeHelper('Random');
 }
 
