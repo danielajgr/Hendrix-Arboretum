@@ -9,10 +9,11 @@ import "/api/tree.dart";
 import "/api/specialty.dart";
 import "/pages/tree_info.dart";
 
-// class SearchResult {
-//   List<Tree> trees;
-//   LatLng mapCenter;
-// }
+class SearchResult {
+  List<Tree> trees;
+
+  SearchResult({required this.trees});
+}
 
 class Map extends StatefulWidget {
   @override
@@ -20,8 +21,6 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  LatLng? mapLocation;
-
   List<Tree>? trees;
 
   List<Specialty> specialtyList = [];
@@ -62,9 +61,7 @@ class _MapState extends State<Map> {
               Positioned.fill(
                   child: FlutterMap(
                       mapController: mapController,
-                      options: MapOptions(
-                          initialCenter: mapLocation ??
-                              const LatLng(35.100232, -92.440290),
+                      options: const MapOptions(initialCenter: LatLng(35.100232, -92.440290),
                           initialZoom: 16),
                       children: [
                     TileLayer(
@@ -270,8 +267,6 @@ class _MapState extends State<Map> {
         if (specialty != null && trees != null) {
           int len = trees!.length;
 
-          mapLocation = const LatLng(35.100232, -92.440290);
-
           _audioPlayer.play(AssetSource('audio/ding.mp3'));
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -282,11 +277,11 @@ class _MapState extends State<Map> {
                 ),
                 backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
           );
+          mapController.move(
+            const LatLng(35.100232, -92.440290),
+            16,
+          );
         }
-        mapController.move(
-          mapLocation!,
-          16,
-        );
       });
     } catch (e) {
       print("Error fetching specialty trees: $e");
@@ -349,11 +344,9 @@ class _MapState extends State<Map> {
     setState(() {
       specialty = null;
       trees = treeList;
+
       if (trees != null) {
         int len = trees!.length;
-
-        mapLocation = LatLng(trees![0].latitude, trees![0].longitude);
-        //   mapLocation = LatLng(loc.latitude,loc.longitude);
 
         _audioPlayer.play(AssetSource('audio/ding.mp3'));
         ScaffoldMessenger.of(context).showSnackBar(
@@ -365,8 +358,8 @@ class _MapState extends State<Map> {
               ),
               backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
         );
+        mapController.move(LatLng(trees![0].latitude, trees![0].longitude), 18);
       }
-      mapController.move(mapLocation!, 18);
     });
   }
 }
