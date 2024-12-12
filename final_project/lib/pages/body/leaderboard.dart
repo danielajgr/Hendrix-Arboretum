@@ -30,6 +30,7 @@ class _LeaderboardState extends State<Leaderboard> {
             rank = 0;
             return Column(children: [
               // First ListTile (with headings)
+              // https://stackoverflow.com/questions/47107027/how-to-center-the-title-of-a-listtile-in-flutter
               ListTile(
                 title: Text("Top 10 Trees", textAlign: TextAlign.center),
               ),
