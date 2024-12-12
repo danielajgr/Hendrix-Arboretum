@@ -24,7 +24,7 @@ class _MapState extends State<Map> {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   List<Specialty> specialtyList = [];
-  Specialty? specialty;
+  Specialty? selectedSpecialty;
 
   MapController mapController = MapController();
 
@@ -86,7 +86,7 @@ class _MapState extends State<Map> {
                 buildStyledContainer(
                   Center(
                     child: DropdownButton<Specialty>(
-                      value: specialty,
+                      value: selectedSpecialty,
                       hint: Center(
                           child: Text(
                         "Select a specialty",
@@ -104,8 +104,8 @@ class _MapState extends State<Map> {
                       }).toList(),
                       onChanged: (Specialty? newSpecialty) {
                         if (newSpecialty != null) {
-                          specialty = newSpecialty;
-                          specialtyTrees();
+                          selectedSpecialty = newSpecialty;
+                          specialtyTrees(newSpecialty);
                         }
                       },
                       dropdownColor: const Color.fromARGB(255, 188, 159, 128),
@@ -226,8 +226,7 @@ class _MapState extends State<Map> {
       searchResult = SearchResult(trees: trees);
     });
 
-    mapController.move(LatLng(trees[0].latitude, trees[0].longitude), 16);
-
+    _audioPlayer.play(AssetSource('audio/ding.mp3'));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -238,6 +237,8 @@ class _MapState extends State<Map> {
         backgroundColor: const Color.fromARGB(255, 0, 103, 79),
       ),
     );
+
+    mapController.move(LatLng(trees[0].latitude, trees[0].longitude), 16);
   }
 
   void noTreesFound() {
@@ -253,31 +254,26 @@ class _MapState extends State<Map> {
     );
   }
 
-  Future<void> specialtyTrees() async {
+  Future<void> getSpecialties() async {
     try {
-      trees = await fetchTreesForSpecialty(specialty!);
-
+      List<Specialty> specialties = await fetchAllSpecialties();
       setState(() {
-        if (specialty != null && trees != null) {
-          int len = trees!.length;
-
-          _audioPlayer.play(AssetSource('audio/ding.mp3'));
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                  'You found $len Trees!',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                backgroundColor: const Color.fromARGB(255, 0, 103, 79)),
-          );
-          mapController.move(
-            const LatLng(35.100232, -92.440290),
-            16,
-          );
-        }
+        specialtyList = specialties;
       });
     } catch (e) {
+      print("Error fetching specialties");
+    }
+  }
+
+  Future<void> specialtyTrees(Specialty specialty) async {
+    try {
+      List<Tree> trees = await fetchTreesForSpecialty(specialty);
+
+      setState(() {
+        populateMap(trees);
+      });
+    } catch (e) {
+      noTreesFound();
       print("Error fetching specialty trees: $e");
     }
   }
@@ -355,12 +351,4 @@ class _MapState extends State<Map> {
     });
   }
 
-  Future<void> getSpecialties() async {
-    try {
-      specialtyList = await fetchAllSpecialties();
-      setState(() {});
-    } catch (e) {
-      print("Error fetching specialties");
-    }
-  }
 }
