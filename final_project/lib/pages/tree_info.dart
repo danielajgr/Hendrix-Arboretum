@@ -72,7 +72,15 @@ class _TreeInfoState extends State<TreeInfo> {
           FutureBuilder<Tree?>(
             future: futureTree,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              // NOTE(LeitMoth):
+              // The website normally returns a full URL for tree images,
+              // except when the image is missing, then it returns
+              // a relative URL. So we need to handle this relative URL
+              // specially, because this app is not the website.
+              bool loadedButImageMissing = snapshot.data != null &&
+                  snapshot.data!.imageURL == '/assets/img/stockTree.jpg';
+
+              if (snapshot.hasData && !loadedButImageMissing) {
                 return CachedNetworkImage(
                     imageUrl: snapshot.data!.imageURL,
                     placeholder: (context, url) => Center(
@@ -83,8 +91,8 @@ class _TreeInfoState extends State<TreeInfo> {
                             child: const CircularProgressIndicator(
                               color: Color.fromARGB(255, 0, 103, 79),
                             ))));
-              } else if (snapshot.hasError) {
-                return Image.asset('img/stockTree.jpg');
+              } else if (snapshot.hasError || loadedButImageMissing) {
+                return Image.asset('assets/img/stockTree.jpg');
               }
               return Center(
                   child: Container(
