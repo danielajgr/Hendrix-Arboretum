@@ -1,12 +1,12 @@
 import "package:audioplayers/audioplayers.dart";
 import "package:final_project/api/by_name.dart";
-import "package:final_project/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
-import "package:latlong2/latlong.dart";
 import "package:geolocator/geolocator.dart";
-import "/api/tree.dart";
+import "package:latlong2/latlong.dart";
+
 import "/api/specialty.dart";
+import "/api/tree.dart";
 import "/pages/tree_info.dart";
 
 class SearchResult {
@@ -35,126 +35,142 @@ class _MapState extends State<Map> {
     getSpecialties();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return Column(children: [
-        Expanded(
-          child: Stack(
-            children: [
-              Positioned.fill(
+      return Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
                   child: FlutterMap(
-                      mapController: mapController,
-                      options: const MapOptions(
-                          initialCenter: LatLng(35.100232, -92.440290),
-                          initialZoom: 16),
-                      children: [
-                    TileLayer(
-                        // https://docs.fleaflet.dev/
-                        urlTemplate:
-                            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' // Should change
+                    mapController: mapController,
+                    options: const MapOptions(
+                        initialCenter: LatLng(35.100232, -92.440290),
+                        initialZoom: 16),
+                    children: [
+                      TileLayer(
+                          // https://docs.fleaflet.dev/
+                          urlTemplate:
+                              'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' // Should change
+                          ),
+                      const SimpleAttributionWidget(
+                        source: Text("Tiles - Esri", softWrap: true),
+                      ),
+                      // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
+                      if (searchResult case SearchResult res)
+                        Stack(
+                          children: [
+                            MarkerLayer(
+                              markers: createMarkers(res.trees),
+                            ),
+                          ],
                         ),
-                    const SimpleAttributionWidget(
-                        source: Text("Tiles - Esri", softWrap: true)),
-                    // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
-                    if (searchResult case SearchResult res)
-                      Stack(children: [
-                        MarkerLayer(
-                          markers: createMarkers(res.trees),
-                        )
-                      ]),
-                  ])),
-              Column(children: [
-                buildStyledContainer(
-                  Center(
-                    child: DropdownButton<Specialty>(
-                      value: selectedSpecialty,
-                      hint: Center(
-                          child: Text(
-                        "Select a specialty",
-                        style: Theme.of(context).textTheme.labelLarge,
-                      )),
-                      isExpanded: true,
-                      items: specialtyList.map((Specialty item) {
-                        return DropdownMenuItem<Specialty>(
-                            value: item,
-                            child: Center(
-                              child: Text(item.title,
-                                  style:
-                                      Theme.of(context).textTheme.labelLarge),
-                            ));
-                      }).toList(),
-                      onChanged: (Specialty? newSpecialty) {
-                        if (newSpecialty != null) {
-                          selectedSpecialty = newSpecialty;
-                          specialtyTrees(newSpecialty);
-                        }
-                      },
-                      dropdownColor: const Color.fromARGB(255, 188, 159, 128),
-                    ),
+                    ],
                   ),
                 ),
-                buildStyledContainer(
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      fetchNearbyTrees();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 188, 159, 128),
-                    ),
-                    icon: const Icon(Icons.near_me, color: Colors.white),
-                    label: Text(
-                      "Find Nearby Trees",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                ),
-                Row(
+                Column(
                   children: [
                     buildStyledContainer(
-                      TextField(
-                        decoration: InputDecoration(
-                          label: Text(
-                            "Search For Trees:",
-                            style: Theme.of(context).textTheme.labelLarge,
+                      Center(
+                        child: DropdownButton<Specialty>(
+                          value: selectedSpecialty,
+                          hint: Center(
+                            child: Text(
+                              "Select a specialty",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
                           ),
-                          fillColor: Color.fromARGB(255, 188, 159, 128),
-                          filled: true,
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
+                          isExpanded: true,
+                          items: specialtyList.map((Specialty item) {
+                            return DropdownMenuItem<Specialty>(
+                              value: item,
+                              child: Center(
+                                child: Text(item.title,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (Specialty? newSpecialty) {
+                            if (newSpecialty != null) {
+                              selectedSpecialty = newSpecialty;
+                              specialtyTrees(newSpecialty);
+                            }
+                          },
+                          dropdownColor:
+                              const Color.fromARGB(255, 188, 159, 128),
                         ),
-                        onSubmitted: (query) {
-                          search(query);
-                          // searchTree(id, false);
-                        },
                       ),
                     ),
-                    IconButton(
-                        icon: Image.asset("assets/dice.png",
-                            width: 40, height: 40),
+                    buildStyledContainer(
+                      ElevatedButton.icon(
                         onPressed: () {
-                          randomTree();
+                          fetchNearbyTrees();
                         },
-                        style: IconButton.styleFrom(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 188, 159, 128),
+                        ),
+                        icon: const Icon(Icons.near_me, color: Colors.white),
+                        label: Text(
+                          "Find Nearby Trees",
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        buildStyledContainer(
+                          TextField(
+                            decoration: InputDecoration(
+                              label: Text(
+                                "Search For Trees:",
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              fillColor: Color.fromARGB(255, 188, 159, 128),
+                              filled: true,
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                            ),
+                            onSubmitted: (query) {
+                              search(query);
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: Image.asset("assets/dice.png",
+                              width: 40, height: 40),
+                          onPressed: () {
+                            randomTree();
+                          },
+                          style: IconButton.styleFrom(
                             backgroundColor:
-                                const Color.fromARGB(255, 188, 159, 128)))
+                                const Color.fromARGB(255, 188, 159, 128),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ])
-            ],
+              ],
+            ),
           ),
-        )
-      ]);
+        ],
+      );
     });
   }
 
@@ -185,9 +201,11 @@ class _MapState extends State<Map> {
             child: GestureDetector(
               onTap: () => {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TreeInfo(treeid: tree.id)))
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TreeInfo(treeid: tree.id),
+                  ),
+                )
               },
               child: Container(
                 alignment: Alignment.center,
@@ -244,6 +262,56 @@ class _MapState extends State<Map> {
     }
   }
 
+  Future<void> fetchNearbyTrees() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    // Check for location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position loc = await Geolocator.getCurrentPosition();
+    List<Tree> treeList =
+        await fetchClosestTrees(loc.latitude, loc.longitude, 5);
+
+    populateMap(treeList);
+  }
+
+  Future<void> specialtyTrees(Specialty specialty) async {
+    try {
+      List<Tree> trees = await fetchTreesForSpecialty(specialty);
+      populateMap(trees);
+    } catch (e) {
+      noTreesFound();
+      print("Error fetching specialty trees: $e");
+    }
+  }
+
+  Future<void> getSpecialties() async {
+    try {
+      List<Specialty> specialties = await fetchAllSpecialties();
+      setState(() {
+        specialtyList = specialties;
+      });
+    } catch (e) {
+      print("Error fetching specialties");
+    }
+  }
+
   void populateMap(List<Tree> trees) {
     int len = trees.length;
 
@@ -277,55 +345,5 @@ class _MapState extends State<Map> {
         backgroundColor: const Color.fromARGB(255, 0, 103, 79),
       ),
     );
-  }
-
-  Future<void> getSpecialties() async {
-    try {
-      List<Specialty> specialties = await fetchAllSpecialties();
-      setState(() {
-        specialtyList = specialties;
-      });
-    } catch (e) {
-      print("Error fetching specialties");
-    }
-  }
-
-  Future<void> specialtyTrees(Specialty specialty) async {
-    try {
-      List<Tree> trees = await fetchTreesForSpecialty(specialty);
-      populateMap(trees);
-    } catch (e) {
-      noTreesFound();
-      print("Error fetching specialty trees: $e");
-    }
-  }
-
-  Future<void> fetchNearbyTrees() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    // Check for location permissions
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    Position loc = await Geolocator.getCurrentPosition();
-    List<Tree> treeList =
-        await fetchClosestTrees(loc.latitude, loc.longitude, 5);
-
-    populateMap(treeList);
   }
 }
