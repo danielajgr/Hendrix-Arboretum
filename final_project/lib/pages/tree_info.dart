@@ -27,7 +27,7 @@ class TreeInfo extends StatefulWidget {
 )**/
 
 class _TreeInfoState extends State<TreeInfo> {
-  late Future<Tree> futureTree;
+  late Future<Tree?> futureTree;
   var appState;
   @override
   void initState() {
@@ -69,7 +69,7 @@ class _TreeInfoState extends State<TreeInfo> {
       body: ListView(
         padding: const EdgeInsets.only(left: 50, right: 50, top: 50),
         children: [
-          FutureBuilder<Tree>(
+          FutureBuilder<Tree?>(
             future: futureTree,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -106,7 +106,7 @@ class _TreeInfoState extends State<TreeInfo> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18) /*style: TextStyle(),**/),
-                  FutureBuilder<Tree>(
+                  FutureBuilder<Tree?>(
                       future: futureTree,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -137,7 +137,7 @@ class _TreeInfoState extends State<TreeInfo> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18) /*style: TextStyle(),**/),
-                  FutureBuilder<Tree>(
+                  FutureBuilder<Tree?>(
                       future: futureTree,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -159,7 +159,7 @@ class _TreeInfoState extends State<TreeInfo> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18) /*style: TextStyle(),**/),
-                  FutureBuilder<Tree>(
+                  FutureBuilder<Tree?>(
                       future: futureTree,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -172,7 +172,7 @@ class _TreeInfoState extends State<TreeInfo> {
                       }),
                 ],
               )),
-          FutureBuilder<Tree>(
+          FutureBuilder<Tree?>(
               future: futureTree,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -195,7 +195,7 @@ class _TreeInfoState extends State<TreeInfo> {
                 }
                 return Text('');
               }),
-          FutureBuilder<Tree>(
+          FutureBuilder<Tree?>(
               future: futureTree,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

@@ -5,7 +5,7 @@ class TreeObject implements Comparable<TreeObject> {
   int treeid;
   int likes = 0;
 
-  Future<Tree> getTree() {
+  Future<Tree?> getTree() {
     return fetchTree(treeid);
   }
 
