@@ -250,6 +250,19 @@ class _MapState extends State<Map> {
     );
   }
 
+  void noTreesFound() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'No trees found!',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        backgroundColor: const Color.fromARGB(255, 0, 103, 79),
+      ),
+    );
+  }
+
   Future<void> searchTree(String id, bool rand) async {
     final AudioPlayer _audioPlayer = AudioPlayer();
     try {
