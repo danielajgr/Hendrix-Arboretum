@@ -31,25 +31,8 @@ class _LeaderboardState extends State<Leaderboard> {
             return Column(children: [
               // First ListTile (with headings)
               ListTile(
-                shape: Border(
-                  bottom: BorderSide(
-                      color: Color.fromARGB(255, 0, 48, 37), width: 1),
-                ),
-                leading: Text(
-                  "Rank",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                title: TextAndIcon(
-                  Icons.forest,
-                  "Top 10 Trees",
-                  25,
-                ),
-                trailing: Text(
-                  "Likes",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+                title: Text("Top 10 Trees", textAlign: TextAlign.center),
               ),
-
               // Image placed between ListTiles
               Image.asset(
                 'assets/breaker.PNG',
