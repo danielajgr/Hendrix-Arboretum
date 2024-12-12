@@ -17,7 +17,7 @@ class SearchResult {
 
 class Map extends StatefulWidget {
   @override
-  _MapState createState() => _MapState();
+  State<Map> createState() => _MapState();
 }
 
 class _MapState extends State<Map> {
