@@ -89,6 +89,9 @@ flutter:
     - assets/dam.PNG
     - assets/missing.PNG
     - assets/tree_icon.PNG
+    - assets/tree_icon_gold.png
+    - assets/tree_icon_silver.png
+    - assets/tree_icon_bronze.png
     - assets/breaker.PNG
   # To add assets to your application, add an assets section, like this:
   # assets:

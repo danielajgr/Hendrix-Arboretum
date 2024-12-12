@@ -23,8 +23,10 @@ class _LeaderboardState extends State<Leaderboard> {
     return Consumer<ApplicationState>(
       builder: (context, appState, _) => ListView(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        children: (appState.getTopTrees()).map((item) {
+        //https://stackoverflow.com/a/54899730
+        children: appState.getTopTrees().indexed.map((tuple) {
           //appstate gives top ten trees
+          var (idx, item) = tuple;
 
           if (item.treeid == 0000) {
             rank = 0;
@@ -52,7 +54,12 @@ class _LeaderboardState extends State<Leaderboard> {
               contentPadding: const EdgeInsets.all(8.0),
               leading: Stack(alignment: Alignment.center, children: <Widget>[
                 Image.asset(
-                  'assets/tree_icon.PNG',
+                  switch (idx) {
+                    1 => 'assets/tree_icon_gold.png',
+                    2 => 'assets/tree_icon_silver.png',
+                    3 => 'assets/tree_icon_bronze.png',
+                    _ => 'assets/tree_icon.PNG',
+                  },
                   width: 80,
                   height: 200,
                   fit: BoxFit.fill,
