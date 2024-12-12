@@ -22,11 +22,10 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   final AudioPlayer _audioPlayer = AudioPlayer();
+  MapController mapController = MapController();
 
   List<Specialty> specialtyList = [];
   Specialty? selectedSpecialty;
-
-  MapController mapController = MapController();
 
   SearchResult? searchResult;
 
@@ -36,22 +35,6 @@ class _MapState extends State<Map> {
     getSpecialties();
   }
 
-  Widget buildStyledContainer(Widget child) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: SizedBox(
-        width: 300,
-        height: 55,
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 188, 159, 128),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: child,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +58,10 @@ class _MapState extends State<Map> {
                     const SimpleAttributionWidget(
                         source: Text("Tiles - Esri", softWrap: true)),
                     // Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community
-                    if (searchResult != null)
+                    if (searchResult case SearchResult res)
                       Stack(children: [
                         MarkerLayer(
-                          markers: createMarkers(context),
+                          markers: createMarkers(res.trees),
                         )
                       ]),
                   ])),
@@ -173,6 +156,48 @@ class _MapState extends State<Map> {
         )
       ]);
     });
+  }
+
+  Widget buildStyledContainer(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: SizedBox(
+        width: 300,
+        height: 55,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 188, 159, 128),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  List<Marker> createMarkers(List<Tree> trees) {
+    return trees
+        .map(
+          (tree) => Marker(
+            point: LatLng(tree.latitude, tree.longitude),
+            width: 60,
+            height: 60,
+            child: GestureDetector(
+              onTap: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TreeInfo(treeid: tree.id)))
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: const Icon(Icons.location_on,
+                    color: Color.fromARGB(255, 202, 81, 39), size: 50),
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 
   Future<void> search(String text) async {
@@ -273,31 +298,6 @@ class _MapState extends State<Map> {
       noTreesFound();
       print("Error fetching specialty trees: $e");
     }
-  }
-
-  List<Marker> createMarkers(List<Tree> trees) {
-    return trees
-        .map(
-          (tree) => Marker(
-            point: LatLng(tree.latitude, tree.longitude),
-            width: 60,
-            height: 60,
-            child: GestureDetector(
-              onTap: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TreeInfo(treeid: tree.id)))
-              },
-              child: Container(
-                alignment: Alignment.center,
-                child: const Icon(Icons.location_on,
-                    color: Color.fromARGB(255, 202, 81, 39), size: 50),
-              ),
-            ),
-          ),
-        )
-        .toList();
   }
 
   Future<void> fetchNearbyTrees() async {
