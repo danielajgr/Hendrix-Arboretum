@@ -84,32 +84,9 @@ class ApplicationState extends ChangeNotifier {
     }
   }
   
-  Future<List<Comment>> loadComments(int id) async {
-    final user = FirebaseAuth.instance.currentUser;
-    List<Comment> comments = [];
-    if (user != null){
-      final _firestore = FirebaseFirestore.instance;
-      QuerySnapshot snapshot = await _firestore
-        .collection('treeComments')
-        .doc(id.toString())
-        .collection('comments')
-        .get();
-      return snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
-      //List<Object?> objects = snapshot.docs.map((doc) => doc.data()).toList();
-      for (var d in snapshot.docs){
-        
-          Map<String, dynamic> data = d.data() as dynamic;
-          comments.add(Comment(name: data['name'], message: data['message']));  
-        
-        
-      }
-      notifyListeners();
-      //_treeComments = comments;
-    } 
-    //print(treeComments[0].message);
-    return [];
+  
     
-  }
+  
   
 
   /*List<Comment> getComments(int id){

@@ -246,6 +246,7 @@ class _CommentSectionState extends State<CommentSection> {
         .collection('comments')
         .get();
       _comments = snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
+      _comments.sort((a, b) => b.time.compareTo(a.time));
     setState(() {
       
     });
@@ -296,11 +297,15 @@ class _CommentSectionState extends State<CommentSection> {
           ),
         const SizedBox(height: 20),
         
-       ListView.builder(shrinkWrap: true, itemCount: _comments.length, 
+       ListView.separated(
+        separatorBuilder: (BuildContext context, int index){
+          return SizedBox(height: 5);
+        },
+        shrinkWrap: true, itemCount: _comments.length, 
           itemBuilder: (context, index){
-            return Text(
-              '${_comments[index].name}: ${_comments[index].message}'
-            );
+            return ColoredBox(color: Colors.white, child: ListTile(
+            title: Text('${_comments[index].name}'), subtitle: Text('${_comments[index].message}')
+            ));
           }
         )
         //for (Comment comment in widget.comments)
