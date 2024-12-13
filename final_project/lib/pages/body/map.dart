@@ -28,6 +28,7 @@ class _MapState extends State<Map> {
   Specialty? selectedSpecialty;
 
   SearchResult? searchResult;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -70,6 +71,16 @@ class _MapState extends State<Map> {
                     ],
                   ),
                 ),
+                // Incredibly helpful reference:
+                // https://dartling.dev/displaying-a-loading-overlay-or-progress-hud-in-flutter
+                if (_isLoading)
+                  const Opacity(
+                    opacity: 0.8,
+                    child:
+                        ModalBarrier(dismissible: false, color: Colors.black),
+                  ),
+                if (_isLoading)
+                  const Center(child: CircularProgressIndicator()),
                 Column(
                   children: [
                     buildStyledContainer(
