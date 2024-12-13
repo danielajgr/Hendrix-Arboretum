@@ -19,9 +19,9 @@ class ApplicationState extends ChangeNotifier {
   }
   List<int> likedTrees = [];
   List<int> allLikedTrees = [];
-  List<int> allComments = [];
-  List<Comment> _treeComments = [];
-  List<Comment> get treeComments => _treeComments;
+  //List<int> allComments = [];
+  //List<Comment> _treeComments = [];
+  //List<Comment> get treeComments => _treeComments;
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
@@ -94,7 +94,7 @@ class ApplicationState extends ChangeNotifier {
         .doc(id.toString())
         .collection('comments')
         .get();
-      
+      return snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
       //List<Object?> objects = snapshot.docs.map((doc) => doc.data()).toList();
       for (var d in snapshot.docs){
         
@@ -104,18 +104,18 @@ class ApplicationState extends ChangeNotifier {
         
       }
       notifyListeners();
-      _treeComments = comments;
+      //_treeComments = comments;
     } 
-    print(treeComments[0].message);
-    return comments;
+    //print(treeComments[0].message);
+    return [];
     
   }
   
 
-  List<Comment> getComments(int id){
+  /*List<Comment> getComments(int id){
     loadComments(id);
     return treeComments;
-  }
+  }*/
 
   void addTree(int id) async {
     if (!likedTrees.contains(id)) {

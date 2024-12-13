@@ -18,7 +18,7 @@ class TreeInfo extends StatefulWidget {
   //will need to know the tree?
   final int treeid;
   String commonname = 'tree';
-  List<Comment> cmts = [];
+  //late Future<List<Comment>> cmts;
   @override
   State<TreeInfo> createState() => _TreeInfoState();
 }
@@ -40,8 +40,8 @@ class _TreeInfoState extends State<TreeInfo> {
     super.initState();
     futureTree = fetchTree(widget.treeid);
     appState = context.read<ApplicationState>();
-    widget.cmts = appState.getComments(widget.treeid);
-    appState.loadComments(widget.treeid);
+    //widget.cmts = appState.loadComments(widget.treeid);
+    //appState.loadComments(widget.treeid);
   }
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class _TreeInfoState extends State<TreeInfo> {
       },
     )]
     ),
-      body: ListView(padding: const EdgeInsets.only(left: 50, right: 50, top: 50), children: [
+      body: ListView(padding: const EdgeInsets.only(left: 50, right: 50, top: 50), shrinkWrap: true, children: [
 
           
            FutureBuilder<Tree>(
@@ -197,8 +197,8 @@ class _TreeInfoState extends State<TreeInfo> {
           ),
           
           //widget.cmts = appState.getComments(widget.treeid);
-          Text(appState.getComments(widget.treeid).length.toString()),
-          CommentSection(addComment: (id, comment) => appState.addComment(id, comment), comments: appState.loadComments(widget.treeid), getComment: appState.loadComments(widget.treeid), treeID: widget.treeid)
+          //Text(appState.loadComments(widget.treeid).length.toString()),
+          CommentSection(addComment: (id, comment) => appState.addComment(id, comment), treeID: widget.treeid)
           ],
       ),
 
@@ -215,11 +215,11 @@ class _TreeInfoState extends State<TreeInfo> {
 }
 
 class CommentSection extends StatefulWidget {
-  const CommentSection({super.key, required this.addComment, required this.comments, required this.treeID, required this.getComment});
+  const CommentSection({super.key, required this.addComment, required this.treeID});
 
   final Future<void> Function(int id, String comment) addComment;
-  final Future<List<Comment>> Function(int id) getComment;
-  final List<Comment> comments;
+  //final Future<List<Comment>> Function(int id) getComment;
+  //final Future<List<Comment>> comments;
   final int treeID;
 
   @override
@@ -229,10 +229,32 @@ class CommentSection extends StatefulWidget {
 class _CommentSectionState extends State<CommentSection> {
   final _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>(debugLabel: '_CommentSectionState');
-  late List result;
-  void getCmts(id) async{
-    result = await widget.getComment(id);
+  List<Comment> _comments = [];
+  @override
+  void initState() {
+    super.initState();
+    _fetchcmts();
   }
+
+  Future<void> _fetchcmts() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null){
+      final _firestore = FirebaseFirestore.instance;
+      QuerySnapshot snapshot = await _firestore
+        .collection('treeComments')
+        .doc(widget.treeID.toString())
+        .collection('comments')
+        .get();
+      _comments = snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
+    setState(() {
+      
+    });
+    }
+  }
+  //late List result;
+  //void getCmts(id) async{
+   // result = await widget.getComment(id);
+  //}
   
   @override
   Widget build(BuildContext context) {
@@ -274,9 +296,16 @@ class _CommentSectionState extends State<CommentSection> {
           ),
         const SizedBox(height: 20),
         
-        for (Comment comment in widget.comments)
-          Text('${comment.name}: ${comment.message}', style: TextStyle(color: Colors.black), ),
-        const SizedBox(height: 8),
+       ListView.builder(shrinkWrap: true, itemCount: _comments.length, 
+          itemBuilder: (context, index){
+            return Text(
+              '${_comments[index].name}: ${_comments[index].message}'
+            );
+          }
+        )
+        //for (Comment comment in widget.comments)
+         // Text('${comment.name}: ${comment.message}', style: TextStyle(color: Colors.black), ),
+        //const SizedBox(height: 8),
         
       ],
     );
