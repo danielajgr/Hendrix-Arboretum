@@ -8,6 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:safe_text/safe_text.dart';
 import 'package:final_project/objects/comment.dart';
 
 
@@ -283,12 +284,17 @@ class _CommentSectionState extends State<CommentSection> {
         onPressed: () async{
           if(_formKey.currentState != null){
             if(_formKey.currentState!.validate()){
+              if(await SafeText.containsBadWord(text: _controller.text)){
+                
+              }
+              else{
             await widget.addComment(widget.treeID, _controller.text);
             _fetchcmts();
             setState(() {
               
             });
             _controller.clear();
+            }
             }
           }
           
