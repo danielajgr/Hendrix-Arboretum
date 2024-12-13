@@ -27,10 +27,12 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   void initState() {
+    // Trying to stop the whole widget from reloading when we click away and back
+    // https://medium.com/flutterdude/flutter-performance-series-building-an-efficient-widget-tree-84fd236e9868
     pageCache = [
-      (Leaderboard(), "Leaderboard"),
-      (Map(), "Hendrix Arboretum"),
-      (About(), "About"),
+      (Leaderboard(key: UniqueKey()), "Leaderboard"),
+      (Map(key: UniqueKey()), "Hendrix Arboretum"),
+      (About(key: UniqueKey()), "About"),
     ];
 
     _onItemTapped(pageIndex);

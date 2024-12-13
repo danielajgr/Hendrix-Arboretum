@@ -16,6 +16,8 @@ class SearchResult {
 }
 
 class Map extends StatefulWidget {
+  const Map({required super.key});
+
   @override
   State<Map> createState() => _MapState();
 }
@@ -46,6 +48,7 @@ class _MapState extends State<Map> {
               children: [
                 Positioned.fill(
                   child: FlutterMap(
+                    // key: UniqueKey(),
                     mapController: mapController,
                     options: const MapOptions(
                         initialCenter: LatLng(35.100232, -92.440290),
