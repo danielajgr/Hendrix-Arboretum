@@ -284,6 +284,10 @@ class _CommentSectionState extends State<CommentSection> {
           if(_formKey.currentState != null){
             if(_formKey.currentState!.validate()){
             await widget.addComment(widget.treeID, _controller.text);
+            _fetchcmts();
+            setState(() {
+              
+            });
             _controller.clear();
             }
           }
@@ -297,17 +301,38 @@ class _CommentSectionState extends State<CommentSection> {
           ),
         const SizedBox(height: 20),
         
-       ListView.separated(
-        separatorBuilder: (BuildContext context, int index){
-          return SizedBox(height: 5);
-        },
-        shrinkWrap: true, itemCount: _comments.length, 
-          itemBuilder: (context, index){
-            return ColoredBox(color: Colors.white, child: ListTile(
-            title: Text('${_comments[index].name}'), subtitle: Text('${_comments[index].message}')
-            ));
-          }
-        )
+        Consumer<ApplicationState>(
+            builder: (context, appState, _)=> Column(children: [
+              if(appState.loggedIn)...[
+                ListView.separated(
+                  separatorBuilder: (BuildContext context, int index){
+                    return SizedBox(height: 5);
+                  },
+                  shrinkWrap: true, itemCount: _comments.length, 
+                  itemBuilder: (context, index){
+                    return ColoredBox(color: Colors.white, child: Column(children: [
+                      ListTile( isThreeLine: true,
+                        title: Text('${_comments[index].name}'), subtitle: Text('${_comments[index].message}')
+                      ),
+                      Row(children: [Expanded(child: Container()), if(FirebaseAuth.instance.currentUser?.displayName == _comments[index].name)...[
+                        StyledButton(onPressed: (){
+                          appState.deleteComment(widget.treeID, _comments[index]);
+                          _fetchcmts();
+                          setState(() {
+                            
+                          });
+                        }, child: Icon(Icons.delete))],
+                        StyledButton(onPressed: (){}, child: Icon(Icons.report))
+                      ],)
+                    ])
+                    );
+                  } 
+                )
+              ] else...[
+                const Text('Sign in to see comments!')
+              ]
+            ],)),
+       
         //for (Comment comment in widget.comments)
          // Text('${comment.name}: ${comment.message}', style: TextStyle(color: Colors.black), ),
         //const SizedBox(height: 8),

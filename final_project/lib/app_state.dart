@@ -159,10 +159,18 @@ class ApplicationState extends ChangeNotifier {
       'message': comment,
       'name': FirebaseAuth.instance.currentUser!.displayName,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
-
     });
     }
-    
+  }
+  Future<void> deleteComment(int id, Comment comment) async{
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference docref = firestore.collection('treeComments').doc(id.toString());
+    await docref.collection('deleted').add(<String, dynamic>{
+      'message': comment.message,
+      'name': comment.name,
+      'timestamp': comment.time
+    });
+    await docref.collection('comments').doc(comment.id).delete();
     
   }
 }
