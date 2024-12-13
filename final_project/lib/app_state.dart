@@ -45,6 +45,13 @@ class ApplicationState extends ChangeNotifier {
     });
   }
 
+  static removeAllLikes(User user) {
+    FirebaseFirestore.instance
+        .collection('favoriteTrees')
+        .doc(user.uid)
+        .delete();
+  }
+
   Future<void> loadAllLikedTrees() async {
     FirebaseFirestore.instance
         .collection('favoriteTrees')

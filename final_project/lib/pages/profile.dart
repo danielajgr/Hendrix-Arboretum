@@ -48,6 +48,9 @@ class _ProfileState extends State<Profile> {
             SignedOutAction((context) {
               context.pushReplacement('/');
             }),
+            AccountDeletedAction((context, user) {
+              ApplicationState.removeAllLikes(user);
+            }),
           ],
           children: [
             const Padding(padding: EdgeInsets.all(5)),
