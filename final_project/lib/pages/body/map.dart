@@ -28,7 +28,7 @@ class _MapState extends State<Map> {
   Specialty? selectedSpecialty;
 
   SearchResult? searchResult;
-  bool _isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -73,14 +73,13 @@ class _MapState extends State<Map> {
                 ),
                 // Incredibly helpful reference:
                 // https://dartling.dev/displaying-a-loading-overlay-or-progress-hud-in-flutter
-                if (_isLoading)
+                if (isLoading)
                   const Opacity(
                     opacity: 0.8,
                     child:
                         ModalBarrier(dismissible: false, color: Colors.black),
                   ),
-                if (_isLoading)
-                  const Center(child: CircularProgressIndicator()),
+                if (isLoading) const Center(child: CircularProgressIndicator()),
                 Column(
                   children: [
                     buildStyledContainer(
@@ -231,6 +230,10 @@ class _MapState extends State<Map> {
 
   Future<void> search(String text) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
+
       if (int.tryParse(text) case int id) {
         Tree? tree = await fetchTree(id);
 
@@ -261,6 +264,10 @@ class _MapState extends State<Map> {
 
   Future<void> randomTree() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
+
       Tree? tree = await fetchRandomTree();
 
       if (tree == null) {
@@ -274,41 +281,57 @@ class _MapState extends State<Map> {
   }
 
   Future<void> fetchNearbyTrees() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      await checkGeoPermissions();
+      Position loc = await Geolocator.getCurrentPosition();
+
+      List<Tree> treeList =
+          await fetchClosestTrees(loc.latitude, loc.longitude, 5);
+
+      populateMap(treeList, zoom: 18);
+    } catch (e) {
+      noTreesFound();
+    }
+  }
+
+  Future<void> specialtyTrees(Specialty specialty) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      List<Tree> trees = await fetchTreesForSpecialty(specialty);
+      populateMap(trees);
+    } catch (e) {
+      noTreesFound();
+      print("Error fetching specialty trees: $e");
+    }
+  }
+
+  Future<void> checkGeoPermissions() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      throw Exception('Location services are disabled.');
     }
     // Check for location permissions
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        throw Exception('Location permissions are denied');
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
+      throw Exception(
           'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    Position loc = await Geolocator.getCurrentPosition();
-    List<Tree> treeList =
-        await fetchClosestTrees(loc.latitude, loc.longitude, 5);
-
-    populateMap(treeList, zoom: 18);
-  }
-
-  Future<void> specialtyTrees(Specialty specialty) async {
-    try {
-      List<Tree> trees = await fetchTreesForSpecialty(specialty);
-      populateMap(trees);
-    } catch (e) {
-      noTreesFound();
-      print("Error fetching specialty trees: $e");
     }
   }
 
@@ -328,6 +351,7 @@ class _MapState extends State<Map> {
 
     setState(() {
       searchResult = SearchResult(trees: trees);
+      isLoading = false;
     });
 
     _audioPlayer.play(AssetSource('audio/ding.mp3'));
@@ -346,6 +370,10 @@ class _MapState extends State<Map> {
   }
 
   void noTreesFound() {
+    setState(() {
+      isLoading = false;
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
