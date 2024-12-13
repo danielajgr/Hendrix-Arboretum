@@ -48,7 +48,6 @@ class _MapState extends State<Map> {
               children: [
                 Positioned.fill(
                   child: FlutterMap(
-                    // key: UniqueKey(),
                     mapController: mapController,
                     options: const MapOptions(
                         initialCenter: LatLng(35.100232, -92.440290),
