@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Leaderboard extends StatefulWidget {
-  const Leaderboard({required super.key});
+  const Leaderboard({super.key});
 
   @override
   State<Leaderboard> createState() => _LeaderboardState();

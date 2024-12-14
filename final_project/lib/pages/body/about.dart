@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
 
 class About extends StatelessWidget {
-  const About({required super.key});
+  const About({super.key});
 
   @override
   Widget build(BuildContext context) {

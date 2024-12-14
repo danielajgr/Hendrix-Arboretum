@@ -16,7 +16,7 @@ class SearchResult {
 }
 
 class Map extends StatefulWidget {
-  const Map({required super.key});
+  const Map({super.key});
 
   @override
   State<Map> createState() => _MapState();
@@ -50,6 +50,7 @@ class _MapState extends State<Map> {
                   child: FlutterMap(
                     mapController: mapController,
                     options: const MapOptions(
+                        keepAlive: true,
                         initialCenter: LatLng(35.100232, -92.440290),
                         initialZoom: 16),
                     children: [

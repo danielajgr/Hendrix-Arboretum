@@ -19,28 +19,22 @@ class MainScaffold extends StatefulWidget {
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
-  Widget? pageBody;
-  String? pageTitle;
-
-  List<(Widget, String)> pageCache = [];
   int pageIndex = 1;
 
   @override
   void initState() {
-    // Trying to stop the whole widget from reloading when we click away and back
-    // https://medium.com/flutterdude/flutter-performance-series-building-an-efficient-widget-tree-84fd236e9868
-    pageCache = [
-      (Leaderboard(key: UniqueKey()), "Leaderboard"),
-      (Map(key: UniqueKey()), "Hendrix Arboretum"),
-      (About(key: UniqueKey()), "About"),
-    ];
-
     _onItemTapped(pageIndex);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    String? pageTitle = [
+      "Leaderboard",
+      "Hendrix Arboretum",
+      "About",
+    ].elementAtOrNull(pageIndex);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
@@ -67,7 +61,17 @@ class _MainScaffoldState extends State<MainScaffold> {
               }),
         ),
       ),
-      body: pageBody,
+      // This ended up working for keeping the map from reloading each time:
+      // https://stackoverflow.com/a/54999503
+      // https://api.flutter.dev/flutter/widgets/IndexedStack-class.html
+      body: IndexedStack(
+        index: pageIndex,
+        children: const [
+          Leaderboard(),
+          Map(),
+          About(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 139, 69, 19),
         items: const [
@@ -86,13 +90,6 @@ class _MainScaffoldState extends State<MainScaffold> {
   void _onItemTapped(int index) async {
     setState(() {
       pageIndex = index;
-
-      if (index >= 0 && index <= 3) {
-        var (pageBody, pageTitle) = pageCache[index];
-
-        this.pageBody = pageBody;
-        this.pageTitle = pageTitle;
-      }
     });
   }
 }
