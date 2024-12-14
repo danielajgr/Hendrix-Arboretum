@@ -12,26 +12,28 @@ import "body/map.dart";
 import "/pages/report.dart";
 
 class MainScaffold extends StatefulWidget {
-  const MainScaffold();
+  const MainScaffold({super.key});
 
   @override
-  _MainScaffoldState createState() => _MainScaffoldState();
+  State<MainScaffold> createState() => _MainScaffoldState();
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
-  Widget? pageBody;
-  String? pageTitle;
-
   int pageIndex = 1;
 
   @override
   void initState() {
-    _onItemTapped(pageIndex);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    String? pageTitle = [
+      "Leaderboard",
+      "Hendrix Arboretum",
+      "About",
+    ].elementAtOrNull(pageIndex);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 175, 225, 175),
       appBar: AppBar(
@@ -58,7 +60,17 @@ class _MainScaffoldState extends State<MainScaffold> {
               }),
         ),
       ),
-      body: pageBody,
+      // This ended up working for keeping the map from reloading each time:
+      // https://stackoverflow.com/a/54999503
+      // https://api.flutter.dev/flutter/widgets/IndexedStack-class.html
+      body: IndexedStack(
+        index: pageIndex,
+        children: const [
+          Leaderboard(),
+          Map(),
+          About(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 139, 69, 19),
         items: const [
@@ -69,25 +81,10 @@ class _MainScaffoldState extends State<MainScaffold> {
         ],
         currentIndex: pageIndex,
         selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
-        onTap: _onItemTapped,
+        onTap: (index) => setState(() {
+          pageIndex = index;
+        }),
       ),
     );
-  }
-
-  void _onItemTapped(int index) async {
-    setState(() {
-      pageIndex = index;
-
-      // TODO: see if creating these page bodies every time matters
-      var (pageBody, pageTitle) = switch (index) {
-        0 => (Leaderboard(), "Leaderboard"),
-        1 => (Map(), "Hendrix Arboretum"),
-        2 => (About(), "About"),
-        _ => (null, null)
-      };
-
-      this.pageBody = pageBody;
-      this.pageTitle = pageTitle;
-    });
   }
 }
