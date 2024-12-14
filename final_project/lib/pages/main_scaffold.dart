@@ -12,10 +12,10 @@ import "body/map.dart";
 import "/pages/report.dart";
 
 class MainScaffold extends StatefulWidget {
-  const MainScaffold();
+  const MainScaffold({super.key});
 
   @override
-  _MainScaffoldState createState() => _MainScaffoldState();
+  State<MainScaffold> createState() => _MainScaffoldState();
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
@@ -23,7 +23,6 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   @override
   void initState() {
-    _onItemTapped(pageIndex);
     super.initState();
   }
 
@@ -82,14 +81,10 @@ class _MainScaffoldState extends State<MainScaffold> {
         ],
         currentIndex: pageIndex,
         selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
-        onTap: _onItemTapped,
+        onTap: (index) => setState(() {
+          pageIndex = index;
+        }),
       ),
     );
-  }
-
-  void _onItemTapped(int index) async {
-    setState(() {
-      pageIndex = index;
-    });
   }
 }
