@@ -303,18 +303,18 @@ class _SearchDropdownState extends State<SearchDropdown> {
               _isDropdownOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
             ),
           ),
-          fillColor: const Color.fromARGB(255, 188, 159, 128),
+          fillColor: const Color.fromARGB(255, 199, 96, 22),
           filled: true,
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(color: Colors.grey),
+            borderSide: BorderSide(color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
           ),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(color: Colors.black),
+            borderSide: BorderSide(color: Colors.black, width: 2.0),
           ),
         ),
         onSubmitted: (query) {

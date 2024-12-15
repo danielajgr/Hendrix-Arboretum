@@ -84,58 +84,76 @@ class _MapState extends State<Map> {
                         ModalBarrier(dismissible: false, color: Colors.black),
                   ),
                 if (isLoading) const Center(child: CircularProgressIndicator()),
-                Column(
-                  children: [
-                    buildStyledContainer(
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          fetchNearbyTrees();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 188, 159, 128),
-                        ),
-                        icon: const Icon(Icons.near_me, color: Colors.white),
-                        label: Text(
-                          "Find Nearby Trees",
-                          style: Theme.of(context).textTheme.labelLarge,
+                Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Column(
+                          children: [
+                            Padding(padding:const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0,), child: 
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: buildStyledContainer(
+                                    SearchDropdown(
+                                      specialtyList: specialtyList,
+                                      selectedSpecialty: selectedSpecialty,
+                                      onSpecialtySelected: (specialty) {
+                                        setState(() {
+                                          selectedSpecialty = specialty;
+                                        });
+                                        specialtyTrees(specialty!);
+                                      },
+                                      onSearch: (query) {
+                                        search(query);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle, 
+                                    border: Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2.0), 
+                                    color: const Color.fromARGB(255, 199, 96, 22), 
+                                  ),
+                                  child: IconButton(
+                                    icon: Image.asset("assets/dice.png", width: 40, height: 40),
+                                    onPressed: () {
+                                      randomTree();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),)
+                          ],
                         ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        buildStyledContainer(
-                          SearchDropdown(
-                            specialtyList: specialtyList,
-                            selectedSpecialty: selectedSpecialty,
-                            onSpecialtySelected: (specialty) {
-                              setState(() {
-                                selectedSpecialty = specialty;
-                              });
-                              specialtyTrees(specialty!);
+                      Positioned(
+                        bottom: 30.0,
+                        right: 16.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, 
+                            border: Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2.0), 
+                            color: const Color.fromARGB(255, 199, 96, 22), 
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2), 
+                                blurRadius: 5.0, 
+                                offset: const Offset(0, 3), 
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              fetchNearbyTrees();
                             },
-                            onSearch: (query) {
-                              search(query);
-                            },
-                          )
-
-
-                        ),
-                        IconButton(
-                          icon: Image.asset("assets/dice.png",
-                              width: 40, height: 40),
-                          onPressed: () {
-                            randomTree();
-                          },
-                          style: IconButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 188, 159, 128),
+                            icon: const Icon(Icons.gps_not_fixed, color: Colors.white, size: 40),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  )
+
               ],
             ),
           ),
@@ -152,7 +170,7 @@ class _MapState extends State<Map> {
         height: 55,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 188, 159, 128),
+            color: const Color.fromARGB(255, 199, 96, 22),
             borderRadius: BorderRadius.circular(20),
           ),
           child: child,
