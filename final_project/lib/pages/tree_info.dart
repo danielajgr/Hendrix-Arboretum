@@ -1,18 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/api/tree.dart';
 import 'package:final_project/app_state.dart';
+import 'package:final_project/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:safe_text/safe_text.dart';
+import 'package:final_project/objects/comment.dart';
+import 'package:final_project/widgets/comment_widgets.dart';
 
 class TreeInfo extends StatefulWidget {
   TreeInfo({super.key, required this.treeid, commonname});
   //will need to know the tree?
   final int treeid;
   String commonname = 'tree';
+  //late Future<List<Comment>> cmts;
   @override
   State<TreeInfo> createState() => _TreeInfoState();
 }
@@ -34,6 +39,8 @@ class _TreeInfoState extends State<TreeInfo> {
     super.initState();
     futureTree = fetchTree(widget.treeid);
     appState = context.read<ApplicationState>();
+    //widget.cmts = appState.loadComments(widget.treeid);
+    //appState.loadComments(widget.treeid);
   }
 
   @override
@@ -238,8 +245,9 @@ class _TreeInfoState extends State<TreeInfo> {
                         _launchurl(Uri.parse(
                             'https://plants.ces.ncsu.edu/find_a_plant/common-name/?q=${widget.commonname}'))
                       },
-                  child: Text('More Info')))
-        ],
+                  child: Text('More Info'))),
+          CommentSection(addComment: (id, comment) => appState.addComment(id, comment), treeID: widget.treeid)
+          ],
       ),
     );
   }

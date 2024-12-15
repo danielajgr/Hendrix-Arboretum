@@ -30,6 +30,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:collection/collection.dart";
 
 import 'package:final_project/api/tree.dart';
+import 'package:final_project/objects/comment.dart';
 import 'package:final_project/objects/tree_object.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
@@ -45,6 +46,7 @@ class ApplicationState extends ChangeNotifier {
   }
   List<int> likedTrees = [];
   List<int> allLikedTrees = [];
+  List<String> blockedUsers = [];
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
@@ -61,9 +63,11 @@ class ApplicationState extends ChangeNotifier {
       if (user != null) {
         _loggedIn = true;
         loadLikedTrees();
+        loadBlockedUsers();
       } else {
         _loggedIn = false;
         likedTrees.clear();
+        blockedUsers.clear();
       }
       notifyListeners();
     });
@@ -174,6 +178,89 @@ class ApplicationState extends ChangeNotifier {
     }
     return false;
   }
+
+  Future<void> addComment(int id, String comment) async{
+    final user = FirebaseAuth.instance.currentUser;
+    print(user);
+    if(user != null){
+      await FirebaseFirestore.instance
+        .collection('treeComments')
+        .doc(id.toString())
+        .collection('comments')
+        .add(<String, dynamic>{
+      'message': comment,
+      'name': FirebaseAuth.instance.currentUser!.displayName,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'userid': user.uid,
+    });
+    }
+  }
+  Future<void> deleteComment(int id, Comment comment) async{
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference docref = firestore.collection('treeComments').doc(id.toString());
+    await docref.collection('deleted').add(<String, dynamic>{
+      'message': comment.message,
+      'name': comment.name,
+      'timestamp': comment.time,
+      'userid': comment.userid
+    });
+    await docref.collection('comments').doc(comment.commentid).delete();
+  }
+
+  Future<void> reportComment(int id, Comment comment) async{
+    final user = FirebaseAuth.instance.currentUser;
+    print(user);
+    if(user != null){
+      await FirebaseFirestore.instance
+        .collection('commentReports')
+        .add(<String, dynamic>{
+      'message': comment.message,
+      'commentid': comment.commentid,
+      'commenterid': comment.userid,
+      'commentername': comment.name,
+      'treeid': id,
+      'reportername': FirebaseAuth.instance.currentUser!.displayName,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'reporterid': user.uid,
+    });
+    }
+  }
+  
+  Future<void> blockUser(String id) async{
+    final user = FirebaseAuth.instance.currentUser;
+    
+    blockedUsers.add(id);
+
+    if(user != null){
+        await FirebaseFirestore.instance
+          .collection('blockedUsers')
+          .doc(user.uid)
+          .set({
+        'name': user.displayName,
+        'users': blockedUsers,
+          }, SetOptions(merge: true));
+      
+    }
+  }
+
+  Future<void> loadBlockedUsers() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection('blockedUsers')
+          .doc(user.uid)
+          .get();
+
+      if (doc.exists) {
+        blockedUsers = List<String>.from(doc.data()?['users'] ?? []);
+      } else {
+        blockedUsers = [];
+      }
+      notifyListeners();
+    }
+  }
+
+  
 
   int findDuplicate(TreeObject tr, List<TreeObject> listTr) {
     int index = 0;
