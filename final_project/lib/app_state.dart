@@ -19,9 +19,7 @@ class ApplicationState extends ChangeNotifier {
   }
   List<int> likedTrees = [];
   List<int> allLikedTrees = [];
-  //List<int> allComments = [];
-  //List<Comment> _treeComments = [];
-  //List<Comment> get treeComments => _treeComments;
+  List<String> blockedUsers = [];
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
@@ -38,9 +36,11 @@ class ApplicationState extends ChangeNotifier {
       if (user != null) {
         _loggedIn = true;
         loadLikedTrees();
+        loadBlockedUsers();
       } else {
         _loggedIn = false;
         likedTrees.clear();
+        blockedUsers.clear();
       }
       notifyListeners();
     }); 
@@ -87,12 +87,6 @@ class ApplicationState extends ChangeNotifier {
   
     
   
-  
-
-  /*List<Comment> getComments(int id){
-    loadComments(id);
-    return treeComments;
-  }*/
 
   void addTree(int id) async {
     if (!likedTrees.contains(id)) {
@@ -159,6 +153,7 @@ class ApplicationState extends ChangeNotifier {
       'message': comment,
       'name': FirebaseAuth.instance.currentUser!.displayName,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'userid': user.uid,
     });
     }
   }
@@ -168,9 +163,64 @@ class ApplicationState extends ChangeNotifier {
     await docref.collection('deleted').add(<String, dynamic>{
       'message': comment.message,
       'name': comment.name,
-      'timestamp': comment.time
+      'timestamp': comment.time,
+      'userid': comment.userid
     });
-    await docref.collection('comments').doc(comment.id).delete();
-    
+    await docref.collection('comments').doc(comment.commentid).delete();
   }
+
+  Future<void> reportComment(int id, Comment comment) async{
+    final user = FirebaseAuth.instance.currentUser;
+    print(user);
+    if(user != null){
+      await FirebaseFirestore.instance
+        .collection('commentReports')
+        .add(<String, dynamic>{
+      'message': comment.message,
+      'commentid': comment.commentid,
+      'commenterid': comment.userid,
+      'commentername': comment.name,
+      'treeid': id,
+      'reportername': FirebaseAuth.instance.currentUser!.displayName,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'reporterid': user.uid,
+    });
+    }
+  }
+  
+  Future<void> blockUser(String id) async{
+    final user = FirebaseAuth.instance.currentUser;
+    
+    blockedUsers.add(id);
+
+    if(user != null){
+        await FirebaseFirestore.instance
+          .collection('blockedUsers')
+          .doc(user.uid)
+          .set({
+        'name': user.displayName,
+        'users': blockedUsers,
+          }, SetOptions(merge: true));
+      
+    }
+  }
+
+  Future<void> loadBlockedUsers() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection('blockedUsers')
+          .doc(user.uid)
+          .get();
+
+      if (doc.exists) {
+        blockedUsers = List<String>.from(doc.data()?['users'] ?? []);
+      } else {
+        blockedUsers = [];
+      }
+      notifyListeners();
+    }
+  }
+
+  
 }

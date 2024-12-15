@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:safe_text/safe_text.dart';
 import 'package:final_project/objects/comment.dart';
+import 'package:final_project/widgets/comment_widgets.dart';
 
 
 
@@ -215,137 +216,7 @@ class _TreeInfoState extends State<TreeInfo> {
 
 }
 
-class CommentSection extends StatefulWidget {
-  const CommentSection({super.key, required this.addComment, required this.treeID});
 
-  final Future<void> Function(int id, String comment) addComment;
-  //final Future<List<Comment>> Function(int id) getComment;
-  //final Future<List<Comment>> comments;
-  final int treeID;
 
-  @override
-  State<CommentSection> createState() => _CommentSectionState();
-}
-
-class _CommentSectionState extends State<CommentSection> {
-  final _controller = TextEditingController();
-  final _formKey = GlobalKey<FormState>(debugLabel: '_CommentSectionState');
-  List<Comment> _comments = [];
-  @override
-  void initState() {
-    super.initState();
-    _fetchcmts();
-  }
-
-  Future<void> _fetchcmts() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null){
-      final _firestore = FirebaseFirestore.instance;
-      QuerySnapshot snapshot = await _firestore
-        .collection('treeComments')
-        .doc(widget.treeID.toString())
-        .collection('comments')
-        .get();
-      _comments = snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
-      _comments.sort((a, b) => b.time.compareTo(a.time));
-    setState(() {
-      
-    });
-    }
-  }
-  //late List result;
-  //void getCmts(id) async{
-   // result = await widget.getComment(id);
-  //}
-  
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Consumer<ApplicationState>(
-            builder: (context, appState, _)=> 
-            Form(key: _formKey, child: Row(
-              children: [
-                if(appState.loggedIn)...[
-                  Expanded(child: TextFormField(
-          controller: _controller,
-          decoration: const InputDecoration(
-            hintText: 'Leave a comment',
-          ),
-          validator: (value) {
-            if(value == null || value.isEmpty){
-              return 'Enter your message to continue';
-            }
-            print("no");
-            return null;
-          },
-        )),
-        StyledButton(child: Text('post'), 
-        onPressed: () async{
-          if(_formKey.currentState != null){
-            if(_formKey.currentState!.validate()){
-              if(await SafeText.containsBadWord(text: _controller.text)){
-                
-              }
-              else{
-            await widget.addComment(widget.treeID, _controller.text);
-            _fetchcmts();
-            setState(() {
-              
-            });
-            _controller.clear();
-            }
-            }
-          }
-          
-        })
-                ]
-              ],
-            ), 
-          ),
-
-          ),
-        const SizedBox(height: 20),
-        
-        Consumer<ApplicationState>(
-            builder: (context, appState, _)=> Column(children: [
-              if(appState.loggedIn)...[
-                ListView.separated(
-                  separatorBuilder: (BuildContext context, int index){
-                    return SizedBox(height: 5);
-                  },
-                  shrinkWrap: true, itemCount: _comments.length, 
-                  itemBuilder: (context, index){
-                    return ColoredBox(color: Colors.white, child: Column(children: [
-                      ListTile( isThreeLine: true,
-                        title: Text('${_comments[index].name}'), subtitle: Text('${_comments[index].message}')
-                      ),
-                      Row(children: [Expanded(child: Container()), if(FirebaseAuth.instance.currentUser?.displayName == _comments[index].name)...[
-                        StyledButton(onPressed: (){
-                          appState.deleteComment(widget.treeID, _comments[index]);
-                          _fetchcmts();
-                          setState(() {
-                            
-                          });
-                        }, child: Icon(Icons.delete))],
-                        StyledButton(onPressed: (){}, child: Icon(Icons.report))
-                      ],)
-                    ])
-                    );
-                  } 
-                )
-              ] else...[
-                const Text('Sign in to see comments!')
-              ]
-            ],)),
-       
-        //for (Comment comment in widget.comments)
-         // Text('${comment.name}: ${comment.message}', style: TextStyle(color: Colors.black), ),
-        //const SizedBox(height: 8),
-        
-      ],
-    );
-  }
-}
 
 
