@@ -72,7 +72,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 139, 69, 19),
+        backgroundColor: const Color.fromARGB(255, 116, 55, 11),
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.leaderboard), label: "Leaderboard"),

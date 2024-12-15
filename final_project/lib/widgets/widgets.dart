@@ -27,6 +27,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.`
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:final_project/api/specialty.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
@@ -196,4 +197,130 @@ class TextAndIcon extends StatelessWidget {
           ],
         ),
       );
+}
+
+
+
+
+class SearchDropdown extends StatefulWidget {
+  final List<Specialty> specialtyList;
+  final Specialty? selectedSpecialty;
+  final Function(Specialty?) onSpecialtySelected;
+  final Function(String) onSearch;
+
+  const SearchDropdown({
+    required this.specialtyList,
+    this.selectedSpecialty,
+    required this.onSpecialtySelected,
+    required this.onSearch,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _SearchDropdownState createState() => _SearchDropdownState();
+}
+
+class _SearchDropdownState extends State<SearchDropdown> {
+  final TextEditingController _controller = TextEditingController();
+  final LayerLink _layerLink = LayerLink();
+  bool _isDropdownOpen = false;
+
+  OverlayEntry? _overlayEntry;
+
+  void _toggleDropdown() {
+    if (_isDropdownOpen) {
+      _closeDropdown();
+    } else {
+      _openDropdown();
+    }
+  }
+
+  void _openDropdown() {
+    _overlayEntry = _createOverlayEntry();
+    Overlay.of(context).insert(_overlayEntry!);
+    setState(() {
+      _isDropdownOpen = true;
+    });
+  }
+
+  void _closeDropdown() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    setState(() {
+      _isDropdownOpen = false;
+    });
+  }
+
+  OverlayEntry _createOverlayEntry() {
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        width: size.width,
+        child: CompositedTransformFollower(
+          link: _layerLink,
+          showWhenUnlinked: false,
+          offset: Offset(0, size.height),
+          child: Material(
+            elevation: 4.0,
+            color: const Color.fromARGB(255, 188, 159, 128),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              children: widget.specialtyList.map((specialty) {
+                return ListTile(
+                  title: Text(
+                    specialty.title,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  onTap: () {
+                    widget.onSpecialtySelected(specialty);
+                    _controller.text = specialty.title;
+                    _closeDropdown();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          hintText: "Select or Search",
+          hintStyle: Theme.of(context).textTheme.labelLarge,
+          suffixIcon: GestureDetector(
+            onTap: _toggleDropdown,
+            child: Icon(
+              _isDropdownOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+            ),
+          ),
+          fillColor: const Color.fromARGB(255, 199, 96, 22),
+          filled: true,
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(color: Color.fromARGB(255, 0, 0, 0), width: 2.0),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(color: Colors.black, width: 2.0),
+          ),
+        ),
+        onSubmitted: (query) {
+          widget.onSearch(query);
+        },
+      ),
+    );
+  }
 }
