@@ -1,5 +1,6 @@
 import "package:audioplayers/audioplayers.dart";
 import "package:final_project/api/by_name.dart";
+import "package:final_project/widgets/widgets.dart";
 import 'package:flutter/material.dart';
 import "package:flutter_map/flutter_map.dart";
 import "package:geolocator/geolocator.dart";
@@ -86,38 +87,6 @@ class _MapState extends State<Map> {
                 Column(
                   children: [
                     buildStyledContainer(
-                      Center(
-                        child: DropdownButton<Specialty>(
-                          value: selectedSpecialty,
-                          hint: Center(
-                            child: Text(
-                              "Select a specialty",
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ),
-                          isExpanded: true,
-                          items: specialtyList.map((Specialty item) {
-                            return DropdownMenuItem<Specialty>(
-                              value: item,
-                              child: Center(
-                                child: Text(item.title,
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (Specialty? newSpecialty) {
-                            if (newSpecialty != null) {
-                              selectedSpecialty = newSpecialty;
-                              specialtyTrees(newSpecialty);
-                            }
-                          },
-                          dropdownColor:
-                              const Color.fromARGB(255, 188, 159, 128),
-                        ),
-                      ),
-                    ),
-                    buildStyledContainer(
                       ElevatedButton.icon(
                         onPressed: () {
                           fetchNearbyTrees();
@@ -136,33 +105,21 @@ class _MapState extends State<Map> {
                     Row(
                       children: [
                         buildStyledContainer(
-                          TextField(
-                            decoration: InputDecoration(
-                              label: Text(
-                                "Search For Trees:",
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              fillColor: Color.fromARGB(255, 188, 159, 128),
-                              filled: true,
-                              border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                borderSide: BorderSide(color: Colors.black),
-                              ),
-                            ),
-                            onSubmitted: (query) {
+                          SearchDropdown(
+                            specialtyList: specialtyList,
+                            selectedSpecialty: selectedSpecialty,
+                            onSpecialtySelected: (specialty) {
+                              setState(() {
+                                selectedSpecialty = specialty;
+                              });
+                              specialtyTrees(specialty!);
+                            },
+                            onSearch: (query) {
                               search(query);
                             },
-                          ),
+                          )
+
+
                         ),
                         IconButton(
                           icon: Image.asset("assets/dice.png",
