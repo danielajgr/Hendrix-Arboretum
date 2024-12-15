@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
 
 class About extends StatelessWidget {
+  const About({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -13,15 +15,11 @@ class About extends StatelessWidget {
           children: <Widget>[
             Image.asset('assets/vines.png'),
             Container(
-              child: Text(
-                "Hendrix Arboretum",
-                style: Theme.of(context).textTheme.displayLarge),
-              ),
-              
-            
+              child: Text("Hendrix Arboretum",
+                  style: Theme.of(context).textTheme.displayLarge),
+            ),
           ],
         ),
-        
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -50,11 +48,11 @@ class About extends StatelessWidget {
           children: <Widget>[
             Image.asset(
               'assets/tag.png',
-              fit: BoxFit.contain, 
-              height: 400.0,       
+              fit: BoxFit.contain,
+              height: 400.0,
             ),
             Positioned(
-              top: 150, 
+              top: 150,
               child: ArcText(
                 radius: 150,
                 text: 'Locate Tag!',
@@ -66,22 +64,20 @@ class About extends StatelessWidget {
               ),
             ),
           ],
-          ),
-          
-        Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Text(
-          "Each tree in the arboretum can be identified with a numbered circular metallic tag, found on the south side of the tree. Enter the ID number in the search field to learn more information about the tree.",
-          style: TextStyle(fontSize: 16),
-          textAlign: TextAlign.center,
         ),
-      ),
-      Image.asset('assets/hendrix_logo.png',
-              fit: BoxFit.contain, 
-              height: 150.0,       
-            )
-      
-
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            "Each tree in the arboretum can be identified with a numbered circular metallic tag, found on the south side of the tree. Enter the ID number in the search field to learn more information about the tree.",
+            style: TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Image.asset(
+          'assets/hendrix_logo.png',
+          fit: BoxFit.contain,
+          height: 150.0,
+        )
       ],
     );
   }

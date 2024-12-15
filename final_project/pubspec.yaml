@@ -53,6 +53,7 @@ dependencies:
   flutter_arc_text: ^0.6.0
   url_launcher: ^6.3.1
   safe_text: ^1.0.7
+  geolocator: ^13.0.2
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +90,9 @@ flutter:
     - assets/dam.PNG
     - assets/missing.PNG
     - assets/tree_icon.PNG
+    - assets/tree_icon_gold.png
+    - assets/tree_icon_silver.png
+    - assets/tree_icon_bronze.png
     - assets/breaker.PNG
   # To add assets to your application, add an assets section, like this:
   # assets:
