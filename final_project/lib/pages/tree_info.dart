@@ -74,7 +74,7 @@ class _TreeInfoState extends State<TreeInfo> {
             )
           ]),
       body: ListView(
-        padding: const EdgeInsets.only(left: 50, right: 50, top: 50),
+        padding: const EdgeInsets.only(left: 30, right: 30, top: 40),
         children: [
           FutureBuilder<Tree?>(
             future: futureTree,
@@ -118,6 +118,9 @@ class _TreeInfoState extends State<TreeInfo> {
           ),
           Card(
               color: Color.fromARGB(255, 0, 103, 79),
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
+              ),
               child: Column(
                 children: [
                   const Text('Common Name',
@@ -149,6 +152,9 @@ class _TreeInfoState extends State<TreeInfo> {
               )),
           Card(
               color: Color.fromARGB(255, 0, 103, 79),
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
+              ),
               child: Column(
                 children: [
                   const Text('Scientific Name',
@@ -171,6 +177,9 @@ class _TreeInfoState extends State<TreeInfo> {
               )),
           Card(
               color: Color.fromARGB(255, 0, 103, 79),
+              shape: BeveledRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
+              ),
               child: Column(
                 children: [
                   const Text('Building',
@@ -198,6 +207,9 @@ class _TreeInfoState extends State<TreeInfo> {
                   if (snapshot.data!.height != 0.0) {
                     return Card(
                         color: Color.fromARGB(255, 0, 103, 79),
+                        shape: BeveledRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
                         child: Column(
                           children: [
                             const Text('Height',
@@ -221,6 +233,9 @@ class _TreeInfoState extends State<TreeInfo> {
                   if (snapshot.data!.dbh != 0.0) {
                     return Card(
                         color: Color.fromARGB(255, 0, 103, 79),
+                        shape: BeveledRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
                         child: Column(
                           children: [
                             const Text('DBH',
@@ -239,7 +254,7 @@ class _TreeInfoState extends State<TreeInfo> {
               }),
           Container(
               padding:
-                  EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 10),
+                  EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 30),
               child: ElevatedButton(
                   onPressed: () => {
                         _launchurl(Uri.parse(

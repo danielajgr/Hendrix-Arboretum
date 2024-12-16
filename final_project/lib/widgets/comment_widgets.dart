@@ -115,11 +115,25 @@ class _CommentSectionState extends State<CommentSection> {
                       ),
                       Row(children: [Expanded(child: Container()), if(FirebaseAuth.instance.currentUser?.uid == _comments[index].userid)...[
                         StyledButton(onPressed: (){
-                          appState.deleteComment(widget.treeID, _comments[index]);
-                          _fetchcmts();
-                          setState(() {
-                            
-                          });
+                          showDialog(context: context, builder: (_){
+                                return AlertDialog(title: Text('Delete comment?'),
+                                    content: Text('Would you like to delete this comment?'),
+                                    actions: [
+                                        StyledButton(child: Text('Cancel'), onPressed: () { 
+                                            Navigator.of(context).pop(); 
+                                        }),
+                                        StyledButton(child: Text('Delete'), onPressed: () {
+                                            appState.deleteComment(widget.treeID, _comments[index]);
+                                            _fetchcmts(); 
+                                        setState(() {
+              
+                                        });
+                                        Navigator.of(context).pop();
+                                        })
+                                    ],
+    );
+                            });
+                          
                         }, child: Icon(Icons.delete))] else...[
                           StyledButton(onPressed: (){
                             /*appState.reportComment(widget.treeID, _comments[index]);
