@@ -147,7 +147,7 @@ class _MapState extends State<Map> {
                             onPressed: () {
                               fetchNearbyTrees();
                             },
-                            icon: const Icon(Icons.gps_not_fixed, color: Colors.white, size: 40),
+                            icon: const Icon(Icons.near_me, color: Colors.white, size: 40),
                           ),
                         ),
                       ),
