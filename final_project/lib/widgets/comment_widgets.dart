@@ -41,11 +41,13 @@ class _CommentSectionState extends State<CommentSection> {
         .doc(widget.treeID.toString())
         .collection('comments')
         .get();
-      _comments = snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
-      _comments.sort((a, b) => b.time.compareTo(a.time));
-    setState(() {
+       if(snapshot.size > 0){
+            _comments = snapshot.docs.map((doc) => Comment.fromDocument(doc)).toList();
+            _comments.sort((a, b) => b.time.compareTo(a.time));
+            setState(() {
+            });
+       }
       
-    });
     }
   }
  
@@ -111,7 +113,7 @@ class _CommentSectionState extends State<CommentSection> {
                       ListTile( isThreeLine: true, visualDensity: VisualDensity(horizontal: 3, vertical: 3),
                         title: Text('${_comments[index].name}', style: TextStyle(fontSize: 12),), subtitle: Text('${_comments[index].message}')
                       ),
-                      Row(children: [Expanded(child: Container()), if(FirebaseAuth.instance.currentUser?.displayName == _comments[index].name)...[
+                      Row(children: [Expanded(child: Container()), if(FirebaseAuth.instance.currentUser?.uid == _comments[index].userid)...[
                         StyledButton(onPressed: (){
                           appState.deleteComment(widget.treeID, _comments[index]);
                           _fetchcmts();
