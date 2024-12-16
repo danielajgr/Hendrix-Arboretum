@@ -74,7 +74,7 @@ class _TreeInfoState extends State<TreeInfo> {
             )
           ]),
       body: ListView(
-        padding: const EdgeInsets.only(left: 30, right: 30, top: 40),
+        padding: const EdgeInsets.only(left: 30, right: 30, top: 40, bottom: 30),
         children: [
           FutureBuilder<Tree?>(
             future: futureTree,
@@ -216,7 +216,7 @@ class _TreeInfoState extends State<TreeInfo> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18)),
-                            Text("${snapshot.data!.height}",
+                            Text("${snapshot.data!.height} ft",
                                 style: TextStyle(color: Colors.white)),
                           ],
                         ));
