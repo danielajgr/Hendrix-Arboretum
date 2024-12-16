@@ -294,6 +294,7 @@ class _SearchDropdownState extends State<SearchDropdown> {
       link: _layerLink,
       child: TextField(
         controller: _controller,
+        style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: "Select or Search",
           hintStyle: Theme.of(context).textTheme.labelLarge,
